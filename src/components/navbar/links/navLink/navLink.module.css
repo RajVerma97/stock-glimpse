@@ -1,0 +1,12 @@
+.container{
+    min-width: 2rem;
+    padding:1rem;
+    border-radius:12%;
+    font-weight: 500;
+
+}
+
+.active{
+    background-color:var(--text);
+    color:var(--bg);
+}
