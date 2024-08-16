@@ -5,6 +5,8 @@ import { redirect, useRouter } from "next/navigation";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
+import FacebookProvider from "next-auth/providers/facebook";
+import bcrypt from "bcrypt";
 
 import prisma from "./prisma";
 
@@ -24,14 +26,11 @@ export const authConfig: NextAuthOptions = {
         if (!credentials || !credentials.email || !credentials.password)
           return null;
 
-        const dbUser = await prisma.user.findFirst({
+        const dbUser = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
 
-        //Verify Password here
-        //We are going to use a simple === operator
-        //In production DB, passwords should be encrypted using something like bcrypt...
-        if (dbUser && dbUser.password === credentials.password) {
+        if (dbUser && await bcrypt.compare(credentials.password, dbUser.password)) {
           const { password, createdAt, id, ...dbUserWithoutPassword } = dbUser;
           return dbUserWithoutPassword as User;
         }
@@ -47,6 +46,8 @@ export const authConfig: NextAuthOptions = {
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     }),
+    
+
   ],
 };
 

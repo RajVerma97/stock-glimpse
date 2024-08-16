@@ -1,4 +1,3 @@
-import TwitterNavbar from "@/components/twitterNavbar";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { NextAuthProvider } from "./providers";
@@ -18,10 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className + " flex flex-row"}>
-        <NextAuthProvider>
-          {/* <TwitterNavbar /> */}
-          {children}
-        </NextAuthProvider>
+        <NextAuthProvider>{children}</NextAuthProvider>
       </body>
     </html>
   );

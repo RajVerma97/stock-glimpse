@@ -1,6 +1,5 @@
 "use client";
 
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -16,18 +15,48 @@ export function CredentialsForm(props: CredentialsFormProps) {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
 
-    const signInResponse = await signIn("credentials", {
-      email: data.get("email"),
-      password: data.get("password"),
-      redirect: false,
-    });
+    // Extract email and password from form data
+    const email = data.get("email");
+    const password = data.get("password");
 
-    if (signInResponse && !signInResponse.error) {
-      //Redirect to homepage (/timeline)
-      router.push("/timeline");
-    } else {
-      console.log("Error: ", signInResponse);
-      setError("Your Email or Password is wrong!");
+    // Send POST request to /api/login
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      // Log the response status and content type
+      console.log("Response Status:", res.status);
+      console.log("Content-Type:", res.headers.get("Content-Type"));
+
+      let responseData;
+      const contentType = res.headers.get("Content-Type");
+
+      // Check if the response is JSON
+      if (contentType && contentType.includes("application/json")) {
+        responseData = await res.json();
+        console.log("Response Data:", responseData);
+      } else {
+        // Handle non-JSON responses
+        const text = await res.text();
+        console.log("Response Text:", text);
+        setError("An unexpected error occurred: " + text);
+        return;
+      }
+
+      if (res.ok) {
+        console.log("Redirecting to /home");
+        // Redirect to the homepage (/home) after successful login
+        router.push("/home");
+      } else {
+        // Handle login errors
+        setError(responseData.message || "Your Email or Password is wrong!");
+      }
+    } catch (error) {
+      console.error("Fetch Error:", error);
+      setError("An unexpected error occurred");
     }
   };
 
