@@ -1,6 +1,9 @@
 "use client";
 
-import { GoogleSignInButton } from "@/components/authButtons";
+import {
+  GithubSignInButton,
+  GoogleSignInButton,
+} from "@/components/authButtons";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
@@ -23,10 +26,8 @@ export default function Form() {
     });
 
     if (response?.error) {
-      // Set error message from response
       setError(response.error);
     } else if (response?.ok) {
-      // Redirect to home if login is successful
       router.push("/home");
     }
   };
@@ -51,6 +52,7 @@ export default function Form() {
       <button type="submit">Login</button>
 
       <GoogleSignInButton />
+      <GithubSignInButton />
       {error && <p className="text-red-500 mt-2">{error}</p>}
     </form>
   );
