@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import Logout from "./logout";
 
 export default function SplashPage() {
   return (
@@ -13,6 +14,8 @@ export default function SplashPage() {
       <div>
         <Link href="/register">Register</Link>
       </div>
+
+      <Logout />
     </>
   );
 }
