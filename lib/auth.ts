@@ -7,37 +7,12 @@ import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
 import FacebookProvider from "next-auth/providers/facebook";
 import bcrypt from "bcrypt";
+import { NextResponse } from "next/server";
+import { useEffect } from "react";
 
-import prisma from "./prisma";
 
 export const authConfig: NextAuthOptions = {
   providers: [
-    CredentialsProvider({
-      name: "Sign in",
-      credentials: {
-        email: {
-          label: "Email",
-          type: "email",
-          placeholder: "example@example.com",
-        },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        if (!credentials || !credentials.email || !credentials.password)
-          return null;
-
-        const dbUser = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
-
-        if (dbUser && await bcrypt.compare(credentials.password, dbUser.password)) {
-          const { password, createdAt, id, ...dbUserWithoutPassword } = dbUser;
-          return dbUserWithoutPassword as User;
-        }
-
-        return null;
-      },
-    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
@@ -47,19 +22,24 @@ export const authConfig: NextAuthOptions = {
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     }),
     
-
   ],
 };
 
 export async function loginIsRequiredServer() {
   const session = await getServerSession(authConfig);
-  if (!session) return redirect("/");
+  if (!session) {
+    return NextResponse.redirect(new URL('/', process.env.NEXT_PUBLIC_SITE_URL));
+  }
 }
 
-export function loginIsRequiredClient() {
-  if (typeof window !== "undefined") {
-    const session = useSession();
-    const router = useRouter();
-    if (!session) router.push("/");
-  }
+
+
+export function useRequireLogin() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "loading") return; // Wait for session to load
+    if (!session) router.push("/"); // Redirect to login if not authenticated
+  }, [session, status, router]);
 }

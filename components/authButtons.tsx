@@ -4,10 +4,12 @@ import Image from "next/image";
 import googleLogo from "@/public/google.png";
 import githubLogo from "@/public/github.png";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export function GoogleSignInButton() {
+  const router = useRouter();
   const handleClick = () => {
-    signIn("google");
+    signIn("google", { callbackUrl: "/home" });
   };
 
   return (
