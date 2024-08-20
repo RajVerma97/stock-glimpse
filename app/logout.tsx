@@ -7,12 +7,7 @@ export default function Logout() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const logout = async () => {
-    // Await the signOut process
-    await signOut({ redirect: false });
-    // After signOut, manually handle the redirect
-    router.push("/");
-  };
+  
 
   return <>{session ? <button onClick={logout}>Logout</button> : null}</>;
 }

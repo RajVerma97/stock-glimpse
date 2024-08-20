@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { hash } from 'bcrypt';
 import User from '@/lib/models/Users';
 import { connectDB } from '@/lib/utils';
+import { error } from 'console';
 
 export async function POST(request: Request) {
   try {
@@ -9,14 +10,20 @@ export async function POST(request: Request) {
 
     const { email, password } = await request.json();
 
+   const user= await User.findOne({ email }).exec();
+
+   if(user){
+    return NextResponse.json({ message: 'Can' +'t register , User already exists,please login instead',error:error }, { status: 400 });
+   }
+
     const hashedPassword = await hash(password, 10);
 
-    const user = new User({
+    const newUser = new User({
       email,
       password: hashedPassword,
     });
 
-    await user.save();
+    await newUser.save();
 
     return NextResponse.json({ message: 'success' });
   } catch (e) {

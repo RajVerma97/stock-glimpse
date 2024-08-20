@@ -41,6 +41,9 @@ importers:
       eslint-plugin-react-hooks:
         specifier: ^4.6.2
         version: 4.6.2(eslint@8.40.0)
+      inspector:
+        specifier: ^0.5.0
+        version: 0.5.0
       mongoose:
         specifier: ^8.5.3
         version: 8.5.3
@@ -49,7 +52,10 @@ importers:
         version: 13.4.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       next-auth:
         specifier: ^4.22.1
-        version: 4.24.7(next@13.4.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 4.24.7(next@13.4.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(nodemailer@6.9.14)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      nodemailer:
+        specifier: ^6.9.14
+        version: 6.9.14
       postcss:
         specifier: 8.4.23
         version: 8.4.23
@@ -596,6 +602,9 @@ packages:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
 
+  bindings@1.2.1:
+    resolution: {integrity: sha512-u4cBQNepWxYA55FunZSM7wMi55yQaN0otnhhilNoWHq0MfOfJeQx0v0mRRpolGOExPjZcl6FtB0BB8Xkb88F0g==}
+
   bl@4.1.0:
     resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
 
@@ -623,6 +632,9 @@ packages:
 
   buffer@5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
+
+  bufferutil@1.1.0:
+    resolution: {integrity: sha512-bttEVtkre4VYrZH+ciatjApTuac7jLMQXVXzM/ymw82WFREdOrJO496C4Bkh0/FfYoBUSOFaAYF32a5Q8dyiLw==}
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -876,6 +888,9 @@ packages:
 
   emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
+
+  endpoint@0.4.5:
+    resolution: {integrity: sha512-oA2ALUF+d4Y0I8/WMV/0BuAZGHxfIdAygr9ZXP4rfzmp5zpYZmYKHKAbqRQnrE1YGdPhVg4D24CQkyx2qYEoHg==}
 
   enhanced-resolve@5.17.1:
     resolution: {integrity: sha512-LMHl3dXhTcfv8gM4kEzIUeTQ+7fpdA0l2tUf34BddXPkz2A5xJ5L/Pchd5BL6rdccM9QGvu0sWZzK1Z1t4wwyg==}
@@ -1321,6 +1336,9 @@ packages:
     resolution: {integrity: sha512-QAgPDQMEgrDssk1XiwwHoOGYF9BAbUcc1+j+FhEvaOt8/cKRqyLn0U5qA6F74fGhTMGxf92pOvPBeh29jQJDTQ==}
     engines: {node: '>=12.0.0'}
 
+  inspector@0.5.0:
+    resolution: {integrity: sha512-qs91uK2uL3Bjcl+zSe088cR2Jh8TWgjifv54jsIvr593q92rUPFaTo+WZGvoyMgsRZWusZQR6JJmNA913QSZ+A==}
+
   internal-slot@1.0.7:
     resolution: {integrity: sha512-NGnrKwXzSms2qUUih/ILZ5JBqNTSa1+ZmP6flaIp6KmSElgE9qdndzS3cqjrDovwFdmwsGsLdeFgB6suw+1e9g==}
     engines: {node: '>= 0.4'}
@@ -1730,6 +1748,9 @@ packages:
   mz@2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
 
+  nan@1.8.4:
+    resolution: {integrity: sha512-609zQ1h3ApgH/94qmbbEklSrjcYYXCHnsWk4MAojq4OUk3tidhDYhPaMasMFKsZPZ96r4eQA1hbR2W4H7/77XA==}
+
   nanoid@3.3.7:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -1787,6 +1808,10 @@ packages:
 
   node-releases@2.0.18:
     resolution: {integrity: sha512-d9VeXT4SJ7ZeOqGX6R5EM022wpL+eWPooLI+5UpWn2jCT1aosUQEhQP214x33Wkwx3JQMvIm+tIoVOdodFS40g==}
+
+  nodemailer@6.9.14:
+    resolution: {integrity: sha512-Dobp/ebDKBvz91sbtRKhcznLThrKxKt97GI2FAlAyy+fk19j73Uz3sBXolVtmcXjaorivqsbbbjDY+Jkt4/bQA==}
+    engines: {node: '>=6.0.0'}
 
   nopt@5.0.0:
     resolution: {integrity: sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==}
@@ -1869,6 +1894,10 @@ packages:
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
+
+  options@0.0.6:
+    resolution: {integrity: sha512-bOj3L1ypm++N+n7CEbbe473A414AB7z+amKYshRb//iuL3MpdDCLhPnw6aVTdKB9g5ZRVHIEp8eUln6L2NUStg==}
+    engines: {node: '>=0.4.0'}
 
   ora@5.4.1:
     resolution: {integrity: sha512-5b6Y85tPxZZ7QytO+BQzysW31HJku27cRIlkbAXaNx+BdcVi+LlRFmVXzeF6a7JCwJpyw5c4b+YSVImQIrBpuQ==}
@@ -2429,6 +2458,9 @@ packages:
     engines: {node: '>=12.20'}
     hasBin: true
 
+  ultron@1.0.2:
+    resolution: {integrity: sha512-QMpnpVtYaWEeY+MwKDN/UdKlE/LsFZXM5lO1u7GaZzNgmIbGixHEmVMIKT+vqYOALu3m5GYQy9kz4Xu4IVn7Ow==}
+
   unbox-primitive@1.0.2:
     resolution: {integrity: sha512-61pPlCD9h51VoreyJ0BReideM3MDKMKnh6+V9L08331ipq6Q8OFXZYiqP6n/tbHx4s5I9uRhcye6BrbkizkBDw==}
 
@@ -2444,6 +2476,9 @@ packages:
 
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
+
+  utf-8-validate@1.1.0:
+    resolution: {integrity: sha512-Qsgu1u2akdyOneurUEVf/tXhkqBQMoE3x0GY5+P7ayPHvVzTqOkkgBhtl26wm6ap10Amhwy0jIhPwMGywx76QQ==}
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
@@ -2552,6 +2587,9 @@ packages:
 
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+
+  ws@0.7.2:
+    resolution: {integrity: sha512-8mJ1Ku743qD/PKmO9Dg+y7BXTwzUgKdXguecfIyOVHFmez4JMqMF+V+M684btmQXHlwzyrJqRl3NYDltGDf6CQ==}
 
   yallist@4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
@@ -3146,6 +3184,9 @@ snapshots:
 
   binary-extensions@2.3.0: {}
 
+  bindings@1.2.1:
+    optional: true
+
   bl@4.1.0:
     dependencies:
       buffer: 5.7.1
@@ -3180,6 +3221,12 @@ snapshots:
     dependencies:
       base64-js: 1.5.1
       ieee754: 1.2.1
+
+  bufferutil@1.1.0:
+    dependencies:
+      bindings: 1.2.1
+      nan: 1.8.4
+    optional: true
 
   busboy@1.6.0:
     dependencies:
@@ -3443,6 +3490,10 @@ snapshots:
   emoji-regex@8.0.0: {}
 
   emoji-regex@9.2.2: {}
+
+  endpoint@0.4.5:
+    dependencies:
+      inherits: 2.0.4
 
   enhanced-resolve@5.17.1:
     dependencies:
@@ -4094,6 +4145,11 @@ snapshots:
       through: 2.3.8
       wrap-ansi: 7.0.0
 
+  inspector@0.5.0:
+    dependencies:
+      endpoint: 0.4.5
+      ws: 0.7.2
+
   internal-slot@1.0.7:
     dependencies:
       es-errors: 1.3.0
@@ -4455,13 +4511,16 @@ snapshots:
       object-assign: 4.1.1
       thenify-all: 1.6.0
 
+  nan@1.8.4:
+    optional: true
+
   nanoid@3.3.7: {}
 
   natural-compare@1.4.0: {}
 
   neo-async@2.6.2: {}
 
-  next-auth@4.24.7(next@13.4.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  next-auth@4.24.7(next@13.4.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(nodemailer@6.9.14)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       '@babel/runtime': 7.25.0
       '@panva/hkdf': 1.2.1
@@ -4475,6 +4534,8 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       uuid: 8.3.2
+    optionalDependencies:
+      nodemailer: 6.9.14
 
   next@13.4.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
@@ -4508,6 +4569,8 @@ snapshots:
       whatwg-url: 5.0.0
 
   node-releases@2.0.18: {}
+
+  nodemailer@6.9.14: {}
 
   nopt@5.0.0:
     dependencies:
@@ -4598,6 +4661,8 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
       word-wrap: 1.2.5
+
+  options@0.0.6: {}
 
   ora@5.4.1:
     dependencies:
@@ -5193,6 +5258,8 @@ snapshots:
 
   typescript@5.0.4: {}
 
+  ultron@1.0.2: {}
+
   unbox-primitive@1.0.2:
     dependencies:
       call-bind: 1.0.7
@@ -5211,6 +5278,12 @@ snapshots:
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
+
+  utf-8-validate@1.1.0:
+    dependencies:
+      bindings: 1.2.1
+      nan: 1.8.4
+    optional: true
 
   util-deprecate@1.0.2: {}
 
@@ -5364,6 +5437,14 @@ snapshots:
       strip-ansi: 7.1.0
 
   wrappy@1.0.2: {}
+
+  ws@0.7.2:
+    dependencies:
+      options: 0.0.6
+      ultron: 1.0.2
+    optionalDependencies:
+      bufferutil: 1.1.0
+      utf-8-validate: 1.1.0
 
   yallist@4.0.0: {}
 
