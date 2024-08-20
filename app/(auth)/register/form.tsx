@@ -2,13 +2,18 @@
 
 import { signIn } from "next-auth/react"; // Import signIn
 import { useRouter } from "next/navigation";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 
 export default function Form() {
+  const [error, setError] = useState<string | null>(null);
+
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setError(null);
+
     const formData = new FormData(e.currentTarget);
     const response = await fetch(`/api/auth/register`, {
       method: "POST",
@@ -18,10 +23,13 @@ export default function Form() {
       }),
     });
 
-    if (response?.ok) {
-      console.log("Registration successful, signing in...");
+    console.log(response);
+    const result = await response.json();
 
-      // Automatically sign in the user after registration
+    if (!response.ok) {
+      setError(response.message);
+      return;
+    } else {
       const result = await signIn("credentials", {
         redirect: false,
         email: formData.get("email"),
@@ -33,8 +41,6 @@ export default function Form() {
       } else {
         console.log("Error signing in after registration:", result?.error);
       }
-    } else {
-      console.log("Error during registration");
     }
   };
 
@@ -54,6 +60,8 @@ export default function Form() {
         type="password"
       />
       <button type="submit">Register</button>
+
+      {error && <p className="text-red-500 mt-2">jfd k skjfh</p>}
     </form>
   );
 }

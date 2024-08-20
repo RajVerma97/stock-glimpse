@@ -5,6 +5,7 @@ import {
   GoogleSignInButton,
 } from "@/components/authButtons";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
@@ -16,7 +17,6 @@ export default function Form() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
 
-    // Reset error state
     setError(null);
 
     const response = await signIn("credentials", {
@@ -53,6 +53,7 @@ export default function Form() {
 
       <GoogleSignInButton />
       <GithubSignInButton />
+      <Link href="/forget-password">Forget password?</Link>
       {error && <p className="text-red-500 mt-2">{error}</p>}
     </form>
   );
