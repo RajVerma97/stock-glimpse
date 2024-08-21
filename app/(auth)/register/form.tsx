@@ -1,5 +1,6 @@
 "use client";
 
+import { notify, ToastManager } from "@/components/ToastManager";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
@@ -7,8 +8,6 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 export default function Form() {
-  const [error, setError] = useState<string | null>(null);
-
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -27,8 +26,7 @@ export default function Form() {
     const result = await response.json();
 
     if (!response.ok) {
-      // @ts-expect-error
-      setError(response.message);
+      notify({ status: "error", message: result.message });
       return;
     } else {
       const result = await signIn("credentials", {
@@ -40,7 +38,7 @@ export default function Form() {
       if (result?.ok) {
         router.push("/home");
       } else {
-        console.log("Error signing in after registration:", result?.error);
+        notify({ status: "error", message: result?.error });
       }
     }
   };
@@ -68,7 +66,7 @@ export default function Form() {
         Register
       </Button>
 
-      {error && <p className="text-red-500 mt-2">{error}</p>}
+      <ToastManager />
     </form>
   );
 }

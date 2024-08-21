@@ -4,6 +4,7 @@ import {
   GithubSignInButton,
   GoogleSignInButton,
 } from "@/components/authButtons";
+import { notify, ToastManager } from "@/components/ToastManager";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
@@ -28,7 +29,7 @@ export default function Form() {
     });
 
     if (response?.error) {
-      setError(response.error);
+      notify({ status: "error", message: response.error });
     } else if (response?.ok) {
       router.push("/home");
     }
@@ -62,7 +63,7 @@ export default function Form() {
       <Button asChild variant={"link"}>
         <Link href="/forget-password">Forget password?</Link>
       </Button>
-      {error && <p className="text-red-500 mt-2">{error}</p>}
+      <ToastManager />
     </form>
   );
 }
