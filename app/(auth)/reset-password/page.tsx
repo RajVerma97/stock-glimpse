@@ -1,5 +1,10 @@
 "use client";
 
+import Spinner from "@/components/spinner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import { Description } from "@radix-ui/react-toast";
 import Email from "next-auth/providers/email";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -19,6 +24,7 @@ export default function ResetPassword() {
     const query = new URLSearchParams(window.location.search);
     const tokenFromQuery = query.get("token");
     const emailFromQuery = query.get("email");
+    const { toast } = useToast();
 
     if (tokenFromQuery) {
       setToken(tokenFromQuery);
@@ -26,6 +32,12 @@ export default function ResetPassword() {
 
     if (emailFromQuery) {
       setEmail(emailFromQuery);
+    }
+    if (error) {
+      toast({
+        title: "Error",
+        description: error,
+      });
     }
   }, []);
 
@@ -72,14 +84,13 @@ export default function ResetPassword() {
   };
   return (
     <>
-      {" "}
-      <div>
+      <div className="flex flex-col gap-2 mx-auto max-w-md mt-10">
         <h1>Reset Your Password</h1>
 
         <form onSubmit={handleSubmit}>
           <div>
             <label htmlFor="password">New Password:</label>
-            <input
+            <Input
               type="password"
               id="password"
               value={password}
@@ -90,18 +101,20 @@ export default function ResetPassword() {
           </div>
           <div>
             <label htmlFor="confirm-password">Confirm Password:</label>
-            <input
+            <Input
               type="password"
               id="confirm-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="border border-black  text-black"
+              className="text-black"
               required
             />
           </div>
-          <button type="submit">Reset Password</button>
-          {isLoading && <>Loading...</>}
-          {error && <p className="text-red-500">{error}</p>}
+          <Button disabled={isLoading} variant={"outline"} type="submit">
+            Reset Password
+          </Button>
+          {isLoading && <Spinner />}
+          {/* {error && <p className="text-red-500">{error}</p>} */}
           {success && <p className="text-green-500">{success}</p>}
         </form>
       </div>

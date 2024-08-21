@@ -2,9 +2,9 @@ import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { compare } from 'bcrypt';
 import User from '@/lib/models/Users';
-import { connectDB } from '@/lib/utils';
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
+import { connectDB } from '@/lib/connectDb';
 
 const handler = NextAuth({
   session: {

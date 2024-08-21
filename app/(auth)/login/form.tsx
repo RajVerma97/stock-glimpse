@@ -4,6 +4,8 @@ import {
   GithubSignInButton,
   GoogleSignInButton,
 } from "@/components/authButtons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -37,23 +39,29 @@ export default function Form() {
       onSubmit={handleSubmit}
       className="flex flex-col gap-2 mx-auto max-w-md mt-10"
     >
-      <input
+      <Input
         name="email"
         className="border border-black text-black"
         type="email"
+        placeholder="Email"
         required
       />
-      <input
+      <Input
         name="password"
         className="border border-black text-black"
         type="password"
+        placeholder="Password"
         required
       />
-      <button type="submit">Login</button>
+      <Button variant={"outline"} type="submit">
+        Login
+      </Button>
 
       <GoogleSignInButton />
       <GithubSignInButton />
-      <Link href="/forget-password">Forget password?</Link>
+      <Button asChild variant={"link"}>
+        <Link href="/forget-password">Forget password?</Link>
+      </Button>
       {error && <p className="text-red-500 mt-2">{error}</p>}
     </form>
   );

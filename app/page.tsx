@@ -4,28 +4,44 @@ import React from "react";
 import Logout from "./logout";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function SplashPage() {
   const router = useRouter();
   const { data: session } = useSession();
 
   const logout = async () => {
-    await signOut({ redirect: false });
-    router.push("/");
+    await signOut({ redirect: true, callbackUrl: "/" });
+  };
+
+  const register = () => {
+    router.push("/register");
+  };
+
+  const login = () => {
+    router.push("/login");
   };
   return (
     <>
       <h1>SplashPage</h1>
 
-      <div>
+      <Button variant={"link"} asChild>
         <Link href="/login">Login</Link>
-      </div>
+      </Button>
 
-      <div>
-        <Link href="/register">Register</Link>
-      </div>
+      <Button asChild variant={"link"}>
+        <Link href={"/register"} onClick={register}>
+          Register
+        </Link>
+      </Button>
 
-      {session ? <button onClick={logout}>Logout</button> : null}
+      {session ? (
+        <Button onClick={logout} variant={"outline"}>
+          Logout
+        </Button>
+      ) : (
+        <></>
+      )}
     </>
   );
 }

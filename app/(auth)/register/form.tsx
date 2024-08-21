@@ -1,6 +1,8 @@
 "use client";
 
-import { signIn } from "next-auth/react"; // Import signIn
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
@@ -11,8 +13,6 @@ export default function Form() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    setError(null);
 
     const formData = new FormData(e.currentTarget);
     const response = await fetch(`/api/auth/register`, {
@@ -27,6 +27,7 @@ export default function Form() {
     const result = await response.json();
 
     if (!response.ok) {
+      // @ts-expect-error
       setError(response.message);
       return;
     } else {
@@ -49,19 +50,25 @@ export default function Form() {
       onSubmit={handleSubmit}
       className="flex flex-col gap-2 mx-auto max-w-md mt-10"
     >
-      <input
+      <Input
         name="email"
         className="border border-black text-black"
         type="email"
+        placeholder="Email"
+        required
       />
-      <input
+      <Input
         name="password"
         className="border border-black  text-black"
         type="password"
+        placeholder="Password"
+        required
       />
-      <button type="submit">Register</button>
+      <Button variant={"outline"} type="submit">
+        Register
+      </Button>
 
-      {error && <p className="text-red-500 mt-2">jfd k skjfh</p>}
+      {error && <p className="text-red-500 mt-2">{error}</p>}
     </form>
   );
 }

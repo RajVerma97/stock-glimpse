@@ -1,5 +1,8 @@
 "use client";
 
+import Spinner from "@/components/spinner";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -48,26 +51,30 @@ export default function ForgetPassword() {
 
   return (
     <>
-      <h1>Forget Password</h1>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="email">Enter your email:</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="Email"
-              style={{ color: "black" }}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit">Send Reset Link</button>
-          {isLoading && <>Loading...</>}
-          {error && <p className="text-red-500">{error}</p>}
-          {success && <p className="text-green-500">{success}</p>}
+      <div className="flex flex-col gap-2 mx-auto max-w-md mt-10">
+        <h1 className="text-3xl">Forget Password</h1>
+        <form
+          className="flex flex-col gap-4 mx-auto mt-5 max-w-md"
+          onSubmit={handleSubmit}
+        >
+          <Input
+            name="email"
+            type="email"
+            id="email"
+            placeholder="Email"
+            className="text-black"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <Button type="submit" variant={"outline"}>
+            Send Reset Link
+          </Button>
         </form>
+        {isLoading && <Spinner />}
+        {/* {error && <p className="text-red-500">{error}</p>} */}
+        {success && <p className="text-green-500">{success}</p>}
       </div>
     </>
   );
