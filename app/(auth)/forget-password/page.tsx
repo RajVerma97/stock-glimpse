@@ -1,27 +1,24 @@
 "use client";
 
 import Spinner from "@/components/spinner";
+import { notify, ToastManager } from "@/components/ToastManager";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function ForgetPassword() {
   const router = useRouter();
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError("");
-    setSuccess("");
 
     if (!email) {
-      setError("Email is required");
+      notify({ status: "error", message: "Email is required" });
       setIsLoading(false);
       return;
     }
@@ -38,12 +35,18 @@ export default function ForgetPassword() {
       const data = await res.json();
 
       if (res.ok) {
-        setSuccess("Password reset link sent to your email");
+        notify({
+          status: "success",
+          message: "Password reset link sent to your email",
+        });
       } else {
-        setError(data.message || "Something went wrong");
+        notify({
+          status: "error",
+          message: data.message || "Something went wrong",
+        });
       }
     } catch (error) {
-      setError("Something went wrong");
+      notify({ status: "error", message: "Something went wrong" });
     } finally {
       setIsLoading(false);
     }
@@ -73,9 +76,8 @@ export default function ForgetPassword() {
           </Button>
         </form>
         {isLoading && <Spinner />}
-        {/* {error && <p className="text-red-500">{error}</p>} */}
-        {success && <p className="text-green-500">{success}</p>}
       </div>
+      <ToastManager />
     </>
   );
 }
