@@ -3,7 +3,7 @@ import crypto from "crypto";
 import User from "@/lib/models/Users";
 import { sendResetPasswordEmail } from "@/lib/email";
 import { NextResponse } from "next/server";
-import { connectDB } from "@/lib/utils";
+import { connectDB } from "@/lib/connectDb";
 
 const RESET_TOKEN_EXPIRATION_MS = 3600000;
 

@@ -1,8 +1,8 @@
 import User from "@/lib/models/Users";
-import { connectDB } from "@/lib/utils";
 import { NextResponse } from "next/server";
 import { hash } from "bcrypt";
 import crypto from "crypto";
+import { connectDB } from "@/lib/connectDb";
 
 export async function POST(req: Request, res: Response) {
   const { email, password, token } = await req.json();

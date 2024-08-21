@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
-import { hash } from 'bcrypt';
-import User from '@/lib/models/Users';
-import { connectDB } from '@/lib/utils';
-import { error } from 'console';
+import { NextResponse } from "next/server";
+import { hash } from "bcrypt";
+import User from "@/lib/models/Users";
+import { error } from "console";
+import { connectDB } from "@/lib/connectDb";
 
 export async function POST(request: Request) {
   try {
@@ -10,11 +10,19 @@ export async function POST(request: Request) {
 
     const { email, password } = await request.json();
 
-   const user= await User.findOne({ email }).exec();
+    const user = await User.findOne({ email }).exec();
+    console.log("hel");
 
-   if(user){
-    return NextResponse.json({ message: 'Can' +'t register , User already exists,please login instead',error:error }, { status: 400 });
-   }
+    if (user) {
+      return NextResponse.json(
+        {
+          message:
+            "Can" + "t register , User already exists,please login instead",
+          error: error,
+        },
+        { status: 400 }
+      );
+    }
 
     const hashedPassword = await hash(password, 10);
 
@@ -25,14 +33,20 @@ export async function POST(request: Request) {
 
     await newUser.save();
 
-    return NextResponse.json({ message: 'success' });
+    return NextResponse.json({ message: "success" });
   } catch (e) {
-    console.error('Error:', e);
-    
+    console.error("Error:", e);
+
     if (e instanceof Error) {
-      return NextResponse.json({ message: 'error', error: e.message }, { status: 500 });
+      return NextResponse.json(
+        { message: "error", error: e.message },
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json({ message: 'error', error: 'An unknown error occurred' }, { status: 500 });
+    return NextResponse.json(
+      { message: "error", error: "An unknown error occurred" },
+      { status: 500 }
+    );
   }
 }

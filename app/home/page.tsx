@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Logout from "../logout";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
   const { data: session, status } = useSession();
@@ -11,17 +12,21 @@ export default function HomePage() {
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/"); // Redirect to login if not authenticated
+      router.push("/");
     }
   }, [status, router]);
 
   if (status === "loading") {
-    return <p>Loading...</p>; // Wait for session to load
+    return <p>Loading...</p>;
   }
 
   if (!session) {
-    return <p>No session found</p>; // Handle missing session
+    return <p>No session found</p>;
   }
+
+  const logout = async () => {
+    await signOut({ redirect: true, callbackUrl: "/" });
+  };
 
   return (
     <SessionProvider>
@@ -37,7 +42,13 @@ export default function HomePage() {
             height={50}
           />
         )}
-        <Logout />
+        {session ? (
+          <Button onClick={logout} variant={"outline"}>
+            Logout
+          </Button>
+        ) : (
+          <></>
+        )}
       </div>
     </SessionProvider>
   );
