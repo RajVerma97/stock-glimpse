@@ -1,12 +1,18 @@
 "use client";
 
-import Spinner from "@/components/spinner";
+import SpinnerManager from "@/components/SpinnerManager";
 import { notify, ToastManager } from "@/components/ToastManager";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import React, { CSSProperties, useState } from "react";
+import {
+  CircleLoader,
+  ClipLoader,
+  MoonLoader,
+  PacmanLoader,
+  PuffLoader,
+} from "react-spinners";
 
 export default function ForgetPassword() {
   const router = useRouter();
@@ -55,11 +61,8 @@ export default function ForgetPassword() {
   return (
     <>
       <div className="flex flex-col gap-2 mx-auto max-w-md mt-10">
-        <h1 className="text-3xl">Forget Password</h1>
-        <form
-          className="flex flex-col gap-4 mx-auto mt-5 max-w-md"
-          onSubmit={handleSubmit}
-        >
+        <h1 className="text-3xl mb-8">Forget Password</h1>
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <Input
             name="email"
             type="email"
@@ -71,13 +74,13 @@ export default function ForgetPassword() {
             required
           />
 
-          <Button type="submit" variant={"outline"}>
+          <Button type="submit" variant={"outline"} disabled={isLoading}>
             Send Reset Link
           </Button>
+          <SpinnerManager isLoading={isLoading} />
+          <ToastManager />
         </form>
-        {isLoading && <Spinner />}
       </div>
-      <ToastManager />
     </>
   );
 }

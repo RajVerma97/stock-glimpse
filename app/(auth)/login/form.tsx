@@ -4,6 +4,7 @@ import {
   GithubSignInButton,
   GoogleSignInButton,
 } from "@/components/authButtons";
+import SpinnerManager from "@/components/SpinnerManager";
 import { notify, ToastManager } from "@/components/ToastManager";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,9 +16,11 @@ import { FormEvent, useState } from "react";
 export default function Form() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     const formData = new FormData(e.currentTarget);
 
     setError(null);
@@ -30,6 +33,8 @@ export default function Form() {
 
     if (response?.error) {
       notify({ status: "error", message: response.error });
+      setError(response.error);
+      setIsLoading(false);
     } else if (response?.ok) {
       router.push("/home");
     }
@@ -54,9 +59,11 @@ export default function Form() {
         placeholder="Password"
         required
       />
-      <Button variant={"outline"} type="submit">
+      <Button variant={"outline"} type="submit" disabled={isLoading}>
         Login
       </Button>
+
+      <SpinnerManager isLoading={isLoading} />
 
       <GoogleSignInButton />
       <GithubSignInButton />

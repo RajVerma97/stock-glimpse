@@ -56,6 +56,9 @@ importers:
       react-icons:
         specifier: ^4.8.0
         version: 4.12.0(react@18.2.0)
+      react-spinners:
+        specifier: ^0.14.1
+        version: 0.14.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react-toastify:
         specifier: ^10.0.5
         version: 10.0.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -2398,6 +2401,12 @@ packages:
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
+
+  react-spinners@0.14.1:
+    resolution: {integrity: sha512-2Izq+qgQ08HTofCVEdcAQCXFEYfqTDdfeDQJeo/HHQiQJD4imOicNLhkfN2eh1NYEWVOX4D9ok2lhuDB0z3Aag==}
+    peerDependencies:
+      react: ^16.0.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
 
   react-toastify@10.0.5:
     resolution: {integrity: sha512-mNKt2jBXJg4O7pSdbNUfDdTsK9FIdikfsIE/yUCxbAEXl4HMyJaivrVFcn3Elvt5xvCQYhUZm+hqTIu1UXM3Pw==}
@@ -5462,6 +5471,11 @@ snapshots:
       react: 18.2.0
 
   react-is@16.13.1: {}
+
+  react-spinners@0.14.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
 
   react-toastify@10.0.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
