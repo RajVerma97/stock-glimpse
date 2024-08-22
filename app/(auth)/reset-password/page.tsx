@@ -1,6 +1,6 @@
 "use client";
 
-import Spinner from "@/components/spinner";
+import SpinnerManager from "@/components/SpinnerManager";
 import { notify, ToastManager } from "@/components/ToastManager";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -74,38 +74,38 @@ export default function ResetPassword() {
   return (
     <>
       <div className="flex flex-col gap-2 mx-auto max-w-md mt-10">
-        <h1>Reset Your Password</h1>
+        <h1 className="text-3xl mb-8">Reset Your Password</h1>
 
-        <form onSubmit={handleSubmit}>
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="password">New Password:</label>
             <Input
               type="password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="border border-black text-black"
+              placeholder="Password"
               required
             />
           </div>
           <div>
-            <label htmlFor="confirm-password">Confirm Password:</label>
             <Input
               type="password"
               id="confirm-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="text-black"
+              placeholder="Confirm Password"
               required
             />
           </div>
-          <Button disabled={isLoading} variant={"outline"} type="submit">
+          <Button variant={"outline"} type="submit" disabled={isLoading}>
             Reset Password
           </Button>
-          {isLoading && <Spinner />}
+          <SpinnerManager isLoading={isLoading} />
+          <ToastManager />
         </form>
       </div>
-      <ToastManager />
     </>
   );
 }
