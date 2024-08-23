@@ -1,17 +1,17 @@
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import { compare } from 'bcrypt';
-import User from '@/lib/models/Users';
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { compare } from "bcrypt";
+import User from "@/lib/models/Users";
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
-import { connectDB } from '@/lib/connectDb';
+import { connectDB } from "@/lib/connectDB";
 
 const handler = NextAuth({
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   providers: [
     CredentialsProvider({
@@ -23,7 +23,7 @@ const handler = NextAuth({
         await connectDB();
 
         if (!credentials?.email || !credentials?.password) {
-          throw new Error('Email and password are required');
+          throw new Error("Email and password are required");
         }
 
         // Find the user by email
@@ -31,11 +31,14 @@ const handler = NextAuth({
 
         // Check if user exists
         if (!user) {
-          throw new Error('No user found with that email');
+          throw new Error("No user found with that email");
         }
 
         // Compare password
-        const passwordCorrect = await compare(credentials.password, user.password);
+        const passwordCorrect = await compare(
+          credentials.password,
+          user.password
+        );
 
         if (passwordCorrect) {
           return {
@@ -44,12 +47,12 @@ const handler = NextAuth({
           };
         }
 
-        throw new Error('Incorrect password');
+        throw new Error("Incorrect password");
       },
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,  
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       profile(profile) {
         return {
           id: profile.sub,
@@ -60,23 +63,23 @@ const handler = NextAuth({
       },
     }),
     GithubProvider({
-      clientId:process.env.GITHUB_CLIENT_ID as string,
-      clientSecret:process.env.GITHUB_CLIENT_SECRET as string,
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
       authorization: {
         params: {
-          scope: 'read:user user:email',
+          scope: "read:user user:email",
         },
       },
-      profile(profile){
-        console.log('GitHub profile:', profile); 
+      profile(profile) {
+        console.log("GitHub profile:", profile);
         return {
-          id:profile.id,
-          name:profile.login,
-          email:profile.email,
-          image:profile.avatar_url
-        }
-      }
-    })
+          id: profile.id,
+          name: profile.login,
+          email: profile.email,
+          image: profile.avatar_url,
+        };
+      },
+    }),
   ],
 });
 
