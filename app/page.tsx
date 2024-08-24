@@ -70,7 +70,6 @@ export default function SplashPage() {
         </Button>
       </div>
 
-      {/* Top Gainers Section */}
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Top Gainers</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -109,7 +108,6 @@ export default function SplashPage() {
         </div>
       </div>
 
-      {/* Top Losers Section */}
       <div>
         <h2 className="text-2xl font-semibold mb-4">Top Losers</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

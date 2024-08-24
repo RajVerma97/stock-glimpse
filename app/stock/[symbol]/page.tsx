@@ -1,11 +1,13 @@
 "use client";
+import ShareholdingPatternChart from "@/components/ShareHoldingPatternChart";
+import StockPriceChart from "@/components/StockPriceChart";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 interface Stock {
-  name: string;
+  companyName: string;
   symbol: string;
   currentPrice: number;
   change: number;
@@ -16,10 +18,14 @@ interface Stock {
   previousClosePrice: number;
   timestamp: number;
   logo: string;
-  companyName: string;
+  peRatio: number;
+  bookValue: number;
+  marketCap: number;
   industry: string;
   description: string;
   country: string;
+  historicalData: any;
+  shareHoldingPattern: any;
 }
 
 export default function StockDetailPage({ params }) {
@@ -59,62 +65,75 @@ export default function StockDetailPage({ params }) {
   if (!stock) return <p>No data available</p>;
 
   return (
-    <div className="p-4">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center">
-            {stock.logo && (
-              <Image
-                src={stock.logo}
-                alt={`${stock.companyName} logo`}
-                className="w-12 h-12 mr-4"
-                width={50}
-                height={50}
-              />
-            )}
-            <div>
-              <h1 className="text-3xl font-bold">
-                {stock.companyName} ({stock.symbol})
-              </h1>
-              <p className="text-gray-500">
-                Current Price: ${stock.currentPrice}
+    <>
+      <div className="p-8 grid gap-5">
+        <div className=" mb-5 w-full flex gap-5">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center">
+                {stock.logo && (
+                  <Image
+                    src={stock.logo}
+                    alt={`${stock.companyName} logo`}
+                    className="w-12 h-12 mr-4"
+                    width={50}
+                    height={50}
+                  />
+                )}
+                <div>
+                  <h1 className="text-3xl font-bold">
+                    {stock.companyName} ({stock.symbol})
+                  </h1>
+                  <p className="text-gray-500">
+                    Current Price: ${stock.currentPrice}
+                  </p>
+                  <p className="text-gray-500">Industry: {stock.industry}</p>
+                </div>
+              </div>
+            </CardHeader>
+            <div className="mb-4 p-5">
+              <p>
+                <strong>Change:</strong> {stock.change} ($
+                {stock.currentPrice - stock.previousClosePrice})
               </p>
-              <p className="text-gray-500">Industry: {stock.industry}</p>
+              <p>
+                <strong>Percentage Change:</strong> {stock.percentageChange}%
+              </p>
+              <p>
+                <strong>High Price of Day:</strong> ${stock.highPriceOfDay}
+              </p>
+              <p>
+                <strong>Low Price of Day:</strong> ${stock.lowPriceOfDay}
+              </p>
+              <p>
+                <strong>Opening Price:</strong> ${stock.openingPrice}
+              </p>
+              <p>
+                <strong>Previous Close Price:</strong> $
+                {stock.previousClosePrice}
+              </p>
+              <p>
+                <strong>Description:</strong> {stock.description}
+              </p>
+              <p>
+                <strong>Country:</strong> {stock.country}
+              </p>
             </div>
+            <CardFooter>
+              Data last updated at{" "}
+              {new Date(stock.timestamp * 1000).toLocaleString()}
+            </CardFooter>
+          </Card>
+
+          <div className="w-full h-[500px] mt-4">
+            <StockPriceChart historicalData={stock.historicalData} />
           </div>
-        </CardHeader>
-        <div className="mb-4 p-5">
-          <p>
-            <strong>Change:</strong> {stock.change} ($
-            {stock.currentPrice - stock.previousClosePrice})
-          </p>
-          <p>
-            <strong>Percentage Change:</strong> {stock.percentageChange}%
-          </p>
-          <p>
-            <strong>High Price of Day:</strong> ${stock.highPriceOfDay}
-          </p>
-          <p>
-            <strong>Low Price of Day:</strong> ${stock.lowPriceOfDay}
-          </p>
-          <p>
-            <strong>Opening Price:</strong> ${stock.openingPrice}
-          </p>
-          <p>
-            <strong>Previous Close Price:</strong> ${stock.previousClosePrice}
-          </p>
-          <p>
-            <strong>Description:</strong> {stock.description}
-          </p>
-          <p>
-            <strong>country:</strong> {stock.country}
-          </p>
         </div>
-        <CardFooter>
-          Data last updated at{" "}
-          {new Date(stock.timestamp * 1000).toLocaleString()}
-        </CardFooter>
-      </Card>
-    </div>
+        <div className="p-5">
+          <h1>Share Holding Pattern</h1>
+          <ShareholdingPatternChart data={stock.shareHoldingPattern} />
+        </div>
+      </div>
+    </>
   );
 }
