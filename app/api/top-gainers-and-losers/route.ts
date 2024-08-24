@@ -3,7 +3,6 @@ import axios from "axios";
 
 const BASE_URL = "https://finnhub.io/api/v1";
 
-// Fetch real-time price data for a given symbol
 async function fetchRealTimePrice(symbol: string) {
   try {
     const response = await axios.get(`${BASE_URL}/quote`, {
@@ -19,7 +18,6 @@ async function fetchRealTimePrice(symbol: string) {
   }
 }
 
-// Fetch stock profile (name and logo) for a given symbol
 async function fetchStockProfile(symbol: string) {
   try {
     const response = await axios.get(`${BASE_URL}/stock/profile2`, {
@@ -35,12 +33,10 @@ async function fetchStockProfile(symbol: string) {
   }
 }
 
-// Calculate percentage change
 function calculatePercentageChange(open: number, close: number): number {
   return ((close - open) / open) * 100;
 }
 
-// Format stock changes to two decimal places for display
 function formatStockChanges(
   changes: {
     symbol: string;
@@ -52,19 +48,18 @@ function formatStockChanges(
 ) {
   return changes.map((stock) => ({
     ...stock,
-    change: stock.change.toFixed(2), // Format to 2 decimal places
-    currentPrice: stock.currentPrice.toFixed(2), // Format currentPrice to 2 decimal places
+    change: stock.change.toFixed(2), 
+    currentPrice: stock.currentPrice.toFixed(2), 
   }));
 }
 
-// Get stock changes for multiple symbols
 async function getStockChanges(symbols: string[]) {
   const stockChanges: {
     symbol: string;
     name: string;
     logo: string;
     currentPrice: number;
-    change: number; // Keep as number for calculations
+    change: number; 
   }[] = [];
 
   for (const symbol of symbols) {
@@ -95,10 +90,10 @@ async function getStockChanges(symbols: string[]) {
     }
   }
 
-  stockChanges.sort((a, b) => b.change - a.change); // Sort descending
+  stockChanges.sort((a, b) => b.change - a.change); 
 
-  const topGainers = stockChanges.slice(0, 5); // Top 5 gainers
-  const topLosers = stockChanges.slice(-5).reverse(); // Top 5 losers
+  const topGainers = stockChanges.slice(0, 5); 
+  const topLosers = stockChanges.slice(-5).reverse();
 
   return {
     topGainers: formatStockChanges(topGainers),
@@ -106,10 +101,9 @@ async function getStockChanges(symbols: string[]) {
   };
 }
 
-// Handle GET request
 export async function GET() {
   try {
-    const symbols = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"]; // Example symbols
+    const symbols = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"];
     const { topGainers, topLosers } = await getStockChanges(symbols);
 
     return NextResponse.json({ topGainers, topLosers });
