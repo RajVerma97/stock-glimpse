@@ -1,10 +1,8 @@
-// components/ShareholdingPatternChart.tsx
 import React, { useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Button } from "./ui/button";
 
-// Register required components for Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface Shareholder {
@@ -34,17 +32,15 @@ const ShareholdingPatternChart: React.FC<ShareholdingPatternChartProps> = ({
   const institutionalInvestors = data.institutionalInvestors || [];
   const publicShareholders = data.public || [];
 
-  // Define a color palette using Tailwind CSS color codes
   const colorPalette = [
-    "#60A5FA", // bg-blue-400
-    "#4ADE80", // bg-green-400
-    "#F87171", // bg-red-400
-    "#FBBF24", // bg-yellow-400
-    "#9CA3AF", // bg-gray-400
-    "#A78BFA", // bg-indigo-400
+    "#60A5FA",
+    "#4ADE80",
+    "#F87171",
+    "#FBBF24",
+    "#9CA3AF",
+    "#A78BFA",
   ];
 
-  // Prepare data for the chart
   const chartData = {
     labels: (() => {
       switch (activeCategory) {
@@ -100,7 +96,6 @@ const ShareholdingPatternChart: React.FC<ShareholdingPatternChartProps> = ({
     ],
   };
 
-  // Chart options to make the chart smaller
   const chartOptions = {
     maintainAspectRatio: false,
     responsive: true,
@@ -118,51 +113,51 @@ const ShareholdingPatternChart: React.FC<ShareholdingPatternChartProps> = ({
     },
   };
 
-  // Check if data is empty
   if (chartData.labels.length === 0) {
-    return <p>No data available for the chart</p>;
+    return (
+      <p className="text-center text-gray-600">
+        No data available for the chart
+      </p>
+    );
   }
 
   return (
-    <div className="flex">
-      {/* Pie Chart */}
-      <div className="w-2/3 pr-4">
-        <div
-          style={{ width: "100%", height: "300px" }}
-          className="chart-container"
-        >
+    <div className="flex flex-col lg:flex-row gap-4 p-4 overflow-x-hidden">
+      {/* Chart Container */}
+      <div className="flex-1">
+        <div className="chart-container shadow-lg rounded-lg border border-gray-200 h-[400px] lg:h-[600px]">
           <Pie data={chartData} options={chartOptions} />
         </div>
       </div>
 
-      {/* Buttons */}
-      <div className="w-1/3 flex flex-col items-start space-y-2">
+      {/* Buttons Container */}
+      <div className="flex flex-col space-y-2 lg:space-y-4 w-full lg:w-auto">
         <Button
           onClick={() => setActiveCategory("promoters")}
-          className={`py-2 px-4 rounded ${
+          className={`py-2 px-4 rounded-md text-white ${
             activeCategory === "promoters"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200"
+              ? "bg-blue-500"
+              : "bg-white text-black border border-gray-300"
           }`}
         >
           Promoters
         </Button>
         <Button
           onClick={() => setActiveCategory("institutionalInvestors")}
-          className={`py-2 px-4 rounded ${
+          className={`py-2 px-4 rounded-md text-white ${
             activeCategory === "institutionalInvestors"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200"
+              ? "bg-blue-500"
+              : "bg-white text-black border border-gray-300"
           }`}
         >
           Institutional Investors
         </Button>
         <Button
           onClick={() => setActiveCategory("public")}
-          className={`py-2 px-4 rounded ${
+          className={`py-2 px-4 rounded-md text-white ${
             activeCategory === "public"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200"
+              ? "bg-blue-500"
+              : "bg-white text-black border border-gray-300"
           }`}
         >
           Public

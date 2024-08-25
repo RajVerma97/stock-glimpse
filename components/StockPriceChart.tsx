@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -37,41 +37,48 @@ interface HistoricalDataEntry {
 }
 
 interface StockPriceChartProps {
-  historicalData: HistoricalDataEntry[];
+  historicalData: HistoricalDataEntry[]; // Expecting historical data as a prop
 }
 
-const StockPriceChart: React.FC<StockPriceChartProps> = ({
-  historicalData,
-}) => {
-  const [timeFrame, setTimeFrame] = useState<string>("1M");
-
+const StockPriceChart = ({ historicalData, timeFrame,setTimeFrame }) => {
   const filterData = (data: HistoricalDataEntry[], frame: string) => {
     const now = new Date();
+
     let filtered = [...data];
 
     switch (frame) {
       case "1D":
         filtered = data.filter((item) => {
           const date = new Date(item.date);
-          return now.getTime() - date.getTime() <= 24 * 60 * 60 * 1000;
+          return (
+            date.getFullYear() === now.getFullYear() &&
+            date.getMonth() === now.getMonth() &&
+            date.getDate() === now.getDate()
+          );
         });
         break;
       case "1W":
         filtered = data.filter((item) => {
           const date = new Date(item.date);
-          return now.getTime() - date.getTime() <= 7 * 24 * 60 * 60 * 1000;
+          const diffTime = Math.abs(now.getTime() - date.getTime());
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          return diffDays <= 7;
         });
         break;
       case "1M":
         filtered = data.filter((item) => {
           const date = new Date(item.date);
-          return now.getTime() - date.getTime() <= 30 * 24 * 60 * 60 * 1000;
+          const diffTime = Math.abs(now.getTime() - date.getTime());
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          return diffDays <= 30;
         });
         break;
       case "1Y":
         filtered = data.filter((item) => {
           const date = new Date(item.date);
-          return now.getTime() - date.getTime() <= 365 * 24 * 60 * 60 * 1000;
+          const diffTime = Math.abs(now.getTime() - date.getTime());
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          return diffDays <= 365;
         });
         break;
       default:
@@ -82,6 +89,7 @@ const StockPriceChart: React.FC<StockPriceChartProps> = ({
   };
 
   const filteredData = filterData(historicalData, timeFrame);
+  console.log("Filtered Data:", filteredData);
   const dates = filteredData.map((data) => data.date);
   const prices = filteredData.map((data) => data.close);
 
@@ -144,7 +152,6 @@ const StockPriceChart: React.FC<StockPriceChartProps> = ({
         titleFont: {
           size: 16,
         },
-
         bodyFont: {
           size: 16,
         },

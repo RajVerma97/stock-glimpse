@@ -1,5 +1,6 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
+import { TimeFrame } from "./[timeFrame]/historical/route";
 
 interface HistoricalDataEntry {
   date: string;
@@ -11,7 +12,7 @@ interface HistoricalDataEntry {
 }
 
 interface HistoricalDataResponse {
-  historicalData: HistoricalDataEntry[];
+  results: HistoricalDataEntry[];
 }
 
 interface Shareholder {
@@ -26,33 +27,81 @@ interface ShareholdingPattern {
   public: Shareholder[];
 }
 
-function generateRandomHistoricalData(numDays: number): HistoricalDataResponse {
-  const historicalData: HistoricalDataEntry[] = [];
-  const startDate = new Date();
-  startDate.setDate(startDate.getDate() - numDays);
+interface HistoricalDataEntry {
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
 
-  for (let i = 0; i < numDays; i++) {
-    const currentDate = new Date(startDate);
-    currentDate.setDate(startDate.getDate() + i);
-    const dateString = currentDate.toISOString().split("T")[0];
+interface HistoricalDataEntry {
+  date: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
 
-    const open = parseFloat((Math.random() * 1000 + 3000).toFixed(2));
-    const high = parseFloat((open + Math.random() * 50).toFixed(2));
-    const low = parseFloat((open - Math.random() * 50).toFixed(2));
-    const close = parseFloat((low + Math.random() * (high - low)).toFixed(2));
-    const volume = Math.floor(Math.random() * 5000000 + 1000000);
+async function fetchHistoricalData(
+  symbol: string,
+  timeFrame: TimeFrame
+): Promise<HistoricalDataEntry[]> {
+  const polygonApiKey = process.env.POLYGON_API_KEY;
 
-    historicalData.push({
-      date: dateString,
-      open,
-      high,
-      low,
-      close,
-      volume,
-    });
+  // Get the current date
+  const now = new Date();
+  let startDate: string;
+
+  // Calculate start date based on the time frame
+  switch (timeFrame) {
+    case TimeFrame.OneDay:
+      startDate = formatDate(now);
+      break;
+    case TimeFrame.OneWeek:
+      now.setDate(now.getDate() - 7);
+      startDate = formatDate(now);
+      break;
+    case TimeFrame.OneMonth:
+      now.setMonth(now.getMonth() - 1);
+      startDate = formatDate(now);
+      break;
+    case TimeFrame.OneYear:
+      now.setFullYear(now.getFullYear() - 1);
+      startDate = formatDate(now);
+      break;
+    default:
+      throw new Error("Invalid time frame");
   }
 
-  return { historicalData };
+  const url = `https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/day/${startDate}/${formatDate(
+    new Date()
+  )}?apiKey=${polygonApiKey}`;
+
+  try {
+    const response = await axios.get(url);
+    return response.data.results.map((entry: any) => ({
+      date: new Date(entry.t).toISOString().split("T")[0], // Convert timestamp to YYYY-MM-DD
+      open: entry.o,
+      high: entry.h,
+      low: entry.l,
+      close: entry.c,
+      volume: entry.v,
+    }));
+  } catch (error) {
+    console.error(`Error fetching historical data for ${symbol}:`, error);
+    throw error;
+  }
+}
+
+// Helper function to format Date to YYYY-MM-DD
+function formatDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function generateRandomShareholdingPattern(
@@ -98,23 +147,26 @@ function generateRandomShareholdingPattern(
 
 export async function GET(
   request: Request,
-  { params }: { params: { symbol: string } }
+  { params }: { params: { symbol: string; timeFrame: TimeFrame } }
 ) {
-  const { symbol } = params;
+  const { symbol, timeFrame } = params;
 
   const quoteUrl = `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`;
   const fundamentalsUrl = `https://finnhub.io/api/v1/stock/metric?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`;
   const profileUrl = `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`;
 
   try {
-    const [quoteResponse, fundamentalsResponse, profileResponse] =
-      await Promise.all([
-        axios.get(quoteUrl),
-        axios.get(fundamentalsUrl),
-        axios.get(profileUrl),
-      ]);
-
-    const historicalData = generateRandomHistoricalData(365).historicalData; // Generate data for 1 year
+    const [
+      quoteResponse,
+      fundamentalsResponse,
+      profileResponse,
+      historicalData,
+    ] = await Promise.all([
+      axios.get(quoteUrl),
+      axios.get(fundamentalsUrl),
+      axios.get(profileUrl),
+      fetchHistoricalData(symbol, timeFrame),
+    ]);
 
     const stockDetail = {
       currentPrice: quoteResponse.data.c,
