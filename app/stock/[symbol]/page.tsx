@@ -1,9 +1,9 @@
 "use client";
+import RatioChart from "@/components/RatioChart";
 import ShareholdingPatternChart from "@/components/ShareHoldingPatternChart";
 import StockPriceChart from "@/components/StockPriceChart";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 interface HistoricalDataEntry {
@@ -19,6 +19,8 @@ interface HistoricalData extends HistoricalDataEntry {}
 
 interface StockPriceChartProps {
   historicalData: HistoricalData[];
+  timeFrame: string;
+  setTimeFrame: (timeFrame: string) => void;
 }
 
 interface Shareholder {
@@ -61,6 +63,7 @@ interface Stock {
   country: string;
   historicalData: HistoricalData[];
   shareholdingPattern: ShareholdingPattern | null;
+  ratios: any;
 }
 
 export default function StockDetailPage({ params }) {
@@ -69,6 +72,7 @@ export default function StockDetailPage({ params }) {
   const [stock, setStock] = useState<Stock | null>(null);
   const [historicalData, setHistoricalData] = useState<HistoricalData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [chartLoading, setChartLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [timeFrame, setTimeFrame] = useState<string>("1M");
 
@@ -100,7 +104,7 @@ export default function StockDetailPage({ params }) {
   useEffect(() => {
     const fetchHistoricalData = async () => {
       if (!symbol || !timeFrame) return;
-      setLoading(true);
+      setChartLoading(true);
       try {
         const response = await fetch(
           `/api/stock/${symbol}/${timeFrame}/historical/`
@@ -117,7 +121,7 @@ export default function StockDetailPage({ params }) {
           err instanceof Error ? err.message : "An unknown error occurred"
         );
       } finally {
-        setLoading(false);
+        setChartLoading(false);
       }
     };
 
@@ -130,7 +134,7 @@ export default function StockDetailPage({ params }) {
 
   return (
     <div className="w-full p-8 grid gap-5">
-      <div className="mb-5 w-full flex gap-5">
+      <div className="mb-5  flex  gap-5">
         <Card>
           <CardHeader>
             <div className="flex items-center">
@@ -155,7 +159,6 @@ export default function StockDetailPage({ params }) {
             </div>
           </CardHeader>
           <div className="mb-4 p-5">
-            {/* Stock details */}
             <p>
               <strong>Change:</strong> {stock.change} ($
               {stock.currentPrice - stock.previousClosePrice})
@@ -222,21 +225,27 @@ export default function StockDetailPage({ params }) {
           </CardFooter>
         </Card>
 
-        <div className="w-full h-[500px] mt-4">
+        {/* Increase the width and height of the StockPriceChart */}
+        <div className="w-full h-[600px] mt-4">
           {historicalData.length > 0 && (
             <StockPriceChart
               historicalData={historicalData}
               timeFrame={timeFrame}
               setTimeFrame={setTimeFrame}
+              loading={chartLoading}
             />
           )}
         </div>
       </div>
-      <div className="w-full h-[500px] p-10">
+      <div className="w-full h-[600px] p-10 mb-8">
         <h1>Share Holding Pattern</h1>
         {stock.shareholdingPattern && (
           <ShareholdingPatternChart data={stock.shareholdingPattern} />
         )}
+      </div>
+      <div className="w-full p-10 ">
+        <h1>Ratios</h1>
+        <RatioChart ratios={stock.ratios} />
       </div>
     </div>
   );

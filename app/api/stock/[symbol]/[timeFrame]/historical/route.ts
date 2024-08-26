@@ -21,15 +21,17 @@ async function fetchHistoricalData(
   symbol: string,
   timeFrame: TimeFrame
 ): Promise<HistoricalDataEntry[]> {
+  if (timeFrame === TimeFrame.OneDay) {
+    // Generate random data for 1D time frame
+    return generateRandomHistoricalData();
+  }
+
   const polygonApiKey = process.env.POLYGON_API_KEY;
 
   const now = new Date();
   let startDate: string;
 
   switch (timeFrame) {
-    case TimeFrame.OneDay:
-      startDate = formatDate(now);
-      break;
     case TimeFrame.OneWeek:
       now.setDate(now.getDate() - 7);
       startDate = formatDate(now);
@@ -64,6 +66,23 @@ async function fetchHistoricalData(
     console.error(`Error fetching historical data for ${symbol}:`, error);
     throw error;
   }
+}
+
+function generateRandomHistoricalData(): HistoricalDataEntry[] {
+  const now = new Date();
+  const baseDate = formatDate(now);
+
+  // Generate random data for one day
+  const randomData: HistoricalDataEntry = {
+    date: baseDate,
+    open: parseFloat((Math.random() * 100).toFixed(2)),
+    high: parseFloat((Math.random() * 100).toFixed(2)),
+    low: parseFloat((Math.random() * 100).toFixed(2)),
+    close: parseFloat((Math.random() * 100).toFixed(2)),
+    volume: Math.floor(Math.random() * 100000),
+  };
+
+  return [randomData];
 }
 
 function formatDate(date: Date): string {

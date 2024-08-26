@@ -15,6 +15,7 @@ import {
 } from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
 import { Button } from "./ui/button";
+import { MoonLoader } from "react-spinners"; // Add a spinner for loading
 
 ChartJS.register(
   CategoryScale,
@@ -37,10 +38,33 @@ interface HistoricalDataEntry {
 }
 
 interface StockPriceChartProps {
-  historicalData: HistoricalDataEntry[]; // Expecting historical data as a prop
+  initialTimeFrame: string;
 }
 
-const StockPriceChart = ({ historicalData, timeFrame,setTimeFrame }) => {
+const StockPriceChart = ({ initialTimeFrame }: StockPriceChartProps) => {
+  const [historicalData, setHistoricalData] = useState<HistoricalDataEntry[]>(
+    []
+  );
+  const [timeFrame, setTimeFrame] = useState<string>(initialTimeFrame);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchHistoricalData = async (timeFrame: string) => {
+      setLoading(true);
+      try {
+        const response = await fetch(`/api/stockData?timeFrame=${timeFrame}`);
+        const data = await response.json();
+        setHistoricalData(data);
+      } catch (error) {
+        console.error("Error fetching historical data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHistoricalData(timeFrame);
+  }, [timeFrame]);
+
   const filterData = (data: HistoricalDataEntry[], frame: string) => {
     const now = new Date();
 
@@ -89,13 +113,12 @@ const StockPriceChart = ({ historicalData, timeFrame,setTimeFrame }) => {
   };
 
   const filteredData = filterData(historicalData, timeFrame);
-  console.log("Filtered Data:", filteredData);
   const dates = filteredData.map((data) => data.date);
   const prices = filteredData.map((data) => data.close);
 
   const initialPrice = prices[0];
   const finalPrice = prices[prices.length - 1];
-  const lineColor = finalPrice > initialPrice ? "#FF0000" : "#28c39a";
+  const lineColor = finalPrice > initialPrice ? "#10B981" : "#EC4899";
 
   const chartData: ChartData<"line"> = {
     labels: dates,
@@ -104,13 +127,13 @@ const StockPriceChart = ({ historicalData, timeFrame,setTimeFrame }) => {
         label: "Closing Price",
         data: prices,
         borderColor: lineColor,
-        pointRadius: 3,
+        pointRadius: timeFrame === "1Y" ? 1 : 2,
         pointBackgroundColor: "#fff",
         pointBorderColor: "#fff",
-        pointBorderWidth: 1,
+        pointBorderWidth: timeFrame === "1Y" ? 1 : 2,
         borderWidth: 2,
         backgroundColor:
-          lineColor === "#FF0000"
+          lineColor === "#10B981"
             ? "rgba(255, 0, 0, 0.3)"
             : "rgba(40, 195, 154, 0.3)",
         fill: true,
@@ -207,9 +230,9 @@ const StockPriceChart = ({ historicalData, timeFrame,setTimeFrame }) => {
       <div className="mb-4 flex space-x-2">
         <Button
           onClick={() => setTimeFrame("1D")}
-          className={`p-5 border rounded ${
+          className={`py-3 px-6 text-lg rounded-md ${
             timeFrame === "1D"
-              ? "bg-purple-500 text-white"
+              ? "bg-indigo-500 text-white"
               : "bg-white text-black"
           }`}
         >
@@ -217,9 +240,9 @@ const StockPriceChart = ({ historicalData, timeFrame,setTimeFrame }) => {
         </Button>
         <Button
           onClick={() => setTimeFrame("1W")}
-          className={`p-5 border rounded ${
+          className={`py-3 px-6 text-lg rounded-md ${
             timeFrame === "1W"
-              ? "bg-purple-500 text-white"
+              ? "bg-indigo-500 text-white"
               : "bg-white text-black"
           }`}
         >
@@ -227,9 +250,9 @@ const StockPriceChart = ({ historicalData, timeFrame,setTimeFrame }) => {
         </Button>
         <Button
           onClick={() => setTimeFrame("1M")}
-          className={`p-5 border rounded ${
+          className={`py-3 px-6 text-lg rounded-md ${
             timeFrame === "1M"
-              ? "bg-purple-500 text-white"
+              ? "bg-indigo-500 text-white"
               : "bg-white text-black"
           }`}
         >
@@ -237,16 +260,22 @@ const StockPriceChart = ({ historicalData, timeFrame,setTimeFrame }) => {
         </Button>
         <Button
           onClick={() => setTimeFrame("1Y")}
-          className={`p-5 border rounded ${
+          className={`py-3 px-6 text-lg rounded-md ${
             timeFrame === "1Y"
-              ? "bg-purple-500 text-white"
+              ? "bg-indigo-500 text-white"
               : "bg-white text-black"
           }`}
         >
           1 Year
         </Button>
       </div>
-      <Line data={chartData} options={options} />
+      {loading ? (
+        <div className="flex justify-center items-center h-full">
+          <MoonLoader color="#36d7b7" size={50} />
+        </div>
+      ) : (
+        <Line data={chartData} options={options} />
+      )}
     </div>
   );
 };

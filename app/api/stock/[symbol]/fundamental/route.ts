@@ -88,6 +88,7 @@ export async function GET(
       (total, shareholder) => total + shareholder.percentage,
       0
     );
+
     const totalDebt =
       fundamentalsResponse.data.metric["totalDebt/totalEquityAnnual"] || null;
 
@@ -120,6 +121,16 @@ export async function GET(
       country: profileResponse.data.country,
       logo: profileResponse.data.logo,
       shareholdingPattern: shareholdingResponse,
+      ratios: {
+        bookValue: fundamentalsResponse.data.series.annual.bookValue,
+        roic: fundamentalsResponse.data.series.annual.roic,
+        roe: fundamentalsResponse.data.series.annual.roe,
+        pe: fundamentalsResponse.data.series.annual.pe,
+        totalDebtToEquity:
+          fundamentalsResponse.data.series.annual.totalDebtToEquity,
+        operatingMargin:
+          fundamentalsResponse.data.series.annual.operatingMargin,
+      },
     };
 
     return NextResponse.json(stockDetail);

@@ -66,20 +66,20 @@ body{
   color:white;
 }
 
-/* styles/globals.css */
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+
+
+
+
+.glass-effect {
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 170, 255, 0.3);
 }
 
-.spinner {
-  border: 4px solid transparent;
-  border-top: 4px solid #3490dc; /* Change color as needed */
-  border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
-  animation: spin 1s linear infinite;
+.chart-container {
+  backdrop-filter: blur(20px);
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
 }
-
-
-
