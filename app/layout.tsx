@@ -1,8 +1,9 @@
+// app/layout.tsx (or the relevant file)
 import "./globals.css";
-import { Inter } from "next/font/google";
 import NextAuthProvider from "./providers";
-
-const inter = Inter({ subsets: ["latin"] });
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import QueryClientProviderWrapper from "@/components/QueryClientProviderWrapper";
 
 export const metadata = {
   title: "Stock Glimpse",
@@ -11,15 +12,19 @@ export const metadata = {
 
 export default function RootLayout({
   children,
-  Session,
+  session,
 }: {
   children: React.ReactNode;
-  Session: any;
+  session: any;
 }) {
   return (
     <html lang="en">
-      <body className={inter.className + " flex flex-row"}>
-        <NextAuthProvider session={Session}>{children}</NextAuthProvider>
+      <body>
+        <QueryClientProviderWrapper>
+          <Header />
+          <NextAuthProvider session={session}>{children}</NextAuthProvider>
+          <Footer />
+        </QueryClientProviderWrapper>
       </body>
     </html>
   );

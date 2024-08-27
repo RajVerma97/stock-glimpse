@@ -17,6 +17,7 @@ import {
 import annotationPlugin from "chartjs-plugin-annotation";
 import { Button } from "./ui/button";
 import { MoonLoader } from "react-spinners";
+import { isValid, parseISO, subDays, subMonths, subYears } from "date-fns";
 
 ChartJS.register(
   CategoryScale,

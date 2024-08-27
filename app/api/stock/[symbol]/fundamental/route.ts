@@ -1,6 +1,5 @@
 import axios from "axios";
 import { NextResponse } from "next/server";
-import { TimeFrame } from "../[timeFrame]/historical/route";
 
 interface Shareholder {
   name: string;
