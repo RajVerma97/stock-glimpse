@@ -1,7 +1,11 @@
 "use client";
+import ErrorMessage from "@/components/Error";
+import Loading from "@/components/Loading";
 import RatioChart from "@/components/RatioChart";
 import ShareholdingPatternChart from "@/components/ShareHoldingPatternChart";
+import SpinnerManager from "@/components/SpinnerManager";
 import StockPriceChart from "@/components/StockPriceChart";
+import { ToastManager } from "@/components/ToastManager";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -61,7 +65,7 @@ interface Stock {
   industry: string;
   description: string;
   country: string;
-  historicalData: HistoricalData[];
+  historicalData: any;
   shareholdingPattern: ShareholdingPattern | null;
   ratios: any;
 }
@@ -128,9 +132,10 @@ export default function StockDetailPage({ params }) {
     fetchHistoricalData();
   }, [symbol, timeFrame]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-  if (!stock) return <p>No data available</p>;
+  if (loading) return <Loading isLoading={loading} />;
+  if (!stock) return setError("No Stock details ");
+
+  if (error) return <ErrorMessage message={error} />;
 
   return (
     <div className="w-full p-8 grid gap-5">
@@ -228,12 +233,7 @@ export default function StockDetailPage({ params }) {
         {/* Increase the width and height of the StockPriceChart */}
         <div className="w-full h-[600px] mt-4">
           {historicalData.length > 0 && (
-            <StockPriceChart
-              historicalData={historicalData}
-              timeFrame={timeFrame}
-              setTimeFrame={setTimeFrame}
-              loading={chartLoading}
-            />
+            <StockPriceChart historicalData={historicalData} />
           )}
         </div>
       </div>

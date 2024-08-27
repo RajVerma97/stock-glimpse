@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import SpinnerManager from "@/components/SpinnerManager";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Loading from "@/components/Loading";
+import ErrorMessage from "@/components/Error";
 
 export default function SplashPage() {
   const router = useRouter();
@@ -53,8 +55,8 @@ export default function SplashPage() {
     router.push("/login");
   };
 
-  if (loading) return <SpinnerManager isLoading={loading} />;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) return <Loading isLoading={loading} />;
+  if (error) return <ErrorMessage message={error} />;
 
   return (
     <>

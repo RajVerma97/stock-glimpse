@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,7 +16,7 @@ import {
 } from "chart.js";
 import annotationPlugin from "chartjs-plugin-annotation";
 import { Button } from "./ui/button";
-import { MoonLoader } from "react-spinners"; // Add a spinner for loading
+import { MoonLoader } from "react-spinners";
 
 ChartJS.register(
   CategoryScale,
@@ -38,86 +39,55 @@ interface HistoricalDataEntry {
 }
 
 interface StockPriceChartProps {
-  initialTimeFrame: string;
+  historicalData: HistoricalDataEntry[];
 }
 
-const StockPriceChart = ({ initialTimeFrame }: StockPriceChartProps) => {
-  const [historicalData, setHistoricalData] = useState<HistoricalDataEntry[]>(
-    []
-  );
-  const [timeFrame, setTimeFrame] = useState<string>(initialTimeFrame);
-  const [loading, setLoading] = useState<boolean>(true);
-
+const StockPriceChart = ({ historicalData }: StockPriceChartProps) => {
+  const [timeFrame, setTimeFrame] = useState<string>("1M");
+  const [filteredData, setFilteredData] = useState<HistoricalDataEntry[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
   useEffect(() => {
-    const fetchHistoricalData = async (timeFrame: string) => {
-      setLoading(true);
-      try {
-        const response = await fetch(`/api/stockData?timeFrame=${timeFrame}`);
-        const data = await response.json();
-        setHistoricalData(data);
-      } catch (error) {
-        console.error("Error fetching historical data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchHistoricalData(timeFrame);
-  }, [timeFrame]);
-
-  const filterData = (data: HistoricalDataEntry[], frame: string) => {
+    setLoading(true);
     const now = new Date();
+    let startDate: Date;
 
-    let filtered = [...data];
-
-    switch (frame) {
+    switch (timeFrame) {
       case "1D":
-        filtered = data.filter((item) => {
-          const date = new Date(item.date);
-          return (
-            date.getFullYear() === now.getFullYear() &&
-            date.getMonth() === now.getMonth() &&
-            date.getDate() === now.getDate()
-          );
-        });
+        startDate = subDays(now, 1);
         break;
       case "1W":
-        filtered = data.filter((item) => {
-          const date = new Date(item.date);
-          const diffTime = Math.abs(now.getTime() - date.getTime());
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-          return diffDays <= 7;
-        });
+        startDate = subDays(now, 7);
         break;
       case "1M":
-        filtered = data.filter((item) => {
-          const date = new Date(item.date);
-          const diffTime = Math.abs(now.getTime() - date.getTime());
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-          return diffDays <= 30;
-        });
+        startDate = subMonths(now, 1);
         break;
       case "1Y":
-        filtered = data.filter((item) => {
-          const date = new Date(item.date);
-          const diffTime = Math.abs(now.getTime() - date.getTime());
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-          return diffDays <= 365;
-        });
+        startDate = subYears(now, 1);
         break;
       default:
-        break;
+        startDate = subYears(now, 1);
     }
 
-    return filtered;
-  };
+    const filtered = historicalData.filter((entry) => {
+      try {
+        const entryDate = parseISO(entry.date);
+        return isValid(entryDate) && entryDate >= startDate;
+      } catch {
+        return false;
+      }
+    });
 
-  const filteredData = filterData(historicalData, timeFrame);
-  const dates = filteredData.map((data) => data.date);
-  const prices = filteredData.map((data) => data.close);
+    setFilteredData(filtered);
 
-  const initialPrice = prices[0];
-  const finalPrice = prices[prices.length - 1];
+    setLoading(false);
+  }, [timeFrame, historicalData]);
+
+  const dates = filteredData.map((data) => data.date || "N/A");
+  const prices = filteredData.map((data) => data.close || 0);
+
+  const initialPrice = prices[0] || 0;
+  const finalPrice = prices[prices.length - 1] || 0;
   const lineColor = finalPrice > initialPrice ? "#10B981" : "#EC4899";
 
   const chartData: ChartData<"line"> = {
@@ -134,8 +104,8 @@ const StockPriceChart = ({ initialTimeFrame }: StockPriceChartProps) => {
         borderWidth: 2,
         backgroundColor:
           lineColor === "#10B981"
-            ? "rgba(255, 0, 0, 0.3)"
-            : "rgba(40, 195, 154, 0.3)",
+            ? "rgba(16, 185, 129, 0.3)"
+            : "rgba(236, 72, 96, 0.3)",
         fill: true,
         tension: 0.5,
       },
@@ -229,16 +199,6 @@ const StockPriceChart = ({ initialTimeFrame }: StockPriceChartProps) => {
     <div className="w-full h-[500px] p-4">
       <div className="mb-4 flex space-x-2">
         <Button
-          onClick={() => setTimeFrame("1D")}
-          className={`py-3 px-6 text-lg rounded-md ${
-            timeFrame === "1D"
-              ? "bg-indigo-500 text-white"
-              : "bg-white text-black"
-          }`}
-        >
-          1 Day
-        </Button>
-        <Button
           onClick={() => setTimeFrame("1W")}
           className={`py-3 px-6 text-lg rounded-md ${
             timeFrame === "1W"
@@ -273,11 +233,14 @@ const StockPriceChart = ({ initialTimeFrame }: StockPriceChartProps) => {
         <div className="flex justify-center items-center h-full">
           <MoonLoader color="#36d7b7" size={50} />
         </div>
+      ) : error ? (
+        <div className="flex justify-center items-center h-full text-red-500">
+          <p>{error}</p>
+        </div>
       ) : (
         <Line data={chartData} options={options} />
       )}
     </div>
   );
 };
-
 export default StockPriceChart;

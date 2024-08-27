@@ -1,10 +1,5 @@
 import axios from "axios";
-export enum TimeFrame {
-  OneDay = "1D",
-  OneWeek = "1W",
-  OneMonth = "1M",
-  OneYear = "1Y",
-}
+
 
 import { NextResponse } from "next/server";
 
@@ -18,43 +13,28 @@ interface HistoricalDataEntry {
 }
 
 async function fetchHistoricalData(
-  symbol: string,
-  timeFrame: TimeFrame
+  symbol: string
 ): Promise<HistoricalDataEntry[]> {
-  if (timeFrame === TimeFrame.OneDay) {
-    // Generate random data for 1D time frame
-    return generateRandomHistoricalData();
-  }
+  console.log("fetch historical data for symbol", symbol);
 
   const polygonApiKey = process.env.POLYGON_API_KEY;
-
-  const now = new Date();
-  let startDate: string;
-
-  switch (timeFrame) {
-    case TimeFrame.OneWeek:
-      now.setDate(now.getDate() - 7);
-      startDate = formatDate(now);
-      break;
-    case TimeFrame.OneMonth:
-      now.setMonth(now.getMonth() - 1);
-      startDate = formatDate(now);
-      break;
-    case TimeFrame.OneYear:
-      now.setFullYear(now.getFullYear() - 1);
-      startDate = formatDate(now);
-      break;
-    default:
-      throw new Error("Invalid time frame");
+  if (!polygonApiKey) {
+    throw new Error("POLYGON_API_KEY is not defined");
   }
 
-  const url = `https://api.polygon.io/v2/aggs/ticker/${symbol}/range/1/day/${startDate}/${formatDate(
-    new Date()
-  )}?apiKey=${polygonApiKey}`;
+  const now = new Date();
+  const interval = "1/day"; // Fixed interval of 1 day
+  const startDate = new Date(now.setFullYear(now.getFullYear() - 1)); // Fetch data for the past year
+  const formattedStartDate = formatDate(startDate);
+  const formattedEndDate = formatDate(new Date());
+
+  const url = `https://api.polygon.io/v2/aggs/ticker/${symbol}/range/${interval}/${formattedStartDate}/${formattedEndDate}?apiKey=${polygonApiKey}`;
 
   try {
     const response = await axios.get(url);
-    return response.data.results.map((entry: any) => ({
+    console.log("response", response.data.results);
+
+    const newData = response.data.results.map((entry: any) => ({
       date: new Date(entry.t).toISOString().split("T")[0],
       open: entry.o,
       high: entry.h,
@@ -62,27 +42,12 @@ async function fetchHistoricalData(
       close: entry.c,
       volume: entry.v,
     }));
+    console.log("response.data.results", newData);
+    return newData;
   } catch (error) {
     console.error(`Error fetching historical data for ${symbol}:`, error);
     throw error;
   }
-}
-
-function generateRandomHistoricalData(): HistoricalDataEntry[] {
-  const now = new Date();
-  const baseDate = formatDate(now);
-
-  // Generate random data for one day
-  const randomData: HistoricalDataEntry = {
-    date: baseDate,
-    open: parseFloat((Math.random() * 100).toFixed(2)),
-    high: parseFloat((Math.random() * 100).toFixed(2)),
-    low: parseFloat((Math.random() * 100).toFixed(2)),
-    close: parseFloat((Math.random() * 100).toFixed(2)),
-    volume: Math.floor(Math.random() * 100000),
-  };
-
-  return [randomData];
 }
 
 function formatDate(date: Date): string {
@@ -94,14 +59,15 @@ function formatDate(date: Date): string {
 
 export async function GET(
   request: Request,
-  { params }: { params: { symbol: string; timeFrame: TimeFrame } }
+  { params }: { params: { symbol: string } }
 ) {
-  const { symbol, timeFrame } = params;
+  const { symbol } = params;
 
   try {
-    const historicalData = await fetchHistoricalData(symbol, timeFrame);
+    const historicalData = await fetchHistoricalData(symbol);
     return NextResponse.json(historicalData);
   } catch (error) {
+    console.error("GET request error:", error);
     return NextResponse.json(
       { error: "Failed to fetch historical data" },
       { status: 500 }
