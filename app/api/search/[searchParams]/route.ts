@@ -8,7 +8,6 @@ export async function GET(
   const { searchParams } = params;
   try {
     const url = `https://api.polygon.io/v3/reference/tickers?search=${searchParams}&apiKey=${process.env.POLYGON_API_KEY}`;
-    console.log("in the search route", searchParams);
     const response = await axios.get(url);
     return NextResponse.json(response.data);
   } catch (error) {

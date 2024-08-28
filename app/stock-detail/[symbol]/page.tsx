@@ -1,145 +1,45 @@
 "use client";
+import { TimeFrame } from "@/app/enums/StockPriceChart.enum";
+import { useFetchHistoricalData } from "@/app/hooks/useFetchHistoricalData";
+import { useFetchStockDetails } from "@/app/hooks/useFetchStockDetails";
+import { HistoricalData, Stock } from "@/app/types/stock-detail";
+import { formatDate } from "@/app/utils/dateFormat";
 import ErrorMessage from "@/components/Error";
 import Loading from "@/components/Loading";
 import RatioChart from "@/components/RatioChart";
 import ShareholdingPatternChart from "@/components/ShareHoldingPatternChart";
-import SpinnerManager from "@/components/SpinnerManager";
 import StockPriceChart from "@/components/StockPriceChart";
-import { ToastManager } from "@/components/ToastManager";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-
-interface HistoricalDataEntry {
-  date: string;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-}
-
-interface HistoricalData extends HistoricalDataEntry {}
-
-interface StockPriceChartProps {
-  historicalData: HistoricalData[];
-  timeFrame: string;
-  setTimeFrame: (timeFrame: string) => void;
-}
-
-interface Shareholder {
-  name: string;
-  percentage: number;
-}
-
-interface ShareholdingPattern {
-  symbol: string;
-  promoters: Shareholder[];
-  institutionalInvestors: Shareholder[];
-  public: Shareholder[];
-}
-
-interface Stock {
-  companyName: string;
-  symbol: string;
-  currentPrice: number;
-  change: number;
-  percentageChange: number;
-  highPriceOfDay: number;
-  lowPriceOfDay: number;
-  openingPrice: number;
-  previousClosePrice: number;
-  timestamp: number;
-  logo: string;
-  peRatio: number | null;
-  bookValue: number | null;
-  marketCap: number | null;
-  roi: number | null;
-  roe: number | null;
-  roce: number | null;
-  dividendYield: number | null;
-  faceValue: number | null;
-  numberOfShares: number | null;
-  promoterHoldingPercentage: number | null;
-  totalDebt: number | null;
-  industry: string;
-  description: string;
-  country: string;
-  historicalData: any;
-  shareholdingPattern: ShareholdingPattern | null;
-  ratios: any;
-}
+import { useState, useEffect } from "react";
 
 export default function StockDetailPage({ params }) {
   const { symbol } = params;
 
-  const [stock, setStock] = useState<Stock | null>(null);
-  const [historicalData, setHistoricalData] = useState<HistoricalData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [chartLoading, setChartLoading] = useState<boolean>(false);
+  const [timeFrame, setTimeFrame] = useState<string>(TimeFrame.OneMonth);
   const [error, setError] = useState<string | null>(null);
-  const [timeFrame, setTimeFrame] = useState<string>("1M");
 
-  useEffect(() => {
-    const fetchStockDetails = async () => {
-      if (!symbol) return;
-      setLoading(true);
-      try {
-        const response = await fetch(`/api/stock/${symbol}/fundamental`);
-        if (!response.ok) {
-          throw new Error(
-            `Network response was not ok: ${await response.text()}`
-          );
-        }
-        const data = await response.json();
-        setStock(data);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "An unknown error occurred"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+  const {
+    data: stock,
+    isLoading: isStockDetailsLoading,
+    isError: isStockDetailsError,
+  } = useFetchStockDetails(symbol);
 
-    fetchStockDetails();
-  }, [symbol]);
+  const {
+    data: historicalData,
+    isLoading: isHistoricalDataLoading,
+    isError: isHistoricalDataError,
+  } = useFetchHistoricalData(symbol);
 
-  useEffect(() => {
-    const fetchHistoricalData = async () => {
-      if (!symbol || !timeFrame) return;
-      setChartLoading(true);
-      try {
-        const response = await fetch(
-          `/api/stock/${symbol}/${timeFrame}/historical/`
-        );
-        if (!response.ok) {
-          throw new Error(
-            `Network response was not ok: ${await response.text()}`
-          );
-        }
-        const data = await response.json();
-        setHistoricalData(data);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "An unknown error occurred"
-        );
-      } finally {
-        setChartLoading(false);
-      }
-    };
-
-    fetchHistoricalData();
-  }, [symbol, timeFrame]);
-
-  if (loading) return <Loading isLoading={loading} />;
-  if (!stock) return setError("No Stock details ");
-
+  if (isStockDetailsLoading || isHistoricalDataLoading)
+    return <Loading isLoading={true} />;
   if (error) return <ErrorMessage message={error} />;
+
+  if (!stock) return <ErrorMessage message="No stock details available" />;
 
   return (
     <div className="w-full p-8 grid gap-5">
-      <div className="mb-5  flex  gap-5">
+      <div className="mb-5 flex gap-5">
         <Card>
           <CardHeader>
             <div className="flex items-center">
@@ -224,16 +124,16 @@ export default function StockDetailPage({ params }) {
               <strong>Total Debt:</strong> {stock.totalDebt ?? "N/A"}
             </p>
           </div>
-          <CardFooter>
-            Data last updated at{" "}
-            {new Date(stock.timestamp * 1000).toLocaleString()}
-          </CardFooter>
+          <CardFooter>Data last updated at {formatDate(new Date())}</CardFooter>
         </Card>
 
-        {/* Increase the width and height of the StockPriceChart */}
         <div className="w-full h-[600px] mt-4">
-          {historicalData.length > 0 && (
-            <StockPriceChart historicalData={historicalData} />
+          {historicalData && historicalData.length > 0 && (
+            <StockPriceChart
+              historicalData={historicalData}
+              timeFrame={timeFrame}
+              setTimeFrame={setTimeFrame}
+            />
           )}
         </div>
       </div>

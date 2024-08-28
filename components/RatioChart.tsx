@@ -11,6 +11,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { RatioData, RatioItem } from "@/app/types/stock-detail";
 
 ChartJS.register(
   CategoryScale,
@@ -21,15 +22,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-interface RatioItem {
-  period: string;
-  v: number;
-}
-
-interface RatioData {
-  [key: string]: RatioItem[];
-}
 
 interface RatioChartProps {
   ratios: RatioData;

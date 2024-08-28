@@ -71,7 +71,6 @@ const handler = NextAuth({
         },
       },
       profile(profile) {
-        console.log("GitHub profile:", profile);
         return {
           id: profile.id,
           name: profile.login,

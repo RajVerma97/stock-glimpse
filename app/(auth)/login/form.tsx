@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  GithubSignInButton,
-  GoogleSignInButton,
-} from "@/components/AuthButtons";
+import { GithubSignInButton, GoogleSignInButton } from "@/components/authButtons";
 import SpinnerManager from "@/components/SpinnerManager";
 import { notify, ToastManager } from "@/components/ToastManager";
 import { Button } from "@/components/ui/button";

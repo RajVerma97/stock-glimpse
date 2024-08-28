@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { hash } from "bcrypt";
 import User from "@/lib/models/Users";
 import { error } from "console";
-import { connectDB } from "@/lib/connectDb";
+import { connectDB } from "@/lib/connectDB";
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +11,6 @@ export async function POST(request: Request) {
     const { email, password } = await request.json();
 
     const user = await User.findOne({ email }).exec();
-    console.log("hel");
 
     if (user) {
       return NextResponse.json(

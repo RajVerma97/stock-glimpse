@@ -1,18 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { searchStocks } from "../queries/search-stock";
 
-const fetchStocks = async (searchParams: string): Promise<any> => {
-  const response = await axios.get("/api/stocks/search", {
-    params: { searchParams }, // Correctly set query as a simple parameter
-  });
-  return response.data;
-};
-
-const useSearchStocks = (searchParams: string) => {
+export function useSearchStocks(searchParams: string) {
   return useQuery({
     queryKey: ["search", searchParams],
-    queryFn: () => fetchStocks(searchParams),
+    queryFn: () => searchStocks(searchParams),
     enabled: !!searchParams,
   });
-};
-export default useSearchStocks;
+}

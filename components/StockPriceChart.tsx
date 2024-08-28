@@ -17,7 +17,9 @@ import {
 import annotationPlugin from "chartjs-plugin-annotation";
 import { Button } from "./ui/button";
 import { MoonLoader } from "react-spinners";
-import { isValid, parseISO, subDays, subMonths, subYears } from "date-fns";
+import dayjs from "dayjs";
+import { TimeFrame } from "@/app/enums/StockPriceChart.enum";
+import { HistoricalDataEntry } from "@/app/types/stock-detail";
 
 ChartJS.register(
   CategoryScale,
@@ -30,59 +32,55 @@ ChartJS.register(
   annotationPlugin
 );
 
-interface HistoricalDataEntry {
-  date: string;
-  open: number;
-  high: number;
-  low: number;
-  close: number;
-  volume: number;
-}
-
 interface StockPriceChartProps {
   historicalData: HistoricalDataEntry[];
+  timeFrame: string;
+  setTimeFrame: (timeFrame: string) => void;
 }
 
-const StockPriceChart = ({ historicalData }: StockPriceChartProps) => {
-  const [timeFrame, setTimeFrame] = useState<string>("1M");
+const StockPriceChart = ({
+  historicalData,
+  timeFrame,
+  setTimeFrame,
+}: StockPriceChartProps) => {
   const [filteredData, setFilteredData] = useState<HistoricalDataEntry[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     setLoading(true);
-    const now = new Date();
-    let startDate: Date;
+    const now = dayjs();
+    let startDate: dayjs.Dayjs;
 
     switch (timeFrame) {
-      case "1D":
-        startDate = subDays(now, 1);
+      case TimeFrame.OneDay:
+        startDate = dayjs().subtract(1, "day");
         break;
-      case "1W":
-        startDate = subDays(now, 7);
+      case TimeFrame.OneWeek:
+        startDate = dayjs().subtract(1, "week");
         break;
-      case "1M":
-        startDate = subMonths(now, 1);
+      case TimeFrame.OneMonth:
+        startDate = dayjs().subtract(1, "month");
         break;
-      case "1Y":
-        startDate = subYears(now, 1);
+      case TimeFrame.OneYear:
+        startDate = dayjs().subtract(1, "year");
         break;
       default:
-        startDate = subYears(now, 1);
+        startDate = dayjs();
     }
 
     const filtered = historicalData.filter((entry) => {
-      try {
-        const entryDate = parseISO(entry.date);
-        return isValid(entryDate) && entryDate >= startDate;
-      } catch {
-        return false;
-      }
+      const entryDate = dayjs(entry.date);
+      return (
+        (entryDate.isAfter(startDate) && entryDate.isBefore(now)) ||
+        entryDate.isSame(startDate) ||
+        entryDate.isSame(now)
+      );
     });
 
     setFilteredData(filtered);
 
     setLoading(false);
-  }, [timeFrame, historicalData]);
+  }, [historicalData, timeFrame]);
 
   const dates = filteredData.map((data) => data.date || "N/A");
   const prices = filteredData.map((data) => data.close || 0);
@@ -98,10 +96,10 @@ const StockPriceChart = ({ historicalData }: StockPriceChartProps) => {
         label: "Closing Price",
         data: prices,
         borderColor: lineColor,
-        pointRadius: timeFrame === "1Y" ? 1 : 2,
+        pointRadius: timeFrame === TimeFrame.OneYear ? 1 : 2,
         pointBackgroundColor: "#fff",
         pointBorderColor: "#fff",
-        pointBorderWidth: timeFrame === "1Y" ? 1 : 2,
+        pointBorderWidth: timeFrame === TimeFrame.OneYear ? 1 : 2,
         borderWidth: 2,
         backgroundColor:
           lineColor === "#10B981"
@@ -200,9 +198,9 @@ const StockPriceChart = ({ historicalData }: StockPriceChartProps) => {
     <div className="w-full h-[500px] p-4">
       <div className="mb-4 flex space-x-2">
         <Button
-          onClick={() => setTimeFrame("1W")}
+          onClick={() => setTimeFrame(TimeFrame.OneWeek)}
           className={`py-3 px-6 text-lg rounded-md ${
-            timeFrame === "1W"
+            timeFrame === TimeFrame.OneWeek
               ? "bg-indigo-500 text-white"
               : "bg-white text-black"
           }`}
@@ -210,9 +208,9 @@ const StockPriceChart = ({ historicalData }: StockPriceChartProps) => {
           1 Week
         </Button>
         <Button
-          onClick={() => setTimeFrame("1M")}
+          onClick={() => setTimeFrame(TimeFrame.OneMonth)}
           className={`py-3 px-6 text-lg rounded-md ${
-            timeFrame === "1M"
+            timeFrame === TimeFrame.OneMonth
               ? "bg-indigo-500 text-white"
               : "bg-white text-black"
           }`}
@@ -220,9 +218,9 @@ const StockPriceChart = ({ historicalData }: StockPriceChartProps) => {
           1 Month
         </Button>
         <Button
-          onClick={() => setTimeFrame("1Y")}
+          onClick={() => setTimeFrame(TimeFrame.OneYear)}
           className={`py-3 px-6 text-lg rounded-md ${
-            timeFrame === "1Y"
+            timeFrame === TimeFrame.OneYear
               ? "bg-indigo-500 text-white"
               : "bg-white text-black"
           }`}

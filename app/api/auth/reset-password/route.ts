@@ -2,14 +2,13 @@ import User from "@/lib/models/Users";
 import { NextResponse } from "next/server";
 import { hash } from "bcrypt";
 import crypto from "crypto";
-import { connectDB } from "@/lib/connectDb";
+import { connectDB } from "@/lib/connectDB";
 
 export async function POST(req: Request, res: Response) {
   const { email, password, token } = await req.json();
 
   try {
     await connectDB();
-    console.log(token, password, "token and password from route");
     const user = await User.findOne({
       email: email,
     });

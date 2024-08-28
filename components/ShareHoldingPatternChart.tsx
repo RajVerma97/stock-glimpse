@@ -2,20 +2,9 @@ import React, { useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Button } from "./ui/button";
+import { ShareholdingPattern } from "@/app/types/stock-detail";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-interface Shareholder {
-  name: string;
-  percentage: number;
-}
-
-interface ShareholdingPattern {
-  symbol: string;
-  promoters: Shareholder[];
-  institutionalInvestors: Shareholder[];
-  public: Shareholder[];
-}
 
 interface ShareholdingPatternChartProps {
   data: ShareholdingPattern;

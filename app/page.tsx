@@ -20,68 +20,36 @@ import {
 import axios from "axios";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { Search } from "lucide-react";
-import useSearchStocks from "./hooks/useSearchStocks";
-
-type SearchData = {
-  id: number;
-  name: string;
-};
+import { SearchData } from "./types/splash-page";
+import { useFetchGainersAndLosers } from "./hooks/useFetchGainersAndLosers";
+import { useFetchHistoricalData } from "./hooks/useFetchHistoricalData";
+import { useSearchStocks } from "./hooks/useSearchStocks";
+import { useFetchStockDetails } from "./hooks/useFetchStockDetails";
+import { symlink } from "fs";
 
 export default function SplashPage() {
   const router = useRouter();
   const { data: session } = useSession();
-  const [topGainers, setTopGainers] = useState<any[]>([]);
-  const [topLosers, setTopLosers] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [searchParams, setSearchParams] = useState<string>("");
   const [searchData, setSearchData] = useState<any[]>([]);
   const [isSearchLoading, setIsSearchLoading] = useState<boolean>(false);
 
-  const search = async (searchParams: string): Promise<SearchData[]> => {
-    if (!searchParams) return [];
-    try {
-      const response = await axios.get(`/api/search/${searchParams}`);
-      if (response.status !== 200) {
-        throw new Error(`Something went wrong: ${response.statusText}`);
-      }
-      const data = response.data;
-      if (Array.isArray(data.results)) {
-        return data.results;
-      } else {
-        return [];
-      }
-    } catch (error) {
-      console.error("Search error:", error);
-      return [];
-    }
-  };
+  const {
+    data: stockSearchData,
+    isLoading: isStockSearchLoading,
+    isError: isStockSearchError,
+  } = useSearchStocks(searchParams);
 
-  const { data, isLoading, isError } = useSearchStocks(searchParams);
-  const fetchTopGainersAndLosers = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/top-gainers-and-losers");
-      if (!response.ok) {
-        throw new Error(
-          `Network response was not ok: ${await response.text()}`
-        );
-      }
-      const data = await response.json();
-      setTopGainers(data.topGainers);
-      setTopLosers(data.topLosers);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "An unknown error occurred"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  const {
+    data: topGainersAndLosersData,
+    isLoading: IsTopGainersAndLosersLoading,
+    isError: topGainersAndLosersIsError,
+  } = useFetchGainersAndLosers();
 
-  useEffect(() => {
-    fetchTopGainersAndLosers();
-  }, []);
+  const topGainers = topGainersAndLosersData?.topGainers;
+  const topLosers = topGainersAndLosersData?.topLosers;
 
   const logout = async () => {
     await signOut({ redirect: true, callbackUrl: "/" });
@@ -116,7 +84,7 @@ export default function SplashPage() {
               {searchData?.map((stock: any) => (
                 <CommandItem
                   key={stock.symbol}
-                  onClick={() => router.push(`/stock/${stock.symbol}`)}
+                  onClick={() => router.push(`/stock-detail/${stock.symbol}`)}
                 >
                   <span>{stock.name}</span>
                 </CommandItem>
@@ -141,10 +109,10 @@ export default function SplashPage() {
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Top Gainers</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {topGainers.slice(0, 5).map((stock: any) => (
+          {topGainers?.slice(0, 5).map((stock: any) => (
             <Link
               key={stock.symbol}
-              href={`/stock/${stock.symbol}`}
+              href={`/stock-detail/${stock.symbol}`}
               className="block"
             >
               <Card className="shadow-md p-4 border rounded-lg cursor-pointer">
@@ -179,10 +147,10 @@ export default function SplashPage() {
       <div>
         <h2 className="text-2xl font-semibold mb-4">Top Losers</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {topLosers.slice(0, 5).map((stock: any) => (
+          {topLosers?.slice(0, 5).map((stock: any) => (
             <Link
               key={stock.symbol}
-              href={`/stock/${stock.symbol}`}
+              href={`/stock-detail/${stock.symbol}`}
               className="block"
             >
               <Card className="shadow-md p-4 border rounded-lg cursor-pointer">
