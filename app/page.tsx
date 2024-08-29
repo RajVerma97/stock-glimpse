@@ -56,15 +56,14 @@ export default function SplashPage() {
       <div>
         <Command className="rounded-lg border shadow-md md:min-w-[450px] bg-white text-black focus:border-blue-300">
           <CommandInput
-            className="text-2xl p-3 "
-            placeholder="Search for stocks..."
+            className="text-3xl p-3 "
+            placeholder="Search for stocks...."
             value={searchParams}
             onValueChange={(value) => setSearchParams(value)}
           />
           <CommandList className="max-h-60 overflow-y-auto">
             {isStockSearchLoading ? (
               <div className="flex justify-center items-center p-4">
-                {/* <Loading isLoading={isStockSearchLoading} /> */}
                 <MoonLoader
                   color="black"
                   loading={isStockSearchLoading}
