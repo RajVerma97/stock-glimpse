@@ -1,7 +1,7 @@
 "use client";
 import { TimeFrame } from "@/app/enums/StockPriceChart.enum";
-import { useFetchHistoricalData } from "@/app/hooks/useFetchHistoricalData";
-import { useFetchStockDetails } from "@/app/hooks/useFetchStockDetails";
+import { useFetchHistoricalData } from "@/app/hooks/use-fetch-historical-data";
+import { useFetchStockDetails } from "@/app/hooks/use-fetch-stock-details";
 import { HistoricalData, Stock } from "@/app/types/stock-detail";
 import { formatDate } from "@/app/utils/dateFormat";
 import ErrorMessage from "@/components/Error";
