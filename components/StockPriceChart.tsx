@@ -46,6 +46,7 @@ const StockPriceChart = ({
   const [filteredData, setFilteredData] = useState<HistoricalDataEntry[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     setLoading(true);
     const now = dayjs();
