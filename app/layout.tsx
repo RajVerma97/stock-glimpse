@@ -4,6 +4,9 @@ import NextAuthProvider from "./providers";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import QueryClientProviderWrapper from "@/components/QueryClientProviderWrapper";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import BackButton from "@/components/BackButton";
 
 export const metadata = {
   title: "Stock Glimpse",
@@ -22,6 +25,7 @@ export default function RootLayout({
       <body>
         <QueryClientProviderWrapper>
           <Header />
+          <BackButton />
           <NextAuthProvider session={session}>{children}</NextAuthProvider>
           <Footer />
         </QueryClientProviderWrapper>
