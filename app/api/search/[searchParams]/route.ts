@@ -34,7 +34,6 @@ export async function GET(
   try {
     const apiUrl = `https://api.polygon.io/v3/reference/tickers?search=${searchParams}&apiKey=${process.env.POLYGON_API_KEY}`;
     const response = await axios.get(apiUrl);
-    console.log(response.data.results);
 
     if (response.data && response.data.results) {
       const results: StockData[] = response.data.results;
