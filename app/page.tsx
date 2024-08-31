@@ -22,9 +22,10 @@ import { useFetchGainersAndLosers } from "./hooks/use-fetch-gainers-and-losers";
 import Image from "next/image";
 import { MoonLoader } from "react-spinners";
 import SearchStocks from "@/components/SearchStocks";
-import MarketStatus from "@/components/MarketStatus";
 import { motion } from "framer-motion";
 import StockCard from "@/components/StockCard";
+import { useFetchMarketIndex } from "./hooks/use-fetch-market-index";
+import MarketIndex from "@/components/MarketIndex";
 
 export default function SplashPage() {
   const router = useRouter();
@@ -39,6 +40,12 @@ export default function SplashPage() {
   const topGainers = topGainersAndLosersData?.topGainers;
   const topLosers = topGainersAndLosersData?.topLosers;
 
+  const {
+    data: marketIndexInfo,
+    isLoading: isMarketIndexInfoLoading,
+    isError: isMarketIndexInfoError,
+  } = useFetchMarketIndex("SPY");
+
   const logout = async () => {
     await signOut({ redirect: true, callbackUrl: "/" });
   };
@@ -46,6 +53,7 @@ export default function SplashPage() {
   return (
     <div className="grid gap-8">
       <SearchStocks />
+      <MarketIndex />
 
       <div className="mb-4"></div>
       <div className="mb-8">

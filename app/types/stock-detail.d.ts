@@ -56,6 +56,7 @@ export interface Stock {
   historicalData: any;
   shareholdingPattern: ShareholdingPattern | null;
   ratios: any;
+  debtToEquityRatio: number;
 }
 
 export interface RatioItem {
@@ -66,4 +67,3 @@ export interface RatioItem {
 export interface RatioData {
   [key: string]: RatioItem[];
 }
-

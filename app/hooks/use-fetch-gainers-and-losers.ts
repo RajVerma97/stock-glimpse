@@ -7,4 +7,3 @@ export function useFetchGainersAndLosers() {
     queryFn: fetchGainersAndLosers,
   });
 }
-

@@ -6,10 +6,17 @@ import { HistoricalData, Stock } from "@/app/types/stock-detail";
 import { formatDate } from "@/app/utils/dateFormat";
 import ErrorMessage from "@/components/Error";
 import Loading from "@/components/Loading";
+import RatioCard from "@/components/RatioCard";
+import RatioCardList from "@/components/RatioCardList";
 import RatioChart from "@/components/RatioChart";
 import ShareholdingPatternChart from "@/components/ShareHoldingPatternChart";
 import StockPriceChart from "@/components/StockPriceChart";
-import { Card, CardFooter, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
@@ -143,10 +150,14 @@ export default function StockDetailPage({ params }) {
           <ShareholdingPatternChart data={stock.shareholdingPattern} />
         )}
       </div>
-      <div className="w-full p-10 ">
-        <h1>Ratios</h1>
-        <RatioChart ratios={stock.ratios} />
+
+      <div>
+        <RatioCardList stock={stock} />
       </div>
+
+      {/* <div className="w-full p-10 ">
+        <RatioChart ratios={stock.ratios} />
+      </div> */}
     </div>
   );
 }

@@ -7,6 +7,5 @@ export async function GET() {
   const response = await axios.get(
     `https://api.polygon.io/v2/aggs/ticker/${SPX_TICKER}/range/1/day/2023-01-01/2023-08-01?adjusted=true&sort=asc&limit=120&apiKey=${POLYGON_API_KEY}`
   );
-  console.log(response);
   return NextResponse.json({ message: "Method not allowed" }, { status: 405 });
 }
