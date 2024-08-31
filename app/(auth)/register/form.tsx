@@ -45,8 +45,9 @@ export default function Form() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-2 mx-auto max-w-md mt-10"
+      className="flex flex-col gap-4 mx-auto max-w-md mt-10"
     >
+      <h1 className="text-3xl text-center mb-5">Register</h1>
       <Input
         name="email"
         className="border border-black text-black"

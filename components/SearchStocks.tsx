@@ -31,10 +31,10 @@ export default function SearchStocks({}) {
 
   return (
     <div>
-      <Command className=" px-4 py-2 rounded-lg border shadow-md md:min-w-[450px] bg-white text-black focus:border-blue-300">
+      <Command className=" px-4 py-1 rounded-lg border shadow-md md:min-w-[450px] bg-white text-black focus:border-blue-300">
         <CommandInput
-          className="text-3xl p-2 "
-          placeholder="Search for stocks...."
+          className="text-2xl p-4 "
+          placeholder="search for stocks...."
           value={searchParams}
           onValueChange={(value) => setSearchParams(value)}
         />

@@ -1,6 +1,9 @@
 "use client";
 
-import { GithubSignInButton, GoogleSignInButton } from "@/components/authButtons";
+import {
+  GithubSignInButton,
+  GoogleSignInButton,
+} from "@/components/authButtons";
 import SpinnerManager from "@/components/SpinnerManager";
 import { notify, ToastManager } from "@/components/ToastManager";
 import { Button } from "@/components/ui/button";
@@ -38,36 +41,39 @@ export default function Form() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-2 mx-auto max-w-md mt-10"
-    >
-      <Input
-        name="email"
-        className="border border-black text-black"
-        type="email"
-        placeholder="Email"
-        required
-      />
-      <Input
-        name="password"
-        className="border border-black text-black"
-        type="password"
-        placeholder="Password"
-        required
-      />
-      <Button variant={"outline"} type="submit" disabled={isLoading}>
-        Login
-      </Button>
+    <>
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-2 mx-auto max-w-md mt-10"
+      >
+        <h1 className="text-3xl text-center mb-5">Login</h1>
+        <Input
+          name="email"
+          className="border border-black text-black"
+          type="email"
+          placeholder="Email"
+          required
+        />
+        <Input
+          name="password"
+          className="border border-black text-black"
+          type="password"
+          placeholder="Password"
+          required
+        />
+        <Button variant={"outline"} type="submit" disabled={isLoading}>
+          Login
+        </Button>
 
-      <SpinnerManager isLoading={isLoading} />
+        <SpinnerManager isLoading={isLoading} />
 
-      <GoogleSignInButton />
-      <GithubSignInButton />
-      <Button asChild variant={"link"}>
-        <Link href="/forget-password">Forget password?</Link>
-      </Button>
-      <ToastManager />
-    </form>
+        <GoogleSignInButton />
+        <GithubSignInButton />
+        <Button asChild variant={"link"}>
+          <Link href="/forget-password">Forget password?</Link>
+        </Button>
+        <ToastManager />
+      </form>
+    </>
   );
 }
