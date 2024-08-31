@@ -101,10 +101,8 @@ export async function GET(
       previousClosePrice: quoteResponse.data.pc,
       timestamp: quoteResponse.data.t,
       peRatio: peRatio !== null ? parseFloat(peRatio) : null,
-      bookValue:
-        fundamentalsResponse.data.metric.tangibleBookValuePerShareAnnual ||
-        null,
-      marketCap: fundamentalsResponse.data.metric.marketCapitalization || null,
+      bookValue: fundamentalsResponse.data.metric.ptbvAnnual,
+      marketCap: fundamentalsResponse.data.metric.marketCapitalization,
       roi: roi,
       roe: roe,
       dividendYield: divYield,
@@ -120,6 +118,9 @@ export async function GET(
       country: profileResponse.data.country,
       logo: profileResponse.data.logo,
       shareholdingPattern: shareholdingResponse,
+      debtToEquityRatio:
+        fundamentalsResponse.data.metric["longTermDebt/equityAnnual"],
+      epsTTM: fundamentalsResponse.data.metric.epsTTM,
       ratios: {
         bookValue: fundamentalsResponse.data.series.annual.bookValue,
         roic: fundamentalsResponse.data.series.annual.roic,
