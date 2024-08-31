@@ -26,6 +26,8 @@
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
     "dayjs": "^1.11.13",
+    "framer-motion": "^11.3.31",
+    "isomorphic-ws": "^5.0.0",
     "lucide-react": "^0.429.0",
     "mongoose": "^8.5.3",
     "next": "13.4.2",

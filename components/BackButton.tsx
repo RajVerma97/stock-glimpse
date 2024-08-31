@@ -4,6 +4,7 @@ import React from "react";
 import { Button } from "./ui/button";
 import { ArrowLeft } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function BackButton() {
   const router = useRouter();
@@ -17,10 +18,13 @@ export default function BackButton() {
     <>
       {pathName !== "/" && (
         <Button onClick={goBack}>
-          <ArrowLeft
-            size={35}
-            className="hover:scale-125 hover:text-gray-300 hover:text-lg"
-          />
+          <motion.div
+            whileHover={{ scale: 1.25, color: "#D1D5DB" }}
+            whileTap={{ scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 500, damping: 20 }}
+          >
+            <ArrowLeft size={35} className="text-white" />
+          </motion.div>
         </Button>
       )}
     </>
