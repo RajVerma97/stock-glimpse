@@ -20,7 +20,7 @@ export default function RatioCard({ title, value, icon: Icon }) {
       initial="initial"
       whileHover="hover"
       variants={bounceVariants}
-      className="p-4"
+      className=""
     >
       <Card className="bg-gradient-to-r from-gray-100 to-white shadow-lg rounded-lg overflow-hidden ">
         <CardHeader className="border-b border-gray-200 p-4 flex flex-row justify-between items-center">
@@ -28,7 +28,7 @@ export default function RatioCard({ title, value, icon: Icon }) {
           {Icon && <Icon className="h-6 w-6 text-gray-600 mr-2" />}
         </CardHeader>
         <CardContent className="flex items-center justify-center h-full p-8">
-          <h1 className="text-6xl font-bold text-pink-600">
+          <h1 className="text-5xl font-bold text-pink-600">
             {value?.toFixed(2)} {title === "ROE" || title === "ROI" ? "%" : ""}
           </h1>
         </CardContent>
