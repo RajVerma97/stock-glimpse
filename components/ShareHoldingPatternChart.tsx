@@ -111,17 +111,17 @@ const ShareholdingPatternChart: React.FC<ShareholdingPatternChartProps> = ({
   }
 
   return (
-    <div className="border border-gray-300 rounded-lg p-8 shadow-lg ">
+    <div className="border border-gray-300 rounded-lg p-8 shadow-lg grid gap-5  ">
       <div className="flex-1">
-        <div className="chart-container" style={{ height: "400px" }}>
+        <div className="chart-container" style={{ height: "380px" }}>
           <Pie data={chartData} options={chartOptions} />
         </div>
       </div>
 
-      <div className=" grid grid-cols-3 gap-5">
+      <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 ">
         <Button
           onClick={() => setActiveCategory("promoters")}
-          className={`py-3 px-6 text-lg rounded-md text-white ${
+          className={`p-5 text-lg rounded-md text-white ${
             activeCategory === "promoters"
               ? "bg-indigo-500"
               : "bg-white text-black border border-gray-300"
@@ -131,7 +131,7 @@ const ShareholdingPatternChart: React.FC<ShareholdingPatternChartProps> = ({
         </Button>
         <Button
           onClick={() => setActiveCategory("institutionalInvestors")}
-          className={`py-3 px-6 text-lg rounded-md text-white ${
+          className={`p-5 text-lg rounded-md text-white ${
             activeCategory === "institutionalInvestors"
               ? "bg-indigo-500"
               : "bg-white text-black border border-gray-300"
@@ -141,7 +141,7 @@ const ShareholdingPatternChart: React.FC<ShareholdingPatternChartProps> = ({
         </Button>
         <Button
           onClick={() => setActiveCategory("public")}
-          className={`py-3 px-6 text-lg rounded-md text-white ${
+          className={`p-5 text-lg rounded-md text-white ${
             activeCategory === "public"
               ? "bg-indigo-500"
               : "bg-white text-black border border-gray-300"

@@ -196,7 +196,7 @@ const StockPriceChart = ({
   };
 
   return (
-    <div className="w-full h-[500px] p-4">
+    <div className="w-full  h-[450px] sm:h-[500px] ">
       <div className="mb-4 flex space-x-2">
         <Button
           onClick={() => setTimeFrame(TimeFrame.OneWeek)}
