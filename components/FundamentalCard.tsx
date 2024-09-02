@@ -2,8 +2,17 @@ import React from "react";
 import { Card, CardFooter, CardHeader } from "./ui/card";
 import { formatDate } from "@/app/utils/dateFormat";
 import Image from "next/image";
+import { Button } from "./ui/button";
+import { useMutation } from "@tanstack/react-query";
+import { useAddToWatchListMutation } from "@/app/hooks/use-add-to-watchlist";
+// import { useAddToWatchListMutation } from "@/app/hooks/use-add-to-watchlist";
 
 export default function FundamentalCard({ stock }) {
+  const addToWatchListMutation = useAddToWatchListMutation();
+
+  const handleAddToWatchList = () => {
+    addToWatchListMutation.mutate(stock.symbol);
+  };
   return (
     <div className="">
       <Card className="w-full p-2 mb-10 md:mb-0">
@@ -89,6 +98,7 @@ export default function FundamentalCard({ stock }) {
           <p>
             <strong>Total Debt:</strong> {stock.totalDebt ?? "N/A"}
           </p>
+          <Button onClick={handleAddToWatchList}>Add to watchlist</Button>
         </div>
       </Card>
     </div>
