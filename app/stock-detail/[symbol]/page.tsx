@@ -12,6 +12,7 @@ import RatioCardList from "@/components/RatioCardList";
 import RatioChart from "@/components/RatioChart";
 import ShareholdingPatternChart from "@/components/ShareHoldingPatternChart";
 import StockPriceChart from "@/components/StockPriceChart";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -44,6 +45,8 @@ export default function StockDetailPage({ params }) {
   if (error) return <ErrorMessage message={error} />;
 
   if (!stock) return <ErrorMessage message="No stock details available" />;
+
+  const addToWatchList = async () => {};
 
   return (
     <div className="w-full p-10 grid gap-[5rem]">
