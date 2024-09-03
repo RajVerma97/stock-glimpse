@@ -5,11 +5,10 @@ import { ReactNode } from "react";
 
 type Props = {
   children?: ReactNode;
-  session: any;
 };
 
-const NextAuthProvider = ({ children, session }: Props) => {
-  return <SessionProvider session={session}> {children}</SessionProvider>;
+const NextAuthProvider = ({ children }: Props) => {
+  return <SessionProvider>{children}</SessionProvider>;
 };
 
 export default NextAuthProvider;

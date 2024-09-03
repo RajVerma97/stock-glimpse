@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { useAddToWatchListMutation } from "@/app/hooks/use-add-to-watchlist";
-// import { useAddToWatchListMutation } from "@/app/hooks/use-add-to-watchlist";
+import { notify, ToastManager } from "./ToastManager";
 
 export default function FundamentalCard({ stock }) {
   const addToWatchListMutation = useAddToWatchListMutation();
@@ -13,6 +13,8 @@ export default function FundamentalCard({ stock }) {
   const handleAddToWatchList = () => {
     addToWatchListMutation.mutate(stock.symbol);
   };
+
+
   return (
     <div className="">
       <Card className="w-full p-2 mb-10 md:mb-0">
@@ -101,6 +103,7 @@ export default function FundamentalCard({ stock }) {
           <Button onClick={handleAddToWatchList}>Add to watchlist</Button>
         </div>
       </Card>
+      <ToastManager />
     </div>
   );
 }

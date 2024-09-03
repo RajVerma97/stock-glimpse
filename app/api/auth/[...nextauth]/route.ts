@@ -5,6 +5,7 @@ import User from "@/lib/models/Users";
 import GoogleProvider from "next-auth/providers/google";
 import GithubProvider from "next-auth/providers/github";
 import { connectDB } from "@/lib/connectDB";
+import { callback } from "chart.js/dist/helpers/helpers.core";
 
 const handler = NextAuth({
   session: {
@@ -26,15 +27,12 @@ const handler = NextAuth({
           throw new Error("Email and password are required");
         }
 
-        // Find the user by email
         const user = await User.findOne({ email: credentials.email }).exec();
 
-        // Check if user exists
         if (!user) {
           throw new Error("No user found with that email");
         }
 
-        // Compare password
         const passwordCorrect = await compare(
           credentials.password,
           user.password
@@ -80,6 +78,25 @@ const handler = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    async signIn({ user, account, profile }) {
+      await connectDB();
+
+      const existingUser = await User.findOne({ email: user.email }).exec();
+
+      if (!existingUser) {
+        const newUser = new User({
+          email: user.email,
+          name: user.name,
+          img: user.image,
+          provider: account?.provider,
+        });
+        await newUser.save();
+      }
+
+      return true; // Continue the sign-in process
+    },
+  },
 });
 
 export { handler as GET, handler as POST };

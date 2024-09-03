@@ -1,15 +1,18 @@
+import {
+  useMutation,
+  UseMutationOptions,
+  UseMutationResult,
+} from "@tanstack/react-query";
 
-import { useMutation } from "@tanstack/react-query";
-
-interface UseAuthenticatedMutationOptions<TData> {
-  mutationFn: (data: TData) => Promise<any>;
-  onSuccess?: () => void;
-  onError?: (error: any) => void;
+interface UseAuthenticatedMutationOptions<TData, TSuccess, TError> {
+  mutationFn: (data: TData) => Promise<TSuccess>;
+  onSuccess?: (data: TSuccess) => void;
+  onError?: (error: TError) => void;
 }
 
-const useAuthenticatedMutation = <TData,>(
-  options: UseAuthenticatedMutationOptions<TData>
-) => {
+const useAuthenticatedMutation = <TData, TSuccess, TError = any>(
+  options: UseAuthenticatedMutationOptions<TData, TSuccess, TError>
+): UseMutationResult<TSuccess, TError, TData> => {
   const { mutationFn, onSuccess, onError } = options;
 
   return useMutation({

@@ -1,9 +1,8 @@
-
-import mongoose from "mongoose";
+import mongoose, { mongo, Mongoose } from "mongoose";
+import { types } from "util";
 
 const userSchema = new mongoose.Schema(
   {
-   
     email: {
       type: String,
       required: true,
@@ -20,16 +19,20 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    resetPasswordToken:{
-      type:String,
+    resetPasswordToken: {
+      type: String,
     },
-    resetPasswordExpires:{
-      type:Date,
-    }
+    resetPasswordExpires: {
+      type: Date,
+    },
+    watchlist: {
+      type: Array,
+      default: [],
+    },
   },
   { timestamps: true }
 );
 
 const User = mongoose.models?.User || mongoose.model("User", userSchema);
 
- export default User;
+export default User;

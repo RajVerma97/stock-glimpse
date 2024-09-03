@@ -9,7 +9,8 @@ import { useRouter } from "next/navigation";
 export function GoogleSignInButton() {
   const router = useRouter();
   const handleClick = () => {
-    signIn("google", { callbackUrl: "/home" });
+    console.log("hell");
+    signIn("google", { callbackUrl: "/" });
   };
 
   return (
@@ -25,7 +26,7 @@ export function GoogleSignInButton() {
 
 export function GithubSignInButton() {
   const handleClick = () => {
-    signIn("github", { callbackUrl: "/home" });
+    signIn("github", { callbackUrl: "/" });
   };
 
   return (

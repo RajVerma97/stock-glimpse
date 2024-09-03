@@ -1,11 +1,8 @@
-// app/layout.tsx (or the relevant file)
 import "./globals.css";
 import NextAuthProvider from "./providers";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import QueryClientProviderWrapper from "@/components/QueryClientProviderWrapper";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
 import BackButton from "@/components/BackButton";
 
 export const metadata = {
@@ -15,19 +12,19 @@ export const metadata = {
 
 export default function RootLayout({
   children,
-  session,
 }: {
   children: React.ReactNode;
-  session: any;
 }) {
   return (
     <html lang="en">
       <body>
         <QueryClientProviderWrapper>
-          <Header />
-          <BackButton />
-          <NextAuthProvider session={session}>{children}</NextAuthProvider>
-          <Footer />
+          <NextAuthProvider>
+            <Header />
+            <BackButton />
+            {children}
+            <Footer />
+          </NextAuthProvider>
         </QueryClientProviderWrapper>
       </body>
     </html>

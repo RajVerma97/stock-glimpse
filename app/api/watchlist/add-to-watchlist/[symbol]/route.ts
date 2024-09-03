@@ -13,16 +13,14 @@ export async function POST(
   const session = await getServerSession(authConfig);
 
   if (!session || !session.user) {
-    return NextResponse.json({ message: "Login required " }, { status: 401 });
+    return NextResponse.json({ message: "Login required" }, { status: 401 });
   }
 
   try {
     await connectDB();
 
-    const user = session.user;
-    const userId = user.id; // Adjust based on how the user ID is stored in the session
-
-    const userFromDb = await User.findById(userId);
+    const userEmail = session.user.email;
+    const userFromDb = await User.findOne({ email: userEmail });
 
     if (!userFromDb) {
       return NextResponse.json(
@@ -31,17 +29,26 @@ export async function POST(
       );
     }
 
-    // Handle the addition of an item to the watchlist
-    // Example: const updatedWatchlist = await userFromDb.addToWatchlist(id);
-    // Replace this with your actual logic for updating the watchlist
+    if (userFromDb.watchlist.includes(symbol)) {
+      return NextResponse.json(
+        { message: "Symbol already in watchlist" },
+        { status: 400 }
+      );
+    }
+
+    userFromDb.watchlist.push(symbol);
+
+    await userFromDb.save();
 
     return NextResponse.json({
       message: "Item added to watchlist successfully",
+      status: 200,
     });
   } catch (error) {
-    console.error("Error updating watchlist:", error);
+    const errorMessage = (error as Error).message || "Internal Server Error";
+
     return NextResponse.json(
-      { message: "Internal server error", error: error.message },
+      { message: "Internal server error", error: errorMessage },
       { status: 500 }
     );
   }
