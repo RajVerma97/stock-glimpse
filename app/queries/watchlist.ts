@@ -7,8 +7,8 @@ export async function addToWatchlist(symbol: string) {
   return response.data;
 }
 
-export async function removeFromWatchlist(stockId: string) {
-  const response = await axios.get(`/api/remove-from-watchlist/${stockId}`);
+export async function removeFromWatchlist(symbol: string) {
+  const response = await axios.get(`/api/remove-from-watchlist/${symbol}`);
   return response.data;
 }
 

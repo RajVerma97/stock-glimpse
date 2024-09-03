@@ -5,11 +5,14 @@ import { ArrowLeft, Menu } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import Logout from "@/app/logout";
+import { signOut, useSession } from "next-auth/react";
 
 export default function Header() {
   const router = useRouter();
 
   const [open, setOpen] = useState<boolean>(false);
+  const { data: session } = useSession();
 
   const openSidebar = () => {
     setOpen(true);
@@ -18,32 +21,27 @@ export default function Header() {
   const closeSidebar = () => {
     setOpen(false);
   };
+  const logout = async () => {
+    await signOut();
+  };
 
   return (
     <header className="py-2  px-4 mb-4 rounded-md w-full flex justify-between items-center shadow-sm borer-2 border-blue-400">
       <div>
         <Link href="/" className="text-2xl font-bold ">
-          Stock Glimpse
+          Stock Glimps..
         </Link>
       </div>
       <div className="hidden sm:flex">
-        <Button variant="secondary" asChild className="hover:border-2">
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 500, damping: 20 }}
-          >
+        <Button variant="secondary" asChild>
+          {session ? (
+            <Button onClick={logout}>Logout</Button>
+          ) : (
             <Link href="/login">Login</Link>
-          </motion.div>
+          )}
         </Button>
-        <Button asChild className="ml-4 hover:border-2">
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 500, damping: 20 }}
-          >
-            <Link href="/register">Register</Link>
-          </motion.div>
+        <Button asChild>
+          <Link href="/register">Register</Link>
         </Button>
       </div>
       <div className="sm:hidden">
@@ -66,28 +64,13 @@ export default function Header() {
             </Button>
           </div>
           <div className="mt-8 flex flex-col items-start px-4 ">
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 500, damping: 20 }}
-            >
-              <Link
-                href="/login"
-                className="mb-4 text-2xl"
-                onClick={closeSidebar}
-              >
-                Login
-              </Link>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 500, damping: 20 }}
-            >
-              <Link href="/register" className="text-xl" onClick={closeSidebar}>
-                Register
-              </Link>
-            </motion.div>
+            <Link href="/login" onClick={closeSidebar}>
+              Login
+            </Link>
+
+            <Link href="/register" className="text-xl" onClick={closeSidebar}>
+              Register
+            </Link>
           </div>
         </motion.div>
       )}

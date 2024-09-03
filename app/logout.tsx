@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -8,5 +9,17 @@ export default function Logout() {
 
   const { data: session } = useSession();
 
-  return <>hlss</>;
+  const logout = async () => {
+    await signOut();
+  };
+
+  return (
+    <>
+      {session ? (
+        <Button onClick={logout} variant="outline" className="mt-4">
+          Logout
+        </Button>
+      ) : null}
+    </>
+  );
 }

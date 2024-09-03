@@ -46,7 +46,8 @@ export default function StockDetailPage({ params }) {
 
   if (!stock) return <ErrorMessage message="No stock details available" />;
 
-  const addToWatchList = async () => {};
+  // const addToWatchList = async () => {};
+  console.log(stock)
 
   return (
     <div className="w-full p-10 grid gap-[5rem]">

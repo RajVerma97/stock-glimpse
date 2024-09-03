@@ -35,7 +35,12 @@ export default function Form() {
       });
 
       if (result?.ok) {
-        router.push("/home");
+        console.log("hel");
+        notify({
+          status: "success",
+          message: "Registered successfully  Now Login",
+        });
+        // setTimeout(() => router.push("/"), 8000);
       } else {
         notify({ status: "error", message: result?.error });
       }

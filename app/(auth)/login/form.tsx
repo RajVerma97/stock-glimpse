@@ -36,7 +36,7 @@ export default function Form() {
       setError(response.error);
       setIsLoading(false);
     } else if (response?.ok) {
-      router.push("/home");
+      router.push("/");
     }
   };
 
