@@ -75,6 +75,10 @@ export default function Header() {
             <Link href="/register" className="text-xl" onClick={closeSidebar}>
               Register
             </Link>
+
+            <Button>
+              <Link href="/watchlist">Watchlist</Link>
+            </Button>
           </div>
         </motion.div>
       )}

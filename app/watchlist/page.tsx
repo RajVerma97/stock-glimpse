@@ -1,33 +1,36 @@
 "use client";
+import useSWR from "swr";
+import { fetcher } from "../utils/fetcher";
+import StockCard from "@/components/StockCard";
 
-import React from "react";
-import { useGetWatchlist } from "../hooks/use-get-watch-list";
-import SpinnerManager from "@/components/SpinnerManager";
-import useAuthenticatedQuery from "../hooks/use-authenticated-query";
-import { getWatchlist } from "../queries/watchlist";
+function Watchlist() {
+  // Use SWR to fetch data from the API route
+  const { data, error } = useSWR("/api/watchlist/get-watchlist", fetcher);
 
-export default function Watchlist() {
-  const { data, error, isLoading } = useAuthenticatedQuery(
-    ["watchlist"],
-    getWatchlist,
-    {
-      onSuccess: (data) => {
-        console.log("Watchlist fetched successfully:", data);
-        // Optionally show a success notification or perform other actions
-      },
-      onError: (error) => {
-        console.error("Error fetching watchlist:", error);
-        // Optionally show an error notification or perform other actions
-      },
-    }
-  );
-  console.log(data);
+  // Check loading state
+  if (!data && !error) return <div>Loading...</div>;
 
+  // Handle error state
+  if (error) return <div>Error: {error.message}</div>;
+
+  // Handle case where data might be undefined
+  const watchlist = data?.watchlist || []; // Default to an empty array if data is undefined
+
+  // Render fetched data
   return (
-    <div className="p-4">
-      <h1>Watchlist</h1>
-
-      {isLoading && <SpinnerManager isLoading={isLoading} />}
+    <div>
+      <h1 className="text-2xl text-center mb-4">Your Watchlist</h1>
+      {watchlist.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {watchlist.map((stock) => (
+            <StockCard key={stock.symbol} stock={stock} />
+          ))}
+        </div>
+      ) : (
+        <p>Your watchlist is empty.</p>
+      )}
     </div>
   );
 }
+
+export default Watchlist;

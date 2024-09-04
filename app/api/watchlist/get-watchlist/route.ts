@@ -20,8 +20,13 @@ export async function GET() {
       );
     }
 
-    return NextResponse.json({ watchlist: user.watchlist }, { status: 200 });
-  } catch (error) {}
-
-  return NextResponse.json({ message: "Method not allowed" }, { status: 405 });
+    const { watchlist } = user;
+    return NextResponse.json({ watchlist }, { status: 200 });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
 }
