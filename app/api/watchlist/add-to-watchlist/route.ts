@@ -6,10 +6,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   const stock = await request.json();
-  console.log(request);
-  console.log("backendlj ", stock);
   const { symbol } = stock;
-
   const session = await getServerSession(authConfig);
 
   if (!session || !session.user) {

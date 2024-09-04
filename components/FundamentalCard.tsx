@@ -11,9 +11,8 @@ export default function FundamentalCard({ stock }) {
   const addToWatchListMutation = useAddToWatchListMutation();
 
   const handleAddToWatchList = () => {
-    addToWatchListMutation.mutate(stock.symbol);
+    addToWatchListMutation.mutate(stock);
   };
-
 
   return (
     <div className="">

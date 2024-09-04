@@ -1,10 +1,11 @@
 import { notify } from "@/components/ToastManager";
 import { addToWatchlist } from "../queries/watchlist";
 import useAuthenticatedMutation from "./use-authenticated-mutation";
+import { Stock } from "../types/stock-detail";
 
 export const useAddToWatchListMutation = () => {
   return useAuthenticatedMutation({
-    mutationFn: (stockId: string) => addToWatchlist(stockId),
+    mutationFn: (stock: Stock) => addToWatchlist(stock),
 
     onSuccess: (data) => {
       notify({
