@@ -43,6 +43,10 @@ export default function Header() {
         <Button asChild>
           <Link href="/register">Register</Link>
         </Button>
+
+        <Button asChild>
+          <Link href="/watchlist">Watchlist</Link>
+        </Button>
       </div>
       <div className="sm:hidden">
         <Button onClick={openSidebar}>
