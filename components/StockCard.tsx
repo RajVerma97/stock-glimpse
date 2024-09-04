@@ -31,7 +31,7 @@ const StockCard: React.FC<StockCardProps> = ({ stock }) => {
               className="w-16 h-16 mr-4 rounded-full"
             />
             <CardTitle className="text-xl font-semibold text-gray-900">
-              {stock.name}
+              {stock.companyName}
             </CardTitle>
           </CardHeader>
           <CardContent className="flex justify-between items-center">

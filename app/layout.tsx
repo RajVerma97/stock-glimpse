@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import QueryClientProviderWrapper from "@/components/QueryClientProviderWrapper";
 import BackButton from "@/components/BackButton";
+import { AxiosProvider } from "./hooks/axios-context";
 
 export const metadata = {
   title: "Stock Glimpse",
@@ -20,10 +21,12 @@ export default function RootLayout({
       <body>
         <QueryClientProviderWrapper>
           <NextAuthProvider>
-            <Header />
-            <BackButton />
-            {children}
-            <Footer />
+            <AxiosProvider>
+              <Header />
+              <BackButton />
+              {children}
+              <Footer />
+            </AxiosProvider>
           </NextAuthProvider>
         </QueryClientProviderWrapper>
       </body>
