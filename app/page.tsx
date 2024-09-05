@@ -52,6 +52,8 @@ export default function SplashPage() {
 
   return (
     <div className="grid gap-8">
+      <h1>Stock Glimpse</h1>
+
       <SearchStocks />
       <MarketIndex />
 
