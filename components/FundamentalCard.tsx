@@ -6,6 +6,7 @@ import { Button } from "./ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { useAddToWatchListMutation } from "@/app/hooks/use-add-to-watchlist";
 import { notify, ToastManager } from "./ToastManager";
+import { HeartIcon } from "lucide-react";
 
 export default function FundamentalCard({ stock }) {
   const addToWatchListMutation = useAddToWatchListMutation();
@@ -40,6 +41,10 @@ export default function FundamentalCard({ stock }) {
           </div>
         </CardHeader>
         <div className="mb-4 p-5">
+          <Button onClick={handleAddToWatchList}>
+            <HeartIcon />
+          </Button>
+
           <p>
             <strong>Change:</strong> {stock.change} ($
             {stock.currentPrice - stock.previousClosePrice})
@@ -99,7 +104,6 @@ export default function FundamentalCard({ stock }) {
           <p>
             <strong>Total Debt:</strong> {stock.totalDebt ?? "N/A"}
           </p>
-          <Button onClick={handleAddToWatchList}>Add to watchlist</Button>
         </div>
       </Card>
       <ToastManager />

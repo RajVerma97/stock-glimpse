@@ -2,7 +2,7 @@ import { getWatchlist } from "../queries/watchlist";
 import useAuthenticatedQuery from "./use-authenticated-query";
 
 export function useGetWatchlist() {
-  return useAuthenticatedQuery(["watchlist"], () => getWatchlist(), {
+  return useAuthenticatedQuery(["get-watchlist"], () => getWatchlist(), {
     onSuccess: (data) => {
       // Handle successful fetch
       console.log("Fetched watchlist successfully:", data);
