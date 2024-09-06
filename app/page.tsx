@@ -52,8 +52,6 @@ export default function SplashPage() {
 
   return (
     <div className="grid gap-8">
-      <h1>Stoc Glimpse</h1>
-
       <SearchStocks />
       <MarketIndex />
 
@@ -79,12 +77,6 @@ export default function SplashPage() {
           ))}
         </div>
       </div>
-
-      {session ? (
-        <Button onClick={logout} variant="outline" className="mt-4">
-          Logout
-        </Button>
-      ) : null}
     </div>
   );
 }

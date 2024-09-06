@@ -25,7 +25,7 @@ export default function RootLayout({
               <Header />
               <BackButton />
               {children}
-              <Footer />
+              {/* <Footer /> */}
             </AxiosProvider>
           </NextAuthProvider>
         </QueryClientProviderWrapper>
@@ -33,3 +33,4 @@ export default function RootLayout({
     </html>
   );
 }
+``;

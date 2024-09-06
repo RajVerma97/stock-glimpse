@@ -7,6 +7,8 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   const stock = await request.json();
   const { symbol } = stock;
+  console.log(symbol);
+  console.log("add to watchlist");
   const session = await getServerSession(authConfig);
 
   if (!session || !session.user) {
@@ -34,6 +36,7 @@ export async function POST(request: Request) {
     }
 
     userFromDb.watchlist.push(stock);
+    // console.log(userFromDb);
 
     await userFromDb.save();
 

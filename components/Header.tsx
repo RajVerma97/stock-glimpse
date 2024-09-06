@@ -29,7 +29,7 @@ export default function Header() {
     <header className="py-2  px-4 mb-4 rounded-md w-full flex justify-between items-center shadow-sm borer-2 border-blue-400">
       <div>
         <Link href="/" className="text-2xl font-bold ">
-          Stock Glimps..
+          Stock Glimpse
         </Link>
       </div>
       <div className="hidden sm:flex">
