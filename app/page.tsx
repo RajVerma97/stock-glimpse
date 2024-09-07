@@ -26,6 +26,7 @@ import { motion } from "framer-motion";
 import StockCard from "@/components/StockCard";
 import { useFetchMarketIndex } from "./hooks/use-fetch-market-index";
 import MarketIndex from "@/components/MarketIndex";
+import StockCategories from "@/components/StockCategories";
 
 export default function SplashPage() {
   const router = useRouter();
@@ -76,6 +77,10 @@ export default function SplashPage() {
             <StockCard stock={stock} />
           ))}
         </div>
+      </div>
+
+      <div>
+        <StockCategories />
       </div>
     </div>
   );
