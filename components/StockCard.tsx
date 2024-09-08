@@ -5,9 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
-import { useRemoveFromWatchlist } from "@/app/hooks/use-remove-from-watchlist";
 import { Trash2Icon } from "lucide-react";
 import SpinnerManager from "./SpinnerManager";
+import useRemoveFromWatchlist from "@/app/hooks/use-remove-from-watchlist";
 
 interface StockCardProps {
   stock: any;
