@@ -1,6 +1,8 @@
-import axios from "axios";
+// app/api/category/[category]/route.ts
 import { NextRequest, NextResponse } from "next/server";
+import axios from "axios";
 
+// Fetch all stock symbols from Finnhub API
 const fetchAllStockSymbols = async () => {
   try {
     const response = await axios.get(
@@ -13,6 +15,7 @@ const fetchAllStockSymbols = async () => {
   }
 };
 
+// Fetch stock details like price, fundamentals, and profile from Finnhub API
 const fetchStockDetails = async (symbol: string) => {
   const quoteUrl = `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`;
   const fundamentalsUrl = `https://finnhub.io/api/v1/stock/metric?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`;
@@ -26,12 +29,6 @@ const fetchStockDetails = async (symbol: string) => {
         axios.get(profileUrl),
       ]);
 
-    console.log(`Data for ${symbol}:`, {
-      quoteResponse: quoteResponse.data,
-      fundamentalsResponse: fundamentalsResponse.data,
-      profileResponse: profileResponse.data,
-    });
-
     const stockDetail = {
       currentPrice: quoteResponse.data.c,
       changeInPrice: quoteResponse.data.d,
@@ -42,7 +39,7 @@ const fetchStockDetails = async (symbol: string) => {
       previousClosePrice: quoteResponse.data.pc,
       timestamp: quoteResponse.data.t,
 
-      marketCap: fundamentalsResponse.data.metric.marketCapitalization,
+      marketCap: fundamentalsResponse.data.metric.marketCapitalization || 0,
 
       companyName: profileResponse.data.name,
       symbol: profileResponse.data.ticker,
@@ -56,62 +53,69 @@ const fetchStockDetails = async (symbol: string) => {
     return stockDetail;
   } catch (error) {
     console.error(`Error fetching data for symbol ${symbol}:`, error);
-    return null; // Return null if there is an error fetching details for a symbol
+    return null;
   }
 };
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
-  const { slug } = params;
-  console.log(`Received slug: ${slug}`);
+// GET handler with pagination for stock details based on market cap category
+export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
+  const category = url.pathname.split("/").pop(); // Extract category from the URL path
+  const page = parseInt(url.searchParams.get("page") || "1", 10);
+  const limit = parseInt(url.searchParams.get("limit") || "10", 10);
 
-  if (!slug) {
+  console.log(category, page, limit);
+
+  if (!category) {
     return NextResponse.json(
-      { message: "No symbol provided" },
+      { message: "No category provided" },
       { status: 400 }
     );
   }
 
   try {
-    // Fetch all symbols
     const symbols = await fetchAllStockSymbols();
-    console.log("Fetched symbols:", symbols);
+    const totalSymbols = symbols.length;
+    const startIndex = (page - 1) * limit;
+    const endIndex = Math.min(startIndex + limit, totalSymbols);
 
-    // Fetch details for each symbol and filter by slug category
-    const stockDetailsPromises = symbols.map(async (symbolData) => {
-      const symbol = symbolData.symbol; // Adjust this if needed
-      console.log(`Fetching details for symbol: ${symbol}`);
-      
+    const paginatedSymbols = symbols.slice(startIndex, endIndex);
+
+    const stockDetailsPromises = paginatedSymbols.map(async (symbolData) => {
+      const symbol = symbolData.symbol;
       const stockDetail = await fetchStockDetails(symbol);
       if (!stockDetail) return null;
 
-      if (slug === "small-cap" && stockDetail.marketCap < 1000000000) {
+      if (category === "small-cap" && stockDetail.marketCap < 1_000_000_000) {
         return stockDetail;
       }
       if (
-        slug === "mid-cap" &&
-        stockDetail.marketCap > 1000000000 &&
-        stockDetail.marketCap < 10000000000
+        category === "mid-cap" &&
+        stockDetail.marketCap >= 1_000_000_000 &&
+        stockDetail.marketCap < 10_000_000_000
       ) {
         return stockDetail;
       }
-      if (slug === "large-cap" && stockDetail.marketCap > 10000000000) {
+      if (category === "large-cap" && stockDetail.marketCap >= 10_000_000_000) {
         return stockDetail;
       }
 
       return null;
     });
 
-    // Resolve all promises and filter out null values
     const stockDetails = (await Promise.all(stockDetailsPromises)).filter(
       Boolean
     );
 
-    console.log("Stock details:", stockDetails);
+    const totalPages = Math.ceil(totalSymbols / limit);
+    const pagination = {
+      currentPage: page,
+      limit,
+      totalPages,
+      totalItems: totalSymbols,
+    };
 
-    return NextResponse.json(stockDetails);
+    return NextResponse.json({ stockDetails, pagination });
   } catch (error) {
     console.error("Error fetching stock data:", error);
     return NextResponse.json(

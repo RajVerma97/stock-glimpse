@@ -3,7 +3,7 @@ import { removeFromWatchlist } from "../queries/watchlist";
 import useAuthenticatedMutation from "./use-authenticated-mutation";
 import { useQueryClient } from "@tanstack/react-query";
 
-export default function useRemoveFromWatchlist() {
+export default function useRemoveFromWatchlist(symbol: string) {
   const queryClient = useQueryClient(); // Access the query client
 
   return useAuthenticatedMutation({
