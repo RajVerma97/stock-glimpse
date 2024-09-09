@@ -24,7 +24,6 @@ import { useState, useEffect } from "react";
 
 export default function StockDetailPage({ params }) {
   const { symbol } = params;
-  console.log("from stock", symbol);
 
   const [timeFrame, setTimeFrame] = useState<string>(TimeFrame.OneMonth);
   const [error, setError] = useState<string | null>(null);
