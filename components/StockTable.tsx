@@ -42,6 +42,7 @@ const StockTableComponent: React.FC<StockTableProps> = ({
   const router = useRouter();
 
   const handleRowClick = (symbol: string) => {
+    router.refresh();
     router.push(`/stock-detail/${symbol}`);
   };
 

@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { addToWatchlist, removeFromWatchlist } from "../queries/watchlist";
 import useAuthenticatedMutation from "./use-authenticated-mutation";
 
-export const useRemoveFromWatchlist = (symbol: string) => {
+export function useRemoveFromWatchlist(symbol: string) {
   const queryClient = useQueryClient();
 
   return useAuthenticatedMutation({
@@ -16,4 +16,4 @@ export const useRemoveFromWatchlist = (symbol: string) => {
       console.error("Error removing Stock from watchlist:", error);
     },
   });
-};
+}
