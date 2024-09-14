@@ -48,8 +48,8 @@ function formatStockChanges(
 ) {
   return changes.map((stock) => ({
     ...stock,
-    change: stock.change.toFixed(2), 
-    currentPrice: stock.currentPrice.toFixed(2), 
+    change: stock.change.toFixed(2),
+    currentPrice: stock.currentPrice.toFixed(2),
   }));
 }
 
@@ -59,7 +59,7 @@ async function getStockChanges(symbols: string[]) {
     name: string;
     logo: string;
     currentPrice: number;
-    change: number; 
+    change: number;
   }[] = [];
 
   for (const symbol of symbols) {
@@ -90,20 +90,44 @@ async function getStockChanges(symbols: string[]) {
     }
   }
 
-  stockChanges.sort((a, b) => b.change - a.change); 
+  stockChanges.map((stock) => ({
+    ...stock,
+    change: stock.change.toFixed(2), // Format as string here
+  }));
 
-  const topGainers = stockChanges.slice(0, 5); 
-  const topLosers = stockChanges.slice(-5).reverse();
+  stockChanges.sort((a, b) => b.change - a.change);
+
+  const topGainers = stockChanges.filter((item) => item.change > 0);
+  const topLosers = stockChanges.filter((item) => item.change < 0);
+
+  // Remove duplicates if necessary
+  const topGainersSymbols = new Set(topGainers.map((stock) => stock.symbol));
+  const distinctTopLosers = topLosers.filter(
+    (stock) => !topGainersSymbols.has(stock.symbol)
+  );
 
   return {
     topGainers: formatStockChanges(topGainers),
-    topLosers: formatStockChanges(topLosers),
+    topLosers: formatStockChanges(distinctTopLosers),
   };
 }
 
 export async function GET() {
   try {
-    const symbols = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA"];
+    const symbols = [
+      "AAPL",
+      "GOOGL",
+      "MSFT",
+      "AMZN",
+      "TSLA",
+      "META",
+      "NFLX",
+      "NVDA",
+
+      "FTEL",
+      "AIRJ",
+      "FARM",
+    ];
     const { topGainers, topLosers } = await getStockChanges(symbols);
 
     return NextResponse.json({ topGainers, topLosers });

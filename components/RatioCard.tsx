@@ -15,6 +15,7 @@ const bounceVariants = {
 };
 
 export default function RatioCard({ title, value, icon: Icon }) {
+  if (!value) return null;
   return (
     <motion.div
       initial="initial"

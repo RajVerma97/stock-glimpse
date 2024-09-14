@@ -10,6 +10,5 @@ export function useFetchCategoryStocks(
   return useQuery({
     queryKey: ["category-stock", category, page, limit],
     queryFn: () => fetchCategoryStocks(category, page, limit),
-    // keepPreviousData: true, // This keeps the old data while loading new data
   });
 }

@@ -21,6 +21,7 @@ export default function StockCategories() {
       stocks: [],
     },
   ];
+
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8">Stock Category</h1>

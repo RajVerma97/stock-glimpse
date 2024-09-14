@@ -1,11 +1,11 @@
-import React, { memo } from "react";
+import React from "react";
+import { useFormik } from "formik";
 import {
-  useReactTable,
   ColumnDef,
+  useReactTable,
   getCoreRowModel,
 } from "@tanstack/react-table";
 import { AiOutlineFrown } from "react-icons/ai";
-import { useRouter } from "next/navigation";
 
 type StockDetail = {
   symbol: string;
@@ -39,12 +39,15 @@ const StockTableComponent: React.FC<StockTableProps> = ({
   pagination,
   onPageChange,
 }) => {
-  const router = useRouter();
-
-  const handleRowClick = (symbol: string) => {
-    router.refresh();
-    router.push(`/stock-detail/${symbol}`);
-  };
+  const formik = useFormik({
+    initialValues: {
+      currentPage: pagination.currentPage,
+    },
+    onSubmit: (values) => {
+      console.log("Formik onSubmit called with page:", values.currentPage);
+      onPageChange(values.currentPage);
+    },
+  });
 
   const table = useReactTable({
     data,
@@ -95,7 +98,7 @@ const StockTableComponent: React.FC<StockTableProps> = ({
             table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                onClick={() => handleRowClick(row.original.symbol)}
+                onClick={() => console.log(row.original.symbol)}
                 className="cursor-pointer hover:bg-gray-800"
               >
                 {row.getVisibleCells().map((cell) => (
@@ -115,7 +118,12 @@ const StockTableComponent: React.FC<StockTableProps> = ({
       {/* Pagination Controls */}
       <div className="mt-4 flex justify-between items-center px-4 py-2 bg-gray-800 border-t border-gray-700">
         <button
-          onClick={() => onPageChange(pagination.currentPage - 1)}
+          type="button"
+          onClick={() => {
+            console.log("Previous button clicked");
+            formik.setFieldValue("currentPage", pagination.currentPage - 1);
+            formik.handleSubmit();
+          }}
           disabled={pagination.currentPage === 1}
           className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:bg-gray-600 transition cursor-pointer"
         >
@@ -125,7 +133,12 @@ const StockTableComponent: React.FC<StockTableProps> = ({
           Page {pagination.currentPage} of {pagination.totalPages}
         </span>
         <button
-          onClick={() => onPageChange(pagination.currentPage + 1)}
+          type="button"
+          onClick={() => {
+            console.log("Next button clicked");
+            formik.setFieldValue("currentPage", pagination.currentPage + 1);
+            formik.handleSubmit();
+          }}
           disabled={pagination.currentPage === pagination.totalPages}
           className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:bg-gray-600 transition cursor-pointer"
         >
@@ -136,7 +149,4 @@ const StockTableComponent: React.FC<StockTableProps> = ({
   );
 };
 
-// Memoize the component to avoid unnecessary re-renders
-const StockTable = memo(StockTableComponent);
-
-export default StockTable;
+export default StockTableComponent;
