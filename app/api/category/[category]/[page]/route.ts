@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import NodeCache from "node-cache";
-import { StockSymbols } from "../../../data/stock-symbols";
+import { StockSymbols } from "../../../../data/stock-symbols";
 
 // Define the types for Finnhub API responses
 
@@ -148,12 +148,14 @@ const fetchStockDetails = async (
 // GET handler with pagination for stock details based on market cap category
 export async function GET(
   request: NextRequest,
-  { params }: { params: { category: string } }
+  { params }: { params: { category: string; page: number } }
 ) {
-  const { category } = params;
+  const { category, page } = params;
 
-  const page = 10;
+  console.log("category", category, "page", page);
+
   const limit = 20;
+
   console.log(category, page, limit);
 
   if (!category) {
@@ -183,8 +185,6 @@ export async function GET(
 
         const marketCap = stockDetail.marketCap || 0; // Ensure marketCap has a value
 
-        console.log(`Market Cap for ${symbol}: ${marketCap}`);
-
         // Adjust the cap ranges for mid and large caps
         if (category === "small-cap" && marketCap < 1_000_000_000) {
           return stockDetail;
@@ -207,7 +207,6 @@ export async function GET(
     const stockDetails = (await Promise.all(stockDetailsPromises)).filter(
       Boolean
     );
-    console.log(stockDetails);
 
     const totalPages = Math.ceil(totalSymbols / limit);
     const pagination = {

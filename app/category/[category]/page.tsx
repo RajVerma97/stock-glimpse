@@ -1,9 +1,9 @@
 "use client";
+import React, { useState } from "react";
 import { useFetchCategoryStocks } from "@/app/hooks/use-fetch-category-stocks";
 import SpinnerManager from "@/components/SpinnerManager";
-import StockTable from "@/components/StockTable";
 import { useParams } from "next/navigation";
-import React, { useState } from "react";
+import StockTableComponent from "@/components/StockTable";
 
 export default function Page() {
   const { category } = useParams();
@@ -24,14 +24,12 @@ export default function Page() {
   }
 
   if (isError || !data) {
-    // Check if the error indicates an API limit has been reached
     const errorMessage = error?.message.includes("API limit reached")
       ? "API limit reached. Please try again later."
       : "Error loading data.";
     return <div className="text-red-500">{errorMessage}</div>;
   }
 
-  // Handle empty data case
   if (data.stockDetails.length === 0) {
     return (
       <div className="p-4 text-center">
@@ -46,11 +44,12 @@ export default function Page() {
   return (
     <div className="p-4">
       <h1 className="text-3xl my-4 uppercase">{category}</h1>
-      <StockTable
+      <StockTableComponent
         data={data.stockDetails}
         pagination={pagination}
         onPageChange={(page) => {
           if (page > 0 && page <= pagination.totalPages) {
+            console.log("Page change requested:", page);
             setPagination((prev) => ({ ...prev, currentPage: page }));
           }
         }}

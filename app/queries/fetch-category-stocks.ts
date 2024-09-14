@@ -6,9 +6,7 @@ const fetchCategoryStocks = async (
   page: number,
   limit: number
 ) => {
-  const response = await axios.get(`/api/category/${category}`, {
-    params: { page, limit },
-  });
+  const response = await axios.get(`/api/category/${category}/${page}`);
   return response.data;
 };
 

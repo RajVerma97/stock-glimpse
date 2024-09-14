@@ -33,7 +33,7 @@ export default function RatioChart({ ratios }: RatioChartProps) {
   }
 
   return (
-    <div className="w-full grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-2 p-4">
+    <div className="w-full grid grid-cols-1 gap-[10rem] sm:grid-cols-2 md:grid-cols-2">
       {Object.entries(ratios).map(([key, values], index) => {
         const data = {
           labels: (values as RatioItem[]).map((item) => item.period).reverse(),
