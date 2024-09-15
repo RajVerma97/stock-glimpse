@@ -1,32 +1,17 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import Loading from "@/components/Loading"; // Ensure this component shows a spinner
+import Loading from "@/components/Loading";
 import ErrorMessage from "@/components/Error";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "@/components/ui/command";
-import { useSearchStocks } from "./hooks/use-search-stocks";
-import useDebounce from "./hooks/use-debounce";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useFetchGainersAndLosers } from "./hooks/use-fetch-gainers-and-losers";
-import Image from "next/image";
-import { MoonLoader } from "react-spinners";
 import SearchStocks from "@/components/SearchStocks";
-import { motion } from "framer-motion";
 import StockCard from "@/components/StockCard";
 import { useFetchMarketIndex } from "./hooks/use-fetch-market-index";
-import MarketIndex from "@/components/MarketIndex";
 import StockCategories from "@/components/StockCategories";
+import MarketNews from "@/components/MarketNews";
 
 export default function SplashPage() {
   const router = useRouter();
@@ -52,12 +37,16 @@ export default function SplashPage() {
   };
 
   return (
-    <div className="grid gap-8">
+    <div className="container mx-auto px-4 grid gap-8">
       <SearchStocks />
-      <MarketIndex />
 
-      <div className="mb-4"></div>
-      <div className="mb-8">
+      <div className="w-full">
+        <MarketNews />
+      </div>
+
+      {/* <MarketIndex /> */}
+
+      <div className="mb-4">
         <h2 className="text-2xl font-semibold mb-4">Top Gainers</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {IsTopGainersAndLosersLoading ? (
@@ -65,7 +54,9 @@ export default function SplashPage() {
           ) : (
             topGainers
               ?.slice(0, 5)
-              .map((stock: any) => <StockCard stock={stock} />)
+              .map((stock: any) => (
+                <StockCard stock={stock} key={stock.ticker} />
+              ))
           )}
         </div>
       </div>
@@ -74,7 +65,7 @@ export default function SplashPage() {
         <h2 className="text-2xl font-semibold mb-4">Top Losers</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {topLosers?.slice(0, 5).map((stock: any) => (
-            <StockCard stock={stock} />
+            <StockCard stock={stock} key={stock.ticker} />
           ))}
         </div>
       </div>

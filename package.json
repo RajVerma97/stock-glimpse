@@ -27,6 +27,8 @@
     "clsx": "^2.1.1",
     "cmdk": "1.0.0",
     "dayjs": "^1.11.13",
+    "embla-carousel-autoplay": "^8.3.0",
+    "embla-carousel-react": "^8.3.0",
     "formik": "^2.4.6",
     "framer-motion": "^11.3.31",
     "isomorphic-ws": "^5.0.0",
