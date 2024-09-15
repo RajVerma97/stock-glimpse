@@ -12,7 +12,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['avatars.githubusercontent.com', 'lh3.googleusercontent.com','static2.finnhub.io'],
+    domains: ['avatars.githubusercontent.com', 'lh3.googleusercontent.com','static2.finnhub.io','image.cnbcfm.com','data.bloomberglp.com'],
   },
   eslint: {
     ignoreDuringBuilds: false,
