@@ -2,15 +2,18 @@
 import { TimeFrame } from "@/app/enums/StockPriceChart.enum";
 import { useFetchHistoricalData } from "@/app/hooks/use-fetch-historical-data";
 import { useFetchStockDetails } from "@/app/hooks/use-fetch-stock-details";
+import { useFetchStockNews } from "@/app/hooks/use-fetch-stock-news";
 import { HistoricalData, Stock } from "@/app/types/stock-detail";
 import { formatDate } from "@/app/utils/dateFormat";
 import ErrorMessage from "@/components/Error";
 import FundamentalCard from "@/components/FundamentalCard";
 import Loading from "@/components/Loading";
+import MarketNews from "@/components/MarketNews";
 import RatioCard from "@/components/RatioCard";
 import RatioCardList from "@/components/RatioCardList";
 import RatioChart from "@/components/RatioChart";
 import ShareholdingPatternChart from "@/components/ShareHoldingPatternChart";
+import StockNews from "@/components/StockNews";
 import StockPriceChart from "@/components/StockPriceChart";
 import { Button } from "@/components/ui/button";
 import {
@@ -45,10 +48,6 @@ export default function StockDetailPage({ params }) {
   if (error) return <ErrorMessage message={error} />;
 
   if (!stock) return <ErrorMessage message="No stock details available" />;
-
-  // const addToWatchList = async () => {};
-  console.log(stock);
-
   return (
     <div className="w-full p-10 grid gap-[5rem]">
       <div className=" block sm:block md:flex  gap-20 sm:gap-10">
@@ -75,6 +74,10 @@ export default function StockDetailPage({ params }) {
 
       <div className="w-full  ">
         <RatioChart ratios={stock.ratios} />
+      </div>
+
+      <div className="w-full">
+        <StockNews symbol={symbol} />
       </div>
     </div>
   );

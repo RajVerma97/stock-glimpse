@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    esmExternals: "loose", // Optional: for handling ESM external packages loosely
-    serverComponentsExternalPackages: ["mongoose"], // Optional: external packages for server components
+    esmExternals: "loose",
+    serverComponentsExternalPackages: ["mongoose"],
   },
   webpack: (config) => {
     config.experiments = {
@@ -12,7 +12,12 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ['avatars.githubusercontent.com', 'lh3.googleusercontent.com','static2.finnhub.io','image.cnbcfm.com','data.bloomberglp.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',  // Allows all domains
+      },
+    ],
   },
   eslint: {
     ignoreDuringBuilds: false,
