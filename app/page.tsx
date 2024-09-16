@@ -12,6 +12,7 @@ import StockCard from "@/components/StockCard";
 import { useFetchMarketIndex } from "./hooks/use-fetch-market-index";
 import StockCategories from "@/components/StockCategories";
 import MarketNews from "@/components/MarketNews";
+import { useFetchMarketNews } from "./hooks/use-fetch-market-news";
 
 export default function SplashPage() {
   const router = useRouter();
@@ -43,8 +44,6 @@ export default function SplashPage() {
       <div className="w-full">
         <MarketNews />
       </div>
-
-      {/* <MarketIndex /> */}
 
       <div className="mb-4">
         <h2 className="text-2xl font-semibold mb-4">Top Gainers</h2>
