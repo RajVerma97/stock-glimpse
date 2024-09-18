@@ -1,16 +1,16 @@
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const notify = ({ status, message }) => {
   toast[status](message, {
-    position: "top-right",
+    position: 'top-right',
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
-    theme: "light",
-  });
-};
+    theme: 'light',
+  })
+}
 
 const ToastManager = () => {
   return (
@@ -26,7 +26,7 @@ const ToastManager = () => {
       rtl={false}
       theme="light"
     />
-  );
-};
+  )
+}
 
-export { notify, ToastManager };
+export { notify, ToastManager }

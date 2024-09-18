@@ -1,26 +1,26 @@
-"use client";
-import React from "react";
-import { Card } from "./ui/card";
-import Link from "next/link";
+'use client'
+import React from 'react'
+import { Card } from './ui/card'
+import Link from 'next/link'
 
 export default function StockCategories() {
   const categories = [
     {
-      title: "Small Cap",
-      slug: "small-cap",
+      title: 'Small Cap',
+      slug: 'small-cap',
       stocks: [],
     },
     {
-      title: "Mid Cap",
-      slug: "mid-cap",
+      title: 'Mid Cap',
+      slug: 'mid-cap',
       stocks: [],
     },
     {
-      title: "Large Cap",
-      slug: "large-cap",
+      title: 'Large Cap',
+      slug: 'large-cap',
       stocks: [],
     },
-  ];
+  ]
 
   return (
     <div>
@@ -36,9 +36,9 @@ export default function StockCategories() {
                 </h1>
               </Card>
             </Link>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }

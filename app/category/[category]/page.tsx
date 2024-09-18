@@ -1,33 +1,33 @@
-"use client";
-import React, { useState } from "react";
-import { useFetchCategoryStocks } from "@/app/hooks/use-fetch-category-stocks";
-import SpinnerManager from "@/components/SpinnerManager";
-import { useParams } from "next/navigation";
-import StockTableComponent from "@/components/StockTable";
+'use client'
+import React, { useState } from 'react'
+import { useFetchCategoryStocks } from '@/app/hooks/use-fetch-category-stocks'
+import SpinnerManager from '@/components/SpinnerManager'
+import { useParams } from 'next/navigation'
+import StockTableComponent from '@/components/StockTable'
 
 export default function Page() {
-  const { category } = useParams();
+  const { category } = useParams()
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
     limit: 50,
-  });
+  })
 
   const { data, isLoading, isError, error } = useFetchCategoryStocks(
     category,
     pagination.currentPage,
-    pagination.limit
-  );
+    pagination.limit,
+  )
 
   if (isLoading) {
-    return <SpinnerManager isLoading={isLoading} />;
+    return <SpinnerManager isLoading={isLoading} />
   }
 
   if (isError || !data) {
-    const errorMessage = error?.message.includes("API limit reached")
-      ? "API limit reached. Please try again later."
-      : "Error loading data.";
-    return <div className="text-red-500">{errorMessage}</div>;
+    const errorMessage = error?.message.includes('API limit reached')
+      ? 'API limit reached. Please try again later.'
+      : 'Error loading data.'
+    return <div className="text-red-500">{errorMessage}</div>
   }
 
   if (data.stockDetails.length === 0) {
@@ -38,7 +38,7 @@ export default function Page() {
           No stocks available for this category.
         </p>
       </div>
-    );
+    )
   }
 
   return (
@@ -49,11 +49,11 @@ export default function Page() {
         pagination={pagination}
         onPageChange={(page) => {
           if (page > 0 && page <= pagination.totalPages) {
-            console.log("Page change requested:", page);
-            setPagination((prev) => ({ ...prev, currentPage: page }));
+            console.log('Page change requested:', page)
+            setPagination((prev) => ({ ...prev, currentPage: page }))
           }
         }}
       />
     </div>
-  );
+  )
 }

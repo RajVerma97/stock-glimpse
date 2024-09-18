@@ -1,27 +1,27 @@
-import { cn } from "@/lib/utils";
-import { fetchChartData } from "@/lib/yahoo-finance/fetchChartData";
-import type { Interval, Range } from "@/types/yahoo-finance";
-import AreaClosedChart from "./AreaClosedChart";
-import yahooFinance from "yahoo-finance2";
-import { fetchQuote } from "@/lib/yahoo-finance/fetchQuote";
+import { cn } from '@/lib/utils'
+import { fetchChartData } from '@/lib/yahoo-finance/fetchChartData'
+import type { Interval, Range } from '@/types/yahoo-finance'
+import AreaClosedChart from './AreaClosedChart'
+import yahooFinance from 'yahoo-finance2'
+import { fetchQuote } from '@/lib/yahoo-finance/fetchQuote'
 
 interface StockGraphProps {
-  ticker: string;
-  range: Range;
-  interval: Interval;
+  ticker: string
+  range: Range
+  interval: Interval
 }
 
 const rangeTextMapping = {
-  "1d": "",
-  "1w": "Past Week",
-  "1m": "Past Month",
-  "3m": "Past 3 Months",
-  "1y": "Past Year",
-};
+  '1d': '',
+  '1w': 'Past Week',
+  '1m': 'Past Month',
+  '3m': 'Past 3 Months',
+  '1y': 'Past Year',
+}
 
 function calculatePriceChange(qouteClose: number, currentPrice: number) {
-  const firstItemPrice = qouteClose || 0;
-  return ((currentPrice - firstItemPrice) / firstItemPrice) * 100;
+  const firstItemPrice = qouteClose || 0
+  return ((currentPrice - firstItemPrice) / firstItemPrice) * 100
 }
 
 export default async function StockChart({
@@ -29,24 +29,24 @@ export default async function StockChart({
   range,
   interval,
 }: StockGraphProps) {
-  const chartData = await fetchChartData(ticker, range, interval);
-  const quoteData = await fetchQuote(ticker);
+  const chartData = await fetchChartData(ticker, range, interval)
+  const quoteData = await fetchQuote(ticker)
 
-  const [chart, quote] = await Promise.all([chartData, quoteData]);
+  const [chart, quote] = await Promise.all([chartData, quoteData])
 
   const priceChange =
     chart.quotes.length &&
     calculatePriceChange(
       Number(chart.quotes[0].close),
-      Number(chart.meta.regularMarketPrice)
-    );
+      Number(chart.meta.regularMarketPrice),
+    )
 
   const ChartQuotes = chart.quotes
     .map((quote) => ({
       date: quote.date,
       close: quote.close?.toFixed(2),
     }))
-    .filter((quote) => quote.close !== undefined && quote.date !== null);
+    .filter((quote) => quote.close !== undefined && quote.date !== null)
 
   return (
     <div className="h-[27.5rem] w-full">
@@ -55,8 +55,8 @@ export default async function StockChart({
           <span className="font-bold text-primary">{quoteData.symbol}</span>
           <span>·</span>
           <span>
-            {quoteData.fullExchangeName === "NasdaqGS"
-              ? "NASDAQ"
+            {quoteData.fullExchangeName === 'NasdaqGS'
+              ? 'NASDAQ'
               : quoteData.fullExchangeName}
           </span>
           <span>{quoteData.shortName}</span>
@@ -66,7 +66,7 @@ export default async function StockChart({
           <div className="space-x-1">
             <span className="text-nowrap">
               <span className="text-xl font-bold">
-                {quote.currency === "USD" ? "$" : ""}
+                {quote.currency === 'USD' ? '$' : ''}
                 {quote.regularMarketPrice?.toFixed(2)}
               </span>
               <span className="font-semibold">
@@ -91,7 +91,7 @@ export default async function StockChart({
                 <>
                   <span>·</span>
                   <span>
-                    Post-Market: {quote.currency === "USD" ? "$" : ""}
+                    Post-Market: {quote.currency === 'USD' ? '$' : ''}
                     {quote.postMarketPrice.toFixed(2)}
                   </span>
                   <span>
@@ -116,7 +116,7 @@ export default async function StockChart({
                 <>
                   <span>·</span>
                   <span>
-                    Pre-Market: {quote.currency === "USD" ? "$" : ""}
+                    Pre-Market: {quote.currency === 'USD' ? '$' : ''}
                     {quote.preMarketPrice.toFixed(2)}
                   </span>
                   <span>
@@ -140,12 +140,12 @@ export default async function StockChart({
             </span>
           </div>
           <span className="space-x-1 whitespace-nowrap font-semibold">
-            {priceChange !== 0 && rangeTextMapping[range] !== "" && (
+            {priceChange !== 0 && rangeTextMapping[range] !== '' && (
               <span
                 className={cn(
                   priceChange > 0
-                    ? "text-green-800 dark:text-green-400"
-                    : "text-red-800 dark:text-red-500"
+                    ? 'text-green-800 dark:text-green-400'
+                    : 'text-red-800 dark:text-red-500',
                 )}
               >
                 {priceChange > 0
@@ -168,5 +168,5 @@ export default async function StockChart({
         <AreaClosedChart chartQuotes={ChartQuotes} range={range} />
       )}
     </div>
-  );
+  )
 }

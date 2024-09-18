@@ -1,29 +1,29 @@
-import { useFetchMarketNews } from "@/app/hooks/use-fetch-market-news";
-import { NewsArticle } from "@/app/types/market-news";
-import { useMemo } from "react";
-import ErrorMessage from "./Error";
-import Loading from "./Loading";
+import { useFetchMarketNews } from '@/app/hooks/use-fetch-market-news'
+import { NewsArticle } from '@/app/types/market-news'
+import { useMemo } from 'react'
+import ErrorMessage from './Error'
+import Loading from './Loading'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "./ui/carousel";
-import Link from "next/link";
-import Image from "next/image";
+} from './ui/carousel'
+import Link from 'next/link'
+import Image from 'next/image'
 
 export default function MarketNews() {
   const {
     data: marketNews,
     isLoading: isMarketNewsLoading,
     isError: isMarketNewsError,
-  } = useFetchMarketNews();
+  } = useFetchMarketNews()
 
   const filteredMarketNews = marketNews?.filter(
     (item: NewsArticle) =>
-      item.source != "MarketWatch" && item.source != "Bloomberg"
-  );
+      item.source != 'MarketWatch' && item.source != 'Bloomberg',
+  )
 
   const content = useMemo(() => {
     return (
@@ -52,8 +52,8 @@ export default function MarketNews() {
           ))}
         </CarouselContent>
       </Carousel>
-    );
-  }, [marketNews]);
+    )
+  }, [marketNews])
 
   return (
     <div className="max-w-screen-xl ">
@@ -67,5 +67,5 @@ export default function MarketNews() {
         content
       )}
     </div>
-  );
+  )
 }

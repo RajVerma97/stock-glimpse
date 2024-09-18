@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -61,13 +59,11 @@
   }
 }
 
-body{
+body {
   background-color: black;
-  color:white;
-  padding:3em;
-
+  color: white;
+  padding: 3em;
 }
-
 
 .glass-effect {
   backdrop-filter: blur(20px);

@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios'
 
 export default async function fetchMarketNews() {
-  const response = await axios.get("/api/news/get-market-news");
-  return response.data;
+  const response = await axios.get('/api/news/get-market-news')
+  return response.data
 }

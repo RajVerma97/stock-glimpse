@@ -1,37 +1,37 @@
-import React from "react";
-import { useFormik } from "formik";
+import React from 'react'
+import { useFormik } from 'formik'
 import {
   ColumnDef,
   useReactTable,
   getCoreRowModel,
-} from "@tanstack/react-table";
-import { AiOutlineFrown } from "react-icons/ai";
+} from '@tanstack/react-table'
+import { AiOutlineFrown } from 'react-icons/ai'
 
 type StockDetail = {
-  symbol: string;
-  companyName: string;
-  currentPrice: number;
-  marketCap: number;
-  industry: string;
-};
+  symbol: string
+  companyName: string
+  currentPrice: number
+  marketCap: number
+  industry: string
+}
 
 const columns: ColumnDef<StockDetail>[] = [
-  { id: "serialNumber", header: "No.", accessorFn: (_, index) => index + 1 },
-  { accessorKey: "symbol", header: "Symbol" },
-  { accessorKey: "companyName", header: "Company Name" },
-  { accessorKey: "currentPrice", header: "Current Price" },
-  { accessorKey: "marketCap", header: "Market Cap" },
-  { accessorKey: "industry", header: "Industry" },
-];
+  { id: 'serialNumber', header: 'No.', accessorFn: (_, index) => index + 1 },
+  { accessorKey: 'symbol', header: 'Symbol' },
+  { accessorKey: 'companyName', header: 'Company Name' },
+  { accessorKey: 'currentPrice', header: 'Current Price' },
+  { accessorKey: 'marketCap', header: 'Market Cap' },
+  { accessorKey: 'industry', header: 'Industry' },
+]
 
 interface StockTableProps {
-  data: StockDetail[];
+  data: StockDetail[]
   pagination: {
-    currentPage: number;
-    totalPages: number;
-    limit: number;
-  };
-  onPageChange: (page: number) => void;
+    currentPage: number
+    totalPages: number
+    limit: number
+  }
+  onPageChange: (page: number) => void
 }
 
 const StockTableComponent: React.FC<StockTableProps> = ({
@@ -44,17 +44,17 @@ const StockTableComponent: React.FC<StockTableProps> = ({
       currentPage: pagination.currentPage,
     },
     onSubmit: (values) => {
-      console.log("Formik onSubmit called with page:", values.currentPage);
-      onPageChange(values.currentPage);
+      console.log('Formik onSubmit called with page:', values.currentPage)
+      onPageChange(values.currentPage)
     },
-  });
+  })
 
   const table = useReactTable({
     data,
     columns,
     pageCount: pagination.totalPages,
     getCoreRowModel: getCoreRowModel(),
-  });
+  })
 
   return (
     <div className="w-full bg-gray-900 text-white shadow-md rounded-lg overflow-hidden">
@@ -68,10 +68,10 @@ const StockTableComponent: React.FC<StockTableProps> = ({
                     key={header.id}
                     className="px-4 py-2 text-center text-sm font-semibold text-gray-300 uppercase tracking-wider"
                   >
-                    {typeof header.column.columnDef.header === "function"
+                    {typeof header.column.columnDef.header === 'function'
                       ? (
                           header.column.columnDef.header as (
-                            props: any
+                            props: any,
                           ) => React.ReactNode
                         )({})
                       : header.column.columnDef.header}
@@ -120,9 +120,9 @@ const StockTableComponent: React.FC<StockTableProps> = ({
         <button
           type="button"
           onClick={() => {
-            console.log("Previous button clicked");
-            formik.setFieldValue("currentPage", pagination.currentPage - 1);
-            formik.handleSubmit();
+            console.log('Previous button clicked')
+            formik.setFieldValue('currentPage', pagination.currentPage - 1)
+            formik.handleSubmit()
           }}
           disabled={pagination.currentPage === 1}
           className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:bg-gray-600 transition cursor-pointer"
@@ -135,9 +135,9 @@ const StockTableComponent: React.FC<StockTableProps> = ({
         <button
           type="button"
           onClick={() => {
-            console.log("Next button clicked");
-            formik.setFieldValue("currentPage", pagination.currentPage + 1);
-            formik.handleSubmit();
+            console.log('Next button clicked')
+            formik.setFieldValue('currentPage', pagination.currentPage + 1)
+            formik.handleSubmit()
           }}
           disabled={pagination.currentPage === pagination.totalPages}
           className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:bg-gray-600 transition cursor-pointer"
@@ -146,7 +146,7 @@ const StockTableComponent: React.FC<StockTableProps> = ({
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default StockTableComponent;
+export default StockTableComponent

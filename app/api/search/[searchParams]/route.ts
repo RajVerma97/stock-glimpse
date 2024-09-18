@@ -1,58 +1,58 @@
-import axios from "axios";
-import { NextRequest, NextResponse } from "next/server";
+import axios from 'axios'
+import { NextRequest, NextResponse } from 'next/server'
 
 interface StockData {
-  ticker: string;
-  name: string;
-  market: string;
-  locale: string;
-  primary_exchange: string;
-  type: string;
-  active: boolean;
-  currency_name: string;
-  last_updated_utc: string;
-  logo?: string | null;
+  ticker: string
+  name: string
+  market: string
+  locale: string
+  primary_exchange: string
+  type: string
+  active: boolean
+  currency_name: string
+  last_updated_utc: string
+  logo?: string | null
 }
 
 interface FinnhubLogoResponse {
-  logo?: string;
+  logo?: string
 }
 
 export async function GET(
   req: NextRequest,
-  context: { params: { searchParams: string } }
+  context: { params: { searchParams: string } },
 ) {
-  const searchParams = context.params.searchParams;
+  const searchParams = context.params.searchParams
 
   if (!searchParams) {
     return NextResponse.json(
-      { error: "No search parameter provided" },
-      { status: 400 }
-    );
+      { error: 'No search parameter provided' },
+      { status: 400 },
+    )
   }
 
   try {
-    const apiUrl = `https://api.polygon.io/v3/reference/tickers?search=${searchParams}&apiKey=${process.env.POLYGON_API_KEY}`;
-    const response = await axios.get(apiUrl);
+    const apiUrl = `https://api.polygon.io/v3/reference/tickers?search=${searchParams}&apiKey=${process.env.POLYGON_API_KEY}`
+    const response = await axios.get(apiUrl)
 
     if (response.data && response.data.results) {
-      const results: StockData[] = response.data.results;
-      const resultsWithLogos: StockData[] = [];
+      const results: StockData[] = response.data.results
+      const resultsWithLogos: StockData[] = []
 
       for (const stock of results) {
         try {
           const logoResponse = await axios.get<FinnhubLogoResponse>(
-            `https://finnhub.io/api/v1/stock/profile2?symbol=${stock.ticker}&token=${process.env.FINNHUB_API_KEY}`
-          );
+            `https://finnhub.io/api/v1/stock/profile2?symbol=${stock.ticker}&token=${process.env.FINNHUB_API_KEY}`,
+          )
           resultsWithLogos.push({
             ...stock,
             logo: logoResponse.data.logo || null,
-          });
+          })
         } catch {
           resultsWithLogos.push({
             ...stock,
             logo: null,
-          });
+          })
         }
       }
 
@@ -67,23 +67,23 @@ export async function GET(
         currency_name: stock.currency_name,
         last_updated_utc: stock.last_updated_utc,
         logo: stock.logo,
-      }));
+      }))
 
-      return NextResponse.json(formattedData);
+      return NextResponse.json(formattedData)
     } else {
-      return NextResponse.json({ error: "No results found" }, { status: 404 });
+      return NextResponse.json({ error: 'No results found' }, { status: 404 })
     }
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
       return NextResponse.json(
         { error: error.response.data.error || error.message },
-        { status: error.response.status }
-      );
+        { status: error.response.status },
+      )
     } else {
       return NextResponse.json(
-        { error: "An unknown error occurred" },
-        { status: 500 }
-      );
+        { error: 'An unknown error occurred' },
+        { status: 500 },
+      )
     }
   }
 }
