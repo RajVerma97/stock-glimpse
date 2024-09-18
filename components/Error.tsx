@@ -1,8 +1,8 @@
 // components/ErrorMessage.tsx
-import React from "react";
+import React from 'react'
 
 interface ErrorMessageProps {
-  message: string;
+  message: string
 }
 
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
@@ -10,7 +10,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
     <div className="w-full p-8 flex justify-center items-center">
       <p className="text-red-500 font-semibold">Error: {message}</p>
     </div>
-  );
-};
+  )
+}
 
-export default ErrorMessage;
+export default ErrorMessage

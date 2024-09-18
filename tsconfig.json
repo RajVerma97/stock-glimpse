@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "allowUnreachableCode": false, // add => raises compiler errors about unreachable code
+    "allowUnusedLabels": false, // add =>  raises compiler errors about unused labels
+    "noFallthroughCasesInSwitch": true, // add => Ensures that any non-empty case inside a switch statement includes either break or return
+    "noImplicitReturns": true, // add => Check all code paths in a function to ensure they return a value.
+    "sourceMap": true, // add => Enables the generation of sourcemap files. Easier to debug
+    "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -24,6 +29,12 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next.config.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "next.config.js"
+  ],
   "exclude": ["node_modules"]
 }

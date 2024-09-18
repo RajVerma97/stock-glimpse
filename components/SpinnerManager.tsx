@@ -1,12 +1,12 @@
-import React, { CSSProperties } from "react";
-import { ClipLoader, MoonLoader } from "react-spinners";
+import React, { CSSProperties } from 'react'
+import { ClipLoader, MoonLoader } from 'react-spinners'
 
 export default function SpinnerManager({ isLoading }) {
   const override: CSSProperties = {
-    display: "block",
-    margin: "0 auto",
-    borderColor: "#ffffff",
-  };
+    display: 'block',
+    margin: '0 auto',
+    borderColor: '#ffffff',
+  }
 
   return (
     <div>
@@ -23,5 +23,5 @@ export default function SpinnerManager({ isLoading }) {
         </div>
       )}
     </div>
-  );
+  )
 }

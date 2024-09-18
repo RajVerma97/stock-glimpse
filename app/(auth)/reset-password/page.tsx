@@ -1,75 +1,75 @@
-"use client";
+'use client'
 
-import SpinnerManager from "@/components/SpinnerManager";
-import { notify, ToastManager } from "@/components/ToastManager";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import SpinnerManager from '@/components/SpinnerManager'
+import { notify, ToastManager } from '@/components/ToastManager'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { useRouter } from 'next/navigation'
+import React, { useEffect, useState } from 'react'
 
 export default function ResetPassword() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [token, setToken] = useState<string | null>(null);
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [token, setToken] = useState<string | null>(null)
 
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
-    const query = new URLSearchParams(window.location.search);
-    const tokenFromQuery = query.get("token");
-    const emailFromQuery = query.get("email");
+    const query = new URLSearchParams(window.location.search)
+    const tokenFromQuery = query.get('token')
+    const emailFromQuery = query.get('email')
 
     if (tokenFromQuery) {
-      setToken(tokenFromQuery);
+      setToken(tokenFromQuery)
     }
 
     if (emailFromQuery) {
-      setEmail(emailFromQuery);
+      setEmail(emailFromQuery)
     }
-  }, []);
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+    e.preventDefault()
+    setIsLoading(true)
 
     if (!password || !confirmPassword) {
-      notify({ status: "error", message: "Password fields must be filled" });
-      setIsLoading(false);
-      return;
+      notify({ status: 'error', message: 'Password fields must be filled' })
+      setIsLoading(false)
+      return
     }
 
     if (password !== confirmPassword) {
-      notify({ status: "error", message: "Passwords must match" });
-      setIsLoading(false);
-      return;
+      notify({ status: 'error', message: 'Passwords must match' })
+      setIsLoading(false)
+      return
     }
 
     try {
-      const res = await fetch("/api/auth/reset-password", {
-        method: "POST",
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
         body: JSON.stringify({ email, password, token }),
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-      });
+      })
 
-      const data = await res.json();
+      const data = await res.json()
 
       if (res.ok) {
-        notify({ status: "success", message: data.message });
-        setPassword("");
-        setConfirmPassword("");
+        notify({ status: 'success', message: data.message })
+        setPassword('')
+        setConfirmPassword('')
       } else {
-        notify({ status: "error", message: data.message });
+        notify({ status: 'error', message: data.message })
       }
     } catch (error) {
-      notify({ status: "error", message: "Something went wrong" });
+      notify({ status: 'error', message: 'Something went wrong' })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <>
@@ -99,7 +99,7 @@ export default function ResetPassword() {
               required
             />
           </div>
-          <Button variant={"outline"} type="submit" disabled={isLoading}>
+          <Button variant={'outline'} type="submit" disabled={isLoading}>
             Reset Password
           </Button>
           <SpinnerManager isLoading={isLoading} />
@@ -107,5 +107,5 @@ export default function ResetPassword() {
         </form>
       </div>
     </>
-  );
+  )
 }

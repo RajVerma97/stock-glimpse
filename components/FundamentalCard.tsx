@@ -1,19 +1,19 @@
-import React from "react";
-import { Card, CardFooter, CardHeader } from "./ui/card";
-import { formatDate } from "@/app/utils/dateFormat";
-import Image from "next/image";
-import { Button } from "./ui/button";
-import { useMutation } from "@tanstack/react-query";
-import { useAddToWatchListMutation } from "@/app/hooks/use-add-to-watchlist";
-import { notify, ToastManager } from "./ToastManager";
-import { HeartIcon } from "lucide-react";
+import React from 'react'
+import { Card, CardFooter, CardHeader } from './ui/card'
+import { formatDate } from '@/app/utils/dateFormat'
+import Image from 'next/image'
+import { Button } from './ui/button'
+import { useMutation } from '@tanstack/react-query'
+import { useAddToWatchListMutation } from '@/app/hooks/use-add-to-watchlist'
+import { notify, ToastManager } from './ToastManager'
+import { HeartIcon } from 'lucide-react'
 
 export default function FundamentalCard({ stock }) {
-  const addToWatchListMutation = useAddToWatchListMutation();
+  const addToWatchListMutation = useAddToWatchListMutation()
 
   const handleAddToWatchList = () => {
-    addToWatchListMutation.mutate(stock);
-  };
+    addToWatchListMutation.mutate(stock)
+  }
 
   return (
     <div className="">
@@ -71,42 +71,42 @@ export default function FundamentalCard({ stock }) {
             <strong>Country:</strong> {stock.country}
           </p>
           <p>
-            <strong>PE Ratio:</strong> {stock.peRatio ?? "N/A"}
+            <strong>PE Ratio:</strong> {stock.peRatio ?? 'N/A'}
           </p>
           <p>
-            <strong>Book Value:</strong> {stock.bookValue ?? "N/A"}
+            <strong>Book Value:</strong> {stock.bookValue ?? 'N/A'}
           </p>
           <p>
-            <strong>Market Cap:</strong> {stock.marketCap ?? "N/A"}
+            <strong>Market Cap:</strong> {stock.marketCap ?? 'N/A'}
           </p>
           <p>
-            <strong>ROI:</strong> {stock.roi ?? "N/A"}
+            <strong>ROI:</strong> {stock.roi ?? 'N/A'}
           </p>
           <p>
-            <strong>ROE:</strong> {stock.roe ?? "N/A"}
+            <strong>ROE:</strong> {stock.roe ?? 'N/A'}
           </p>
           <p>
-            <strong>ROCE:</strong> {stock.roce ?? "N/A"}
+            <strong>ROCE:</strong> {stock.roce ?? 'N/A'}
           </p>
           <p>
-            <strong>Dividend Yield:</strong> {stock.dividendYield ?? "N/A"}
+            <strong>Dividend Yield:</strong> {stock.dividendYield ?? 'N/A'}
           </p>
           <p>
-            <strong>Face Value:</strong> {stock.faceValue ?? "N/A"}
+            <strong>Face Value:</strong> {stock.faceValue ?? 'N/A'}
           </p>
           <p>
-            <strong>Number of Shares:</strong> {stock.numberOfShares ?? "N/A"}
+            <strong>Number of Shares:</strong> {stock.numberOfShares ?? 'N/A'}
           </p>
           <p>
-            <strong>Promoter Holding Percentage:</strong>{" "}
-            {stock.promoterHoldingPercentage ?? "N/A"}
+            <strong>Promoter Holding Percentage:</strong>{' '}
+            {stock.promoterHoldingPercentage ?? 'N/A'}
           </p>
           <p>
-            <strong>Total Debt:</strong> {stock.totalDebt ?? "N/A"}
+            <strong>Total Debt:</strong> {stock.totalDebt ?? 'N/A'}
           </p>
         </div>
       </Card>
       <ToastManager />
     </div>
-  );
+  )
 }

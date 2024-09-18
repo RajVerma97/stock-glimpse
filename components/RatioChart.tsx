@@ -1,6 +1,6 @@
-import React from "react";
-import { Card, CardContent, CardHeader } from "./ui/card";
-import { Line } from "react-chartjs-2";
+import React from 'react'
+import { Card, CardContent, CardHeader } from './ui/card'
+import { Line } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,8 +10,8 @@ import {
   Title,
   Tooltip,
   Legend,
-} from "chart.js";
-import { RatioData, RatioItem } from "@/app/types/stock-detail";
+} from 'chart.js'
+import { RatioData, RatioItem } from '@/app/types/stock-detail'
 
 ChartJS.register(
   CategoryScale,
@@ -20,16 +20,16 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
-);
+  Legend,
+)
 
 interface RatioChartProps {
-  ratios: RatioData;
+  ratios: RatioData
 }
 
 export default function RatioChart({ ratios }: RatioChartProps) {
   if (!ratios || Object.keys(ratios).length === 0) {
-    return <p className="text-center text-gray-500">Data not available...</p>;
+    return <p className="text-center text-gray-500">Data not available...</p>
   }
 
   return (
@@ -41,15 +41,15 @@ export default function RatioChart({ ratios }: RatioChartProps) {
             {
               label: key,
               data: (values as RatioItem[]).map((item) => item.v).reverse(),
-              borderColor: "#EC4899", // Pink-500 color for the line
-              backgroundColor: "rgba(236, 72, 153, 0.2)", // Light pink fill
-              pointBackgroundColor: "#4A4A4A", // Dark gray for points
-              pointBorderColor: "#ffffff", // White border for points
+              borderColor: '#EC4899', // Pink-500 color for the line
+              backgroundColor: 'rgba(236, 72, 153, 0.2)', // Light pink fill
+              pointBackgroundColor: '#4A4A4A', // Dark gray for points
+              pointBorderColor: '#ffffff', // White border for points
               pointBorderWidth: 2,
               fill: true,
             },
           ],
-        };
+        }
 
         return (
           <Card
@@ -68,18 +68,18 @@ export default function RatioChart({ ratios }: RatioChartProps) {
                   plugins: {
                     legend: {
                       display: true,
-                      position: "top",
+                      position: 'top',
                       labels: {
-                        color: "#000000", // Black color for legend text
+                        color: '#000000', // Black color for legend text
                       },
                     },
                     tooltip: {
-                      backgroundColor: "#333", // Dark background color
-                      titleColor: "#ffffff", // White color for title
-                      bodyColor: "#ffffff", // White color for body text
+                      backgroundColor: '#333', // Dark background color
+                      titleColor: '#ffffff', // White color for title
+                      bodyColor: '#ffffff', // White color for body text
                       titleFont: {
                         size: 18, // Increased title font size
-                        weight: "bold",
+                        weight: 'bold',
                       },
                       bodyFont: {
                         size: 16, // Increased body font size
@@ -90,7 +90,7 @@ export default function RatioChart({ ratios }: RatioChartProps) {
                   scales: {
                     x: {
                       ticks: {
-                        color: "#000000", // Black color for x-axis ticks
+                        color: '#000000', // Black color for x-axis ticks
                       },
                       grid: {
                         display: false,
@@ -98,7 +98,7 @@ export default function RatioChart({ ratios }: RatioChartProps) {
                     },
                     y: {
                       ticks: {
-                        color: "#000000", // Black color for y-axis ticks
+                        color: '#000000', // Black color for y-axis ticks
                       },
                       grid: {
                         display: false,
@@ -109,8 +109,8 @@ export default function RatioChart({ ratios }: RatioChartProps) {
               />
             </CardContent>
           </Card>
-        );
+        )
       })}
     </div>
-  );
+  )
 }

@@ -1,19 +1,18 @@
-"use client";
-import { fetcher } from "../utils/fetcher";
-import StockCard from "@/components/StockCard";
-import SpinnerManager from "@/components/SpinnerManager";
-import ErrorMessage from "@/components/Error";
-import { useGetWatchlist } from "../hooks/use-get-watch-list";
+'use client'
+import { fetcher } from '../utils/fetcher'
+import StockCard from '@/components/StockCard'
+import SpinnerManager from '@/components/SpinnerManager'
+import ErrorMessage from '@/components/Error'
+import { useGetWatchlist } from '../hooks/use-get-watch-list'
 
 function Watchlist() {
-  
-  const { data, error, isLoading } = useGetWatchlist();
+  const { data, error, isLoading } = useGetWatchlist()
 
-  if (!data && !error) return <SpinnerManager isLoading={isLoading} />;
+  if (!data && !error) return <SpinnerManager isLoading={isLoading} />
 
-  if (error) console.log(error);
+  if (error) console.log(error)
 
-  const watchlist = data?.watchlist || []; // Default to an empty array if data is undefined
+  const watchlist = data?.watchlist || [] // Default to an empty array if data is undefined
 
   return (
     <div>
@@ -28,7 +27,7 @@ function Watchlist() {
         <p>Your watchlist is empty.</p>
       )}
     </div>
-  );
+  )
 }
 
-export default Watchlist;
+export default Watchlist

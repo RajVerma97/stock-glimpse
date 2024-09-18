@@ -1,32 +1,32 @@
-"use client";
-import { SessionProvider, signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import Logout from "../logout";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
+'use client'
+import { SessionProvider, signOut, useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
+import Logout from '../logout'
+import Image from 'next/image'
+import { Button } from '@/components/ui/button'
 
 export default function HomePage() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
+  const { data: session, status } = useSession()
+  const router = useRouter()
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/");
+    if (status === 'unauthenticated') {
+      router.push('/')
     }
-  }, [status, router]);
+  }, [status, router])
 
-  if (status === "loading") {
-    return <p>Loading...</p>;
+  if (status === 'loading') {
+    return <p>Loading...</p>
   }
 
   if (!session) {
-    return <p>No session found</p>;
+    return <p>No session found</p>
   }
 
   const logout = async () => {
-    await signOut({ redirect: true, callbackUrl: "/" });
-  };
+    await signOut({ redirect: true, callbackUrl: '/' })
+  }
 
   return (
     <SessionProvider>
@@ -43,7 +43,7 @@ export default function HomePage() {
           />
         )}
         {session ? (
-          <Button onClick={logout} variant={"outline"}>
+          <Button onClick={logout} variant={'outline'}>
             Logout
           </Button>
         ) : (
@@ -51,5 +51,5 @@ export default function HomePage() {
         )}
       </div>
     </SessionProvider>
-  );
+  )
 }

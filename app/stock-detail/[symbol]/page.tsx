@@ -1,53 +1,48 @@
-"use client";
-import { TimeFrame } from "@/app/enums/StockPriceChart.enum";
-import { useFetchHistoricalData } from "@/app/hooks/use-fetch-historical-data";
-import { useFetchStockDetails } from "@/app/hooks/use-fetch-stock-details";
-import { useFetchStockNews } from "@/app/hooks/use-fetch-stock-news";
-import { HistoricalData, Stock } from "@/app/types/stock-detail";
-import { formatDate } from "@/app/utils/dateFormat";
-import ErrorMessage from "@/components/Error";
-import FundamentalCard from "@/components/FundamentalCard";
-import Loading from "@/components/Loading";
-import MarketNews from "@/components/MarketNews";
-import RatioCard from "@/components/RatioCard";
-import RatioCardList from "@/components/RatioCardList";
-import RatioChart from "@/components/RatioChart";
-import ShareholdingPatternChart from "@/components/ShareHoldingPatternChart";
-import StockNews from "@/components/StockNews";
-import StockPriceChart from "@/components/StockPriceChart";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import Image from "next/image";
-import { useState, useEffect } from "react";
+'use client'
+import { TimeFrame } from '@/app/enums/StockPriceChart.enum'
+import { useFetchHistoricalData } from '@/app/hooks/use-fetch-historical-data'
+import { useFetchStockDetails } from '@/app/hooks/use-fetch-stock-details'
+import { useFetchStockNews } from '@/app/hooks/use-fetch-stock-news'
+import { HistoricalData, Stock } from '@/app/types/stock-detail'
+import { formatDate } from '@/app/utils/dateFormat'
+import ErrorMessage from '@/components/Error'
+import FundamentalCard from '@/components/FundamentalCard'
+import Loading from '@/components/Loading'
+import MarketNews from '@/components/MarketNews'
+import RatioCard from '@/components/RatioCard'
+import RatioCardList from '@/components/RatioCardList'
+import RatioChart from '@/components/RatioChart'
+import ShareholdingPatternChart from '@/components/ShareHoldingPatternChart'
+import StockNews from '@/components/StockNews'
+import StockPriceChart from '@/components/StockPriceChart'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import Image from 'next/image'
+import { useState, useEffect } from 'react'
 
 export default function StockDetailPage({ params }) {
-  const { symbol } = params;
+  const { symbol } = params
 
-  const [timeFrame, setTimeFrame] = useState<string>(TimeFrame.OneMonth);
-  const [error, setError] = useState<string | null>(null);
+  const [timeFrame, setTimeFrame] = useState<string>(TimeFrame.OneMonth)
+  const [error, setError] = useState<string | null>(null)
 
   const {
     data: stock,
     isLoading: isStockDetailsLoading,
     isError: isStockDetailsError,
-  } = useFetchStockDetails(symbol);
+  } = useFetchStockDetails(symbol)
 
   const {
     data: historicalData,
     isLoading: isHistoricalDataLoading,
     isError: isHistoricalDataError,
-  } = useFetchHistoricalData(symbol);
+  } = useFetchHistoricalData(symbol)
 
   if (isStockDetailsLoading || isHistoricalDataLoading)
-    return <Loading isLoading={true} />;
-  if (error) return <ErrorMessage message={error} />;
+    return <Loading isLoading={true} />
+  if (error) return <ErrorMessage message={error} />
 
-  if (!stock) return <ErrorMessage message="No stock details available" />;
+  if (!stock) return <ErrorMessage message="No stock details available" />
   return (
     <div className="w-full p-10 grid gap-[5rem]">
       <div className=" block sm:block md:flex  gap-20 sm:gap-10">
@@ -80,5 +75,5 @@ export default function StockDetailPage({ params }) {
         <StockNews symbol={symbol} />
       </div>
     </div>
-  );
+  )
 }

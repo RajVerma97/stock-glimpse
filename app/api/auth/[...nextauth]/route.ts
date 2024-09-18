@@ -1,51 +1,51 @@
-import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { compare } from "bcrypt";
-import User from "@/lib/models/Users";
-import GoogleProvider from "next-auth/providers/google";
-import GithubProvider from "next-auth/providers/github";
-import { connectDB } from "@/lib/connectDB";
-import { callback } from "chart.js/dist/helpers/helpers.core";
+import NextAuth from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import { compare } from 'bcrypt'
+import User from '@/lib/models/Users'
+import GoogleProvider from 'next-auth/providers/google'
+import GithubProvider from 'next-auth/providers/github'
+import { connectDB } from '@/lib/connectDB'
+import { callback } from 'chart.js/dist/helpers/helpers.core'
 
 const handler = NextAuth({
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   pages: {
-    signIn: "/login",
+    signIn: '/login',
   },
   providers: [
     CredentialsProvider({
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'text' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        await connectDB();
+        await connectDB()
 
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Email and password are required");
+          throw new Error('Email and password are required')
         }
 
-        const user = await User.findOne({ email: credentials.email }).exec();
+        const user = await User.findOne({ email: credentials.email }).exec()
 
         if (!user) {
-          throw new Error("No user found with that email");
+          throw new Error('No user found with that email')
         }
 
         const passwordCorrect = await compare(
           credentials.password,
-          user.password
-        );
+          user.password,
+        )
 
         if (passwordCorrect) {
           return {
             id: user._id.toString(),
             email: user.email,
-          };
+          }
         }
 
-        throw new Error("Incorrect password");
+        throw new Error('Incorrect password')
       },
     }),
     GoogleProvider({
@@ -57,7 +57,7 @@ const handler = NextAuth({
           name: profile.name,
           email: profile.email,
           image: profile.picture,
-        };
+        }
       },
     }),
     GithubProvider({
@@ -65,7 +65,7 @@ const handler = NextAuth({
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
       authorization: {
         params: {
-          scope: "read:user user:email",
+          scope: 'read:user user:email',
         },
       },
       profile(profile) {
@@ -74,15 +74,15 @@ const handler = NextAuth({
           name: profile.login,
           email: profile.email,
           image: profile.avatar_url,
-        };
+        }
       },
     }),
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      await connectDB();
+      await connectDB()
 
-      const existingUser = await User.findOne({ email: user.email }).exec();
+      const existingUser = await User.findOne({ email: user.email }).exec()
 
       if (!existingUser) {
         const newUser = new User({
@@ -90,13 +90,13 @@ const handler = NextAuth({
           name: user.name,
           img: user.image,
           provider: account?.provider,
-        });
-        await newUser.save();
+        })
+        await newUser.save()
       }
 
-      return true; // Continue the sign-in process
+      return true // Continue the sign-in process
     },
   },
-});
+})
 
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST }

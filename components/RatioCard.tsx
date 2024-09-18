@@ -1,21 +1,21 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader } from "./ui/card";
+import React from 'react'
+import { motion } from 'framer-motion'
+import { Card, CardContent, CardHeader } from './ui/card'
 
 const bounceVariants = {
   initial: { scale: 1 },
   hover: {
     scale: 1.05, // Scale up slightly on hover
     transition: {
-      type: "spring",
+      type: 'spring',
       stiffness: 300, // Controls the springiness
       damping: 10, // Controls the "bounciness"
     },
   },
-};
+}
 
 export default function RatioCard({ title, value, icon: Icon }) {
-  if (!value) return null;
+  if (!value) return null
   return (
     <motion.div
       initial="initial"
@@ -30,10 +30,10 @@ export default function RatioCard({ title, value, icon: Icon }) {
         </CardHeader>
         <CardContent className="flex items-center justify-center h-full p-8">
           <h1 className="text-5xl font-bold text-pink-600">
-            {value?.toFixed(2)} {title === "ROE" || title === "ROI" ? "%" : ""}
+            {value?.toFixed(2)} {title === 'ROE' || title === 'ROI' ? '%' : ''}
           </h1>
         </CardContent>
       </Card>
     </motion.div>
-  );
+  )
 }

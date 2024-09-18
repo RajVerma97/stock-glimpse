@@ -1,5 +1,5 @@
-import React from "react";
-import RatioCard from "./RatioCard";
+import React from 'react'
+import RatioCard from './RatioCard'
 import {
   DollarSign,
   TrendingUp,
@@ -7,7 +7,7 @@ import {
   BarChart,
   PieChart,
   Star,
-} from "lucide-react";
+} from 'lucide-react'
 
 export default function RatioCardList({ stock }) {
   return (
@@ -23,5 +23,5 @@ export default function RatioCardList({ stock }) {
       <RatioCard title="ROI" value={stock.roi} icon={PieChart} />
       <RatioCard title="ROE" value={stock.roe} icon={Star} />
     </div>
-  );
+  )
 }

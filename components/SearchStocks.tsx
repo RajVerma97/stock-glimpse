@@ -1,32 +1,32 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
 import {
   Command,
   CommandEmpty,
   CommandInput,
   CommandList,
   CommandSeparator,
-} from "./ui/command";
-import { MoonLoader } from "react-spinners";
-import useDebounce from "@/app/hooks/use-debounce";
-import { useSearchStocks } from "@/app/hooks/use-search-stocks";
-import { useRouter } from "next/navigation";
-import ErrorMessage from "./Error";
-import Image from "next/image";
+} from './ui/command'
+import { MoonLoader } from 'react-spinners'
+import useDebounce from '@/app/hooks/use-debounce'
+import { useSearchStocks } from '@/app/hooks/use-search-stocks'
+import { useRouter } from 'next/navigation'
+import ErrorMessage from './Error'
+import Image from 'next/image'
 
 export default function SearchStocks({}) {
-  const [searchParams, setSearchParams] = useState<string>("");
-  const debouncedSearchParams = useDebounce(searchParams, 400);
+  const [searchParams, setSearchParams] = useState<string>('')
+  const debouncedSearchParams = useDebounce(searchParams, 400)
 
-  const router = useRouter();
+  const router = useRouter()
 
   const {
     data: stockSearchData,
     isLoading: isStockSearchLoading,
     isError: isStockSearchError,
-  } = useSearchStocks(debouncedSearchParams);
+  } = useSearchStocks(debouncedSearchParams)
 
   if (isStockSearchError) {
-    return <ErrorMessage message="Error loading stocks" />;
+    return <ErrorMessage message="Error loading stocks" />
   }
 
   return (
@@ -94,5 +94,5 @@ export default function SearchStocks({}) {
         </CommandList>
       </Command>
     </div>
-  );
+  )
 }

@@ -1,17 +1,17 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
-import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { Button } from '@/components/ui/button'
+import { signOut, useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export default function Logout() {
-  const router = useRouter();
+  const router = useRouter()
 
-  const { data: session } = useSession();
+  const { data: session } = useSession()
 
   const logout = async () => {
-    await signOut();
-  };
+    await signOut()
+  }
 
   return (
     <>
@@ -21,5 +21,5 @@ export default function Logout() {
         </Button>
       ) : null}
     </>
-  );
+  )
 }

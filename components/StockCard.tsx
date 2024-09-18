@@ -1,25 +1,25 @@
-import React, { useMemo } from "react";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { Button } from "./ui/button";
-import { Trash2Icon } from "lucide-react";
-import SpinnerManager from "./SpinnerManager";
-import { useRemoveFromWatchlist } from "@/app/hooks/use-remove-from-watchlist";
+import React, { useMemo } from 'react'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+import { Button } from './ui/button'
+import { Trash2Icon } from 'lucide-react'
+import SpinnerManager from './SpinnerManager'
+import { useRemoveFromWatchlist } from '@/app/hooks/use-remove-from-watchlist'
 
 interface StockCardProps {
-  stock: any;
+  stock: any
 }
 
 const StockCard: React.FC<StockCardProps> = ({ stock }) => {
-  const pathName = usePathname();
-  const { mutate, status } = useRemoveFromWatchlist(stock.symbol);
+  const pathName = usePathname()
+  const { mutate, status } = useRemoveFromWatchlist(stock.symbol)
 
   const handleRemoveFromWatchlist = () => {
-    mutate(stock.symbol);
-  };
+    mutate(stock.symbol)
+  }
 
   const CardContentComponent = useMemo(
     () => (
@@ -28,19 +28,19 @@ const StockCard: React.FC<StockCardProps> = ({ stock }) => {
           ${stock.currentPrice}
         </p>
 
-        {pathName === "/watchlist" ? (
+        {pathName === '/watchlist' ? (
           <Button
             onClick={handleRemoveFromWatchlist}
             className="text-red-500"
-            variant={"secondary"}
-            disabled={status === "pending"} // Disable button while loading
+            variant={'secondary'}
+            disabled={status === 'pending'} // Disable button while loading
           >
             <Trash2Icon />
           </Button>
         ) : (
           <p
             className={`text-lg font-semibold ${
-              stock.change > 0 ? "text-green-500" : "text-red-500"
+              stock.change > 0 ? 'text-green-500' : 'text-red-500'
             }`}
           >
             {stock.change}%
@@ -54,18 +54,18 @@ const StockCard: React.FC<StockCardProps> = ({ stock }) => {
       stock.change,
       handleRemoveFromWatchlist,
       status,
-    ]
-  );
+    ],
+  )
 
   const CardComponent = (
     <motion.div
       whileHover={{
         scale: 1.05,
-        boxShadow: "0px 8px 15px rgba(0, 0, 0, 0.3)",
-        color: "",
-        backgroundColor: "blue",
+        boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
+        color: '',
+        backgroundColor: 'blue',
       }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       className="rounded-lg"
     >
       <Card className="p-4 border rounded-lg cursor-pointer bg-white shadow-md">
@@ -84,20 +84,20 @@ const StockCard: React.FC<StockCardProps> = ({ stock }) => {
         {CardContentComponent}
       </Card>
     </motion.div>
-  );
+  )
 
   // If in the watchlist and removing is in progress, show the spinner
-  if (pathName === "/watchlist" && status === "pending") {
-    return <SpinnerManager isLoading={true} />;
+  if (pathName === '/watchlist' && status === 'pending') {
+    return <SpinnerManager isLoading={true} />
   }
 
-  return pathName === "/watchlist" ? (
+  return pathName === '/watchlist' ? (
     <div className="block">{CardComponent}</div>
   ) : (
     <Link href={`/stock-detail/${stock.symbol}`} className="block">
       {CardComponent}
     </Link>
-  );
-};
+  )
+}
 
-export default StockCard;
+export default StockCard

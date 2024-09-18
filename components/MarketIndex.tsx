@@ -1,15 +1,15 @@
-import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import ErrorMessage from "./Error";
-import Loading from "./Loading";
-import { useFetchMarketIndex } from "@/app/hooks/use-fetch-market-index";
+import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import ErrorMessage from './Error'
+import Loading from './Loading'
+import { useFetchMarketIndex } from '@/app/hooks/use-fetch-market-index'
 
 export default function MarketIndex() {
   const {
     data: marketIndexInfo,
     isLoading: isMarketIndexInfoLoading,
     isError: isMarketIndexInfoError,
-  } = useFetchMarketIndex("SPY");
+  } = useFetchMarketIndex('SPY')
 
   return (
     <div className="p-2 bg-white text-black">
@@ -34,5 +34,5 @@ export default function MarketIndex() {
         )
       )}
     </div>
-  );
+  )
 }

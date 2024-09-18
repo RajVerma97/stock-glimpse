@@ -1,51 +1,51 @@
-"use client";
+'use client'
 
-import { notify, ToastManager } from "@/components/ToastManager";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { notify, ToastManager } from '@/components/ToastManager'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { FormEvent, useState } from 'react'
 
 export default function Form() {
-  const router = useRouter();
+  const router = useRouter()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const formData = new FormData(e.currentTarget);
+    const formData = new FormData(e.currentTarget)
     const response = await fetch(`/api/auth/register`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify({
-        email: formData.get("email"),
-        password: formData.get("password"),
+        email: formData.get('email'),
+        password: formData.get('password'),
       }),
-    });
+    })
 
-    const result = await response.json();
+    const result = await response.json()
 
     if (!response.ok) {
-      notify({ status: "error", message: result.message });
-      return;
+      notify({ status: 'error', message: result.message })
+      return
     } else {
-      const result = await signIn("credentials", {
+      const result = await signIn('credentials', {
         redirect: false,
-        email: formData.get("email"),
-        password: formData.get("password"),
-      });
+        email: formData.get('email'),
+        password: formData.get('password'),
+      })
 
       if (result?.ok) {
-        console.log("hel");
+        console.log('hel')
         notify({
-          status: "success",
-          message: "Registered successfully  Now Login",
-        });
+          status: 'success',
+          message: 'Registered successfully  Now Login',
+        })
         // setTimeout(() => router.push("/"), 8000);
       } else {
-        notify({ status: "error", message: result?.error });
+        notify({ status: 'error', message: result?.error })
       }
     }
-  };
+  }
 
   return (
     <form
@@ -67,11 +67,11 @@ export default function Form() {
         placeholder="Password"
         required
       />
-      <Button variant={"outline"} type="submit">
+      <Button variant={'outline'} type="submit">
         Register
       </Button>
 
       <ToastManager />
     </form>
-  );
+  )
 }

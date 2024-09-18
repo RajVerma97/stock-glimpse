@@ -1,29 +1,29 @@
-import axios from "axios";
-import { NextResponse } from "next/server";
+import axios from 'axios'
+import { NextResponse } from 'next/server'
 
 export async function GET() {
-  const apiKey = process.env.FINNHUB_API_KEY;
+  const apiKey = process.env.FINNHUB_API_KEY
 
   if (!apiKey) {
-    return NextResponse.json({ message: "API key not found" }, { status: 500 });
+    return NextResponse.json({ message: 'API key not found' }, { status: 500 })
   }
 
   // Use the Finnhub API for stock news
-  const newsApiUrl = `https://finnhub.io/api/v1/news?category=stock&minId=10&token=${apiKey}`;
+  const newsApiUrl = `https://finnhub.io/api/v1/news?category=stock&minId=10&token=${apiKey}`
 
   try {
-    const response = await axios.get(newsApiUrl);
+    const response = await axios.get(newsApiUrl)
 
     if (!response.data || response.data.length === 0) {
-      return NextResponse.json({ error: "No data found" }, { status: 404 });
+      return NextResponse.json({ error: 'No data found' }, { status: 404 })
     }
 
-    return NextResponse.json(response.data, { status: 200 });
+    return NextResponse.json(response.data, { status: 200 })
   } catch (error) {
-    console.error("Error fetching stock news:", error);
+    console.error('Error fetching stock news:', error)
     return NextResponse.json(
-      { error: "Failed to fetch stock news" },
-      { status: 500 }
-    );
+      { error: 'Failed to fetch stock news' },
+      { status: 500 },
+    )
   }
 }

@@ -1,27 +1,27 @@
-import { useFetchMarketNews } from "@/app/hooks/use-fetch-market-news";
-import { NewsArticle } from "@/app/types/market-news";
-import { useMemo } from "react";
-import ErrorMessage from "./Error";
-import Loading from "./Loading";
+import { useFetchMarketNews } from '@/app/hooks/use-fetch-market-news'
+import { NewsArticle } from '@/app/types/market-news'
+import { useMemo } from 'react'
+import ErrorMessage from './Error'
+import Loading from './Loading'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "./ui/carousel";
-import Link from "next/link";
-import Image from "next/image";
-import { useFetchStockNews } from "@/app/hooks/use-fetch-stock-news";
+} from './ui/carousel'
+import Link from 'next/link'
+import Image from 'next/image'
+import { useFetchStockNews } from '@/app/hooks/use-fetch-stock-news'
 
 export default function StockNews({ symbol }) {
   const {
     data: stockNews,
     isLoading: isStockNewsLoading,
     isError: isStockNewsError,
-  } = useFetchStockNews(symbol);
+  } = useFetchStockNews(symbol)
 
-  console.log(stockNews);
+  console.log(stockNews)
   const content = useMemo(() => {
     return (
       <Carousel className="relative w-full overflow-hidden p-6">
@@ -49,8 +49,8 @@ export default function StockNews({ symbol }) {
           ))}
         </CarouselContent>
       </Carousel>
-    );
-  }, [stockNews]);
+    )
+  }, [stockNews])
 
   return (
     <div className="max-w-screen-xl ">
@@ -64,5 +64,5 @@ export default function StockNews({ symbol }) {
         content
       )}
     </div>
-  );
+  )
 }

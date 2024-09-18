@@ -1,6 +1,6 @@
-"use client";
-import React, { useState, useEffect } from "react";
-import { Line } from "react-chartjs-2";
+'use client'
+import React, { useState, useEffect } from 'react'
+import { Line } from 'react-chartjs-2'
 
 import {
   Chart as ChartJS,
@@ -13,13 +13,13 @@ import {
   Legend,
   ChartOptions,
   ChartData,
-} from "chart.js";
-import annotationPlugin from "chartjs-plugin-annotation";
-import { Button } from "./ui/button";
-import { MoonLoader } from "react-spinners";
-import dayjs from "dayjs";
-import { TimeFrame } from "@/app/enums/StockPriceChart.enum";
-import { HistoricalDataEntry } from "@/app/types/stock-detail";
+} from 'chart.js'
+import annotationPlugin from 'chartjs-plugin-annotation'
+import { Button } from './ui/button'
+import { MoonLoader } from 'react-spinners'
+import dayjs from 'dayjs'
+import { TimeFrame } from '@/app/enums/StockPriceChart.enum'
+import { HistoricalDataEntry } from '@/app/types/stock-detail'
 
 ChartJS.register(
   CategoryScale,
@@ -29,13 +29,13 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  annotationPlugin
-);
+  annotationPlugin,
+)
 
 interface StockPriceChartProps {
-  historicalData: HistoricalDataEntry[];
-  timeFrame: string;
-  setTimeFrame: (timeFrame: string) => void;
+  historicalData: HistoricalDataEntry[]
+  timeFrame: string
+  setTimeFrame: (timeFrame: string) => void
 }
 
 const StockPriceChart = ({
@@ -43,82 +43,82 @@ const StockPriceChart = ({
   timeFrame,
   setTimeFrame,
 }: StockPriceChartProps) => {
-  const [filteredData, setFilteredData] = useState<HistoricalDataEntry[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [filteredData, setFilteredData] = useState<HistoricalDataEntry[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    setLoading(true);
-    const now = dayjs();
-    let startDate: dayjs.Dayjs;
+    setLoading(true)
+    const now = dayjs()
+    let startDate: dayjs.Dayjs
 
     switch (timeFrame) {
       case TimeFrame.OneDay:
-        startDate = dayjs().subtract(1, "day");
-        break;
+        startDate = dayjs().subtract(1, 'day')
+        break
       case TimeFrame.OneWeek:
-        startDate = dayjs().subtract(1, "week");
-        break;
+        startDate = dayjs().subtract(1, 'week')
+        break
       case TimeFrame.OneMonth:
-        startDate = dayjs().subtract(1, "month");
-        break;
+        startDate = dayjs().subtract(1, 'month')
+        break
       case TimeFrame.OneYear:
-        startDate = dayjs().subtract(1, "year");
-        break;
+        startDate = dayjs().subtract(1, 'year')
+        break
       default:
-        startDate = dayjs();
+        startDate = dayjs()
     }
 
     const filtered = historicalData.filter((entry) => {
-      const entryDate = dayjs(entry.date);
+      const entryDate = dayjs(entry.date)
       return (
         (entryDate.isAfter(startDate) && entryDate.isBefore(now)) ||
         entryDate.isSame(startDate) ||
         entryDate.isSame(now)
-      );
-    });
+      )
+    })
 
-    setFilteredData(filtered);
+    setFilteredData(filtered)
 
-    setLoading(false);
-  }, [historicalData, timeFrame]);
+    setLoading(false)
+  }, [historicalData, timeFrame])
 
-  const dates = filteredData.map((data) => data.date || "N/A");
-  const prices = filteredData.map((data) => data.close || 0);
+  const dates = filteredData.map((data) => data.date || 'N/A')
+  const prices = filteredData.map((data) => data.close || 0)
 
-  const initialPrice = prices[0] || 0;
-  const finalPrice = prices[prices.length - 1] || 0;
-  const lineColor = finalPrice > initialPrice ? "#10B981" : "#EC4899";
+  const initialPrice = prices[0] || 0
+  const finalPrice = prices[prices.length - 1] || 0
+  const lineColor = finalPrice > initialPrice ? '#10B981' : '#EC4899'
 
-  const chartData: ChartData<"line"> = {
+  const chartData: ChartData<'line'> = {
     labels: dates,
     datasets: [
       {
-        label: "Closing Price",
+        label: 'Closing Price',
         data: prices,
         borderColor: lineColor,
         pointRadius: timeFrame === TimeFrame.OneYear ? 1 : 2,
-        pointBackgroundColor: "#fff",
-        pointBorderColor: "#fff",
+        pointBackgroundColor: '#fff',
+        pointBorderColor: '#fff',
         pointBorderWidth: timeFrame === TimeFrame.OneYear ? 1 : 2,
         borderWidth: 2,
         backgroundColor:
-          lineColor === "#10B981"
-            ? "rgba(16, 185, 129, 0.3)"
-            : "rgba(236, 72, 96, 0.3)",
+          lineColor === '#10B981'
+            ? 'rgba(16, 185, 129, 0.3)'
+            : 'rgba(236, 72, 96, 0.3)',
         fill: true,
         tension: 0.5,
       },
     ],
-  };
+  }
 
-  const options: ChartOptions<"line"> = {
+  const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
         display: true,
-        position: "top",
+        position: 'top',
         labels: {
           font: {
             size: 16,
@@ -127,19 +127,19 @@ const StockPriceChart = ({
       },
       title: {
         display: true,
-        text: "Stock Price History",
-        color: "white",
+        text: 'Stock Price History',
+        color: 'white',
         font: {
           size: 20,
-          weight: "bold",
+          weight: 'bold',
         },
       },
       tooltip: {
         callbacks: {
           title: (tooltipItems) => tooltipItems[0].label,
           label: (tooltipItem) => {
-            const value = tooltipItem.raw as number;
-            return `$${value.toFixed(2)}`;
+            const value = tooltipItem.raw as number
+            return `$${value.toFixed(2)}`
           },
         },
         titleFont: {
@@ -151,8 +151,8 @@ const StockPriceChart = ({
         caretSize: 6,
         cornerRadius: 4,
         padding: 10,
-        backgroundColor: "#333",
-        borderColor: "#fff",
+        backgroundColor: '#333',
+        borderColor: '#fff',
         borderWidth: 1,
       },
     },
@@ -160,40 +160,40 @@ const StockPriceChart = ({
       x: {
         title: {
           display: true,
-          text: "Date",
+          text: 'Date',
           font: {
             size: 14,
-            weight: "bold",
+            weight: 'bold',
           },
         },
         grid: {
-          color: "rgba(255, 255, 255, 0.2)",
+          color: 'rgba(255, 255, 255, 0.2)',
         },
         ticks: {
           autoSkip: true,
           maxTicksLimit: 5,
-          color: "rgba(255, 255, 255, 0.7)",
+          color: 'rgba(255, 255, 255, 0.7)',
         },
       },
       y: {
         title: {
           display: true,
-          text: "Price (USD)",
+          text: 'Price (USD)',
           font: {
             size: 14,
-            weight: "bold",
+            weight: 'bold',
           },
         },
         grid: {
-          color: "rgba(255, 255, 255, 0.2)",
+          color: 'rgba(255, 255, 255, 0.2)',
         },
         ticks: {
           callback: (value) => `$${value}`,
-          color: "rgba(255, 255, 255, 0.7)",
+          color: 'rgba(255, 255, 255, 0.7)',
         },
       },
     },
-  };
+  }
 
   return (
     <div className="w-full  h-[450px] sm:h-[500px] ">
@@ -202,8 +202,8 @@ const StockPriceChart = ({
           onClick={() => setTimeFrame(TimeFrame.OneWeek)}
           className={`py-3 px-6 text-lg rounded-md ${
             timeFrame === TimeFrame.OneWeek
-              ? "bg-indigo-500 text-white"
-              : "bg-white text-black"
+              ? 'bg-indigo-500 text-white'
+              : 'bg-white text-black'
           }`}
         >
           1 Week
@@ -212,8 +212,8 @@ const StockPriceChart = ({
           onClick={() => setTimeFrame(TimeFrame.OneMonth)}
           className={`py-3 px-6 text-lg rounded-md ${
             timeFrame === TimeFrame.OneMonth
-              ? "bg-indigo-500 text-white"
-              : "bg-white text-black"
+              ? 'bg-indigo-500 text-white'
+              : 'bg-white text-black'
           }`}
         >
           1 Month
@@ -222,8 +222,8 @@ const StockPriceChart = ({
           onClick={() => setTimeFrame(TimeFrame.OneYear)}
           className={`py-3 px-6 text-lg rounded-md ${
             timeFrame === TimeFrame.OneYear
-              ? "bg-indigo-500 text-white"
-              : "bg-white text-black"
+              ? 'bg-indigo-500 text-white'
+              : 'bg-white text-black'
           }`}
         >
           1 Year
@@ -241,6 +241,6 @@ const StockPriceChart = ({
         <Line data={chartData} options={options} />
       )}
     </div>
-  );
-};
-export default StockPriceChart;
+  )
+}
+export default StockPriceChart
