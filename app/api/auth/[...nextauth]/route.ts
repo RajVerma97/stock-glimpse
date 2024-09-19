@@ -1,11 +1,10 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { compare } from 'bcrypt'
-import User from '@/lib/models/Users'
 import GoogleProvider from 'next-auth/providers/google'
 import GithubProvider from 'next-auth/providers/github'
-import { connectDB } from '@/lib/connectDB'
-import { callback } from 'chart.js/dist/helpers/helpers.core'
+import { compare } from 'bcrypt'
+import { connectDB } from '../../../../lib/connectDB'
+import User from '../../../../lib/models/Users'
 
 const handler = NextAuth({
   session: {
@@ -33,10 +32,7 @@ const handler = NextAuth({
           throw new Error('No user found with that email')
         }
 
-        const passwordCorrect = await compare(
-          credentials.password,
-          user.password,
-        )
+        const passwordCorrect = await compare(credentials.password, user.password)
 
         if (passwordCorrect) {
           return {
@@ -79,7 +75,7 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account }) {
       await connectDB()
 
       const existingUser = await User.findOne({ email: user.email }).exec()

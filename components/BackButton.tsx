@@ -1,10 +1,10 @@
 'use client'
 
 import React from 'react'
-import { Button } from './ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
+import { Button } from './ui/button'
 
 export default function BackButton() {
   const router = useRouter()

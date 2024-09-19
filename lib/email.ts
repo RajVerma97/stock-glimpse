@@ -1,11 +1,7 @@
 // utils/email.js
-
 import nodemailer from 'nodemailer'
 
-export const sendResetPasswordEmail = async (
-  resetURL: string,
-  email: string,
-) => {
+export const sendResetPasswordEmail = async (resetURL: string, email: string) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -31,7 +27,6 @@ export const sendResetPasswordEmail = async (
   try {
     await transporter.sendMail(mailOptions)
   } catch (error) {
-    console.error('Error sending reset password email:', error)
-    throw new Error('Failed to send reset password email')
+    throw new Error('Failed to send reset password email' + error)
   }
 }

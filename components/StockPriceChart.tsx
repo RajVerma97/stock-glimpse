@@ -15,22 +15,13 @@ import {
   ChartData,
 } from 'chart.js'
 import annotationPlugin from 'chartjs-plugin-annotation'
-import { Button } from './ui/button'
 import { MoonLoader } from 'react-spinners'
 import dayjs from 'dayjs'
-import { TimeFrame } from '@/app/enums/StockPriceChart.enum'
-import { HistoricalDataEntry } from '@/app/types/stock-detail'
+import { Button } from './ui/button'
+import { TimeFrame } from '../app/enums/StockPriceChart.enum'
+import { HistoricalDataEntry } from '../app/types/stock-detail'
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  annotationPlugin,
-)
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, annotationPlugin)
 
 interface StockPriceChartProps {
   historicalData: HistoricalDataEntry[]
@@ -38,14 +29,10 @@ interface StockPriceChartProps {
   setTimeFrame: (timeFrame: string) => void
 }
 
-const StockPriceChart = ({
-  historicalData,
-  timeFrame,
-  setTimeFrame,
-}: StockPriceChartProps) => {
+const StockPriceChart = ({ historicalData, timeFrame, setTimeFrame }: StockPriceChartProps) => {
   const [filteredData, setFilteredData] = useState<HistoricalDataEntry[]>([])
   const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error] = useState<string | null>(null)
 
   useEffect(() => {
     setLoading(true)
@@ -102,10 +89,7 @@ const StockPriceChart = ({
         pointBorderColor: '#fff',
         pointBorderWidth: timeFrame === TimeFrame.OneYear ? 1 : 2,
         borderWidth: 2,
-        backgroundColor:
-          lineColor === '#10B981'
-            ? 'rgba(16, 185, 129, 0.3)'
-            : 'rgba(236, 72, 96, 0.3)',
+        backgroundColor: lineColor === '#10B981' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(236, 72, 96, 0.3)',
         fill: true,
         tension: 0.5,
       },
@@ -196,45 +180,39 @@ const StockPriceChart = ({
   }
 
   return (
-    <div className="w-full  h-[450px] sm:h-[500px] ">
+    <div className="h-[450px] w-full sm:h-[500px]">
       <div className="mb-4 flex space-x-2">
         <Button
           onClick={() => setTimeFrame(TimeFrame.OneWeek)}
-          className={`py-3 px-6 text-lg rounded-md ${
-            timeFrame === TimeFrame.OneWeek
-              ? 'bg-indigo-500 text-white'
-              : 'bg-white text-black'
+          className={`rounded-md px-6 py-3 text-lg ${
+            timeFrame === TimeFrame.OneWeek ? 'bg-indigo-500 text-white' : 'bg-white text-black'
           }`}
         >
           1 Week
         </Button>
         <Button
           onClick={() => setTimeFrame(TimeFrame.OneMonth)}
-          className={`py-3 px-6 text-lg rounded-md ${
-            timeFrame === TimeFrame.OneMonth
-              ? 'bg-indigo-500 text-white'
-              : 'bg-white text-black'
+          className={`rounded-md px-6 py-3 text-lg ${
+            timeFrame === TimeFrame.OneMonth ? 'bg-indigo-500 text-white' : 'bg-white text-black'
           }`}
         >
           1 Month
         </Button>
         <Button
           onClick={() => setTimeFrame(TimeFrame.OneYear)}
-          className={`py-3 px-6 text-lg rounded-md ${
-            timeFrame === TimeFrame.OneYear
-              ? 'bg-indigo-500 text-white'
-              : 'bg-white text-black'
+          className={`rounded-md px-6 py-3 text-lg ${
+            timeFrame === TimeFrame.OneYear ? 'bg-indigo-500 text-white' : 'bg-white text-black'
           }`}
         >
           1 Year
         </Button>
       </div>
       {loading ? (
-        <div className="flex justify-center items-center h-full">
+        <div className="flex h-full items-center justify-center">
           <MoonLoader color="#36d7b7" size={50} />
         </div>
       ) : error ? (
-        <div className="flex justify-center items-center h-full text-red-500">
+        <div className="flex h-full items-center justify-center text-red-500">
           <p>{error}</p>
         </div>
       ) : (

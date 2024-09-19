@@ -1,9 +1,9 @@
 'use client'
 import React, { useState } from 'react'
-import { useFetchCategoryStocks } from '@/app/hooks/use-fetch-category-stocks'
-import SpinnerManager from '@/components/SpinnerManager'
 import { useParams } from 'next/navigation'
-import StockTableComponent from '@/components/StockTable'
+import { useFetchCategoryStocks } from '../../hooks/use-fetch-category-stocks'
+import SpinnerManager from '../../../components/SpinnerManager'
+import StockTableComponent from '../../../components/StockTable'
 
 export default function Page() {
   const { category } = useParams()
@@ -49,7 +49,6 @@ export default function Page() {
         pagination={pagination}
         onPageChange={(page) => {
           if (page > 0 && page <= pagination.totalPages) {
-            console.log('Page change requested:', page)
             setPagination((prev) => ({ ...prev, currentPage: page }))
           }
         }}

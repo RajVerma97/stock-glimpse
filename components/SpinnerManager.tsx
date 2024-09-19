@@ -1,7 +1,7 @@
 import React, { CSSProperties } from 'react'
-import { ClipLoader, MoonLoader } from 'react-spinners'
+import { MoonLoader } from 'react-spinners'
 
-export default function SpinnerManager({ isLoading }) {
+export default function SpinnerManager({ isLoading }: { isLoading: boolean }) {
   const override: CSSProperties = {
     display: 'block',
     margin: '0 auto',

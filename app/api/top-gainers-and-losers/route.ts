@@ -1,5 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import axios from 'axios'
+import Logger from '../../../lib/winstonLogger'
 
 const BASE_URL = 'https://finnhub.io/api/v1'
 
@@ -7,14 +8,13 @@ async function fetchRealTimePrice(symbol: string) {
   try {
     const response = await axios.get(`${BASE_URL}/quote`, {
       params: {
-        symbol: symbol,
+        symbol,
         token: process.env.FINNHUB_API_KEY,
       },
     })
     return response.data
   } catch (error) {
-    console.error(`Error fetching real-time data for ${symbol}:`, error)
-    throw error
+    return NextResponse.json({ error: 'Failed to fetch real-time data: ' + error }, { status: 500 })
   }
 }
 
@@ -22,14 +22,13 @@ async function fetchStockProfile(symbol: string) {
   try {
     const response = await axios.get(`${BASE_URL}/stock/profile2`, {
       params: {
-        symbol: symbol,
+        symbol,
         token: process.env.FINNHUB_API_KEY,
       },
     })
     return response.data
   } catch (error) {
-    console.error(`Error fetching stock profile for ${symbol}:`, error)
-    throw error
+    return NextResponse.json({ error: 'Failed to fetch stock profile: ' + error }, { status: 500 })
   }
 }
 
@@ -48,8 +47,8 @@ function formatStockChanges(
 ) {
   return changes.map((stock) => ({
     ...stock,
-    change: stock.change.toFixed(2),
-    currentPrice: stock.currentPrice.toFixed(2),
+    change: stock.change.toFixed(2), // Format change to 2 decimal places
+    currentPrice: stock.currentPrice.toFixed(2), // Format current price to 2 decimal places
   }))
 }
 
@@ -64,19 +63,13 @@ async function getStockChanges(symbols: string[]) {
 
   for (const symbol of symbols) {
     try {
-      const [priceData, profileData] = await Promise.all([
-        fetchRealTimePrice(symbol),
-        fetchStockProfile(symbol),
-      ])
+      const [priceData, profileData] = await Promise.all([fetchRealTimePrice(symbol), fetchStockProfile(symbol)])
 
       const { c: currentPrice, o: openPrice } = priceData
       const { name, logo } = profileData
 
       if (currentPrice && openPrice) {
-        const percentageChange = calculatePercentageChange(
-          openPrice,
-          currentPrice,
-        )
+        const percentageChange = calculatePercentageChange(openPrice, currentPrice)
         stockChanges.push({
           symbol,
           name,
@@ -86,14 +79,9 @@ async function getStockChanges(symbols: string[]) {
         })
       }
     } catch (error) {
-      console.error(`Error processing data for ${symbol}:`, error)
+      return NextResponse.json({ error: 'Failed to fetch stock changes: ' + error }, { status: 500 })
     }
   }
-
-  stockChanges.map((stock) => ({
-    ...stock,
-    change: stock.change.toFixed(2), // Format as string here
-  }))
 
   stockChanges.sort((a, b) => b.change - a.change)
 
@@ -102,9 +90,7 @@ async function getStockChanges(symbols: string[]) {
 
   // Remove duplicates if necessary
   const topGainersSymbols = new Set(topGainers.map((stock) => stock.symbol))
-  const distinctTopLosers = topLosers.filter(
-    (stock) => !topGainersSymbols.has(stock.symbol),
-  )
+  const distinctTopLosers = topLosers.filter((stock) => !topGainersSymbols.has(stock.symbol))
 
   return {
     topGainers: formatStockChanges(topGainers),
@@ -114,28 +100,11 @@ async function getStockChanges(symbols: string[]) {
 
 export async function GET() {
   try {
-    const symbols = [
-      'AAPL',
-      'GOOGL',
-      'MSFT',
-      'AMZN',
-      'TSLA',
-      'META',
-      'NFLX',
-      'NVDA',
-
-      'FTEL',
-      'AIRJ',
-      'FARM',
-    ]
-    const { topGainers, topLosers } = await getStockChanges(symbols)
-
-    return NextResponse.json({ topGainers, topLosers })
+    const symbols = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'META', 'NFLX', 'NVDA', 'FTEL', 'AIRJ', 'FARM']
+    const result = await getStockChanges(symbols)
+    return NextResponse.json(result)
   } catch (error) {
-    console.error('Error getting top gainers and losers:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch top gainers and losers' },
-      { status: 500 },
-    )
+    Logger.error('Failed to fetch top gainers and losers' + error)
+    return NextResponse.json({ error: 'Failed to fetch top gainers and losers: ' + error }, { status: 500 })
   }
 }

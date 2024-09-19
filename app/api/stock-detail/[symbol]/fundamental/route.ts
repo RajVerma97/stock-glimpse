@@ -13,15 +13,6 @@ interface ShareholdingPattern {
   public: Shareholder[]
 }
 
-interface HistoricalDataEntry {
-  date: string
-  open: number
-  high: number
-  low: number
-  close: number
-  volume: number
-}
-
 function generateRandomShareholder(namePrefix: string): Shareholder {
   return {
     name: `${namePrefix} Shareholder ${Math.floor(Math.random() * 100)}`,
@@ -29,20 +20,12 @@ function generateRandomShareholder(namePrefix: string): Shareholder {
   }
 }
 
-async function fetchShareholdingPattern(
-  symbol: string,
-): Promise<ShareholdingPattern> {
+async function fetchShareholdingPattern(symbol: string): Promise<ShareholdingPattern> {
   // Mock data for demonstration
   const mockData = {
-    promoters: Array.from({ length: 3 }, () =>
-      generateRandomShareholder('Promoter'),
-    ),
-    institutionalInvestors: Array.from({ length: 5 }, () =>
-      generateRandomShareholder('Institutional'),
-    ),
-    public: Array.from({ length: 10 }, () =>
-      generateRandomShareholder('Public'),
-    ),
+    promoters: Array.from({ length: 3 }, () => generateRandomShareholder('Promoter')),
+    institutionalInvestors: Array.from({ length: 5 }, () => generateRandomShareholder('Institutional')),
+    public: Array.from({ length: 10 }, () => generateRandomShareholder('Public')),
   }
 
   return {
@@ -51,10 +34,7 @@ async function fetchShareholdingPattern(
   }
 }
 
-export async function GET(
-  request: Request,
-  { params }: { params: { symbol: string } },
-) {
+export async function GET(request: Request, { params }: { params: { symbol: string } }) {
   const { symbol } = params
 
   const quoteUrl = `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`
@@ -62,12 +42,7 @@ export async function GET(
   const profileUrl = `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`
 
   try {
-    const [
-      quoteResponse,
-      fundamentalsResponse,
-      profileResponse,
-      shareholdingResponse,
-    ] = await Promise.all([
+    const [quoteResponse, fundamentalsResponse, profileResponse, shareholdingResponse] = await Promise.all([
       axios.get(quoteUrl),
       axios.get(fundamentalsUrl),
       axios.get(profileUrl),
@@ -78,18 +53,15 @@ export async function GET(
     const roi = fundamentalsResponse.data.metric.roiTTM || null
     const roe = fundamentalsResponse.data.metric.roeTTM || null
     const roce = fundamentalsResponse.data.metric.roceTTM || null
-    const divYield =
-      fundamentalsResponse.data.metric.dividendPerShareTTM || null
+    const divYield = fundamentalsResponse.data.metric.dividendPerShareTTM || null
     const faceValue = fundamentalsResponse.data.metric.faceValue || null
-    const numberOfShares =
-      fundamentalsResponse.data.metric.numberOfShares || null
+    const numberOfShares = fundamentalsResponse.data.metric.numberOfShares || null
     const promoterHoldingPercentage = shareholdingResponse.promoters.reduce(
       (total, shareholder) => total + shareholder.percentage,
       0,
     )
 
-    const totalDebt =
-      fundamentalsResponse.data.metric['totalDebt/totalEquityAnnual'] || null
+    const totalDebt = fundamentalsResponse.data.metric['totalDebt/totalEquityAnnual'] || null
 
     const stockDetail = {
       currentPrice: quoteResponse.data.c,
@@ -103,48 +75,39 @@ export async function GET(
       peRatio: peRatio !== null ? parseFloat(peRatio) : null,
       bookValue: fundamentalsResponse.data.metric.ptbvAnnual,
       marketCap: fundamentalsResponse.data.metric.marketCapitalization,
-      roi: roi,
-      roe: roe,
+      roi,
+      roe,
+      roce,
       dividendYield: divYield,
-      faceValue: faceValue,
-      numberOfShares: numberOfShares,
-      promoterHoldingPercentage: promoterHoldingPercentage,
-      totalDebt: totalDebt,
+      faceValue,
+      numberOfShares,
+      promoterHoldingPercentage,
+      totalDebt,
       companyName: profileResponse.data.name,
       symbol: profileResponse.data.ticker,
-      description:
-        profileResponse.data.description || 'No description available',
+      description: profileResponse.data.description || 'No description available',
       industry: profileResponse.data.finnhubIndustry,
       country: profileResponse.data.country,
       logo: profileResponse.data.logo,
       shareholdingPattern: shareholdingResponse,
-      debtToEquityRatio:
-        fundamentalsResponse.data.metric['longTermDebt/equityAnnual'],
+      debtToEquityRatio: fundamentalsResponse.data.metric['longTermDebt/equityAnnual'],
       epsTTM: fundamentalsResponse.data.metric.epsTTM,
       ratios: {
         bookValue: fundamentalsResponse.data.series.annual.bookValue,
         roic: fundamentalsResponse.data.series.annual.roic,
         roe: fundamentalsResponse.data.series.annual.roe,
         pe: fundamentalsResponse.data.series.annual.pe,
-        totalDebtToEquity:
-          fundamentalsResponse.data.series.annual.totalDebtToEquity,
-        operatingMargin:
-          fundamentalsResponse.data.series.annual.operatingMargin,
+        totalDebtToEquity: fundamentalsResponse.data.series.annual.totalDebtToEquity,
+        operatingMargin: fundamentalsResponse.data.series.annual.operatingMargin,
       },
     }
 
     return NextResponse.json(stockDetail)
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      return NextResponse.json(
-        { error: error.response.data.error || error.message },
-        { status: error.response.status },
-      )
+      return NextResponse.json({ error: error.response.data.error || error.message }, { status: error.response.status })
     } else {
-      return NextResponse.json(
-        { error: 'An unknown error occurred' },
-        { status: 500 },
-      )
+      return NextResponse.json({ error: 'An unknown error occurred' }, { status: 500 })
     }
   }
 }

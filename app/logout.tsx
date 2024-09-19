@@ -1,12 +1,9 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import { signOut, useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { Button } from '../components/ui/button'
 
 export default function Logout() {
-  const router = useRouter()
-
   const { data: session } = useSession()
 
   const logout = async () => {

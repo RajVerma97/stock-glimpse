@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Stock } from '../types/stock-detail'
 
 export async function addToWatchlist(stock: Stock) {
-  const response = await axios.post(`/api/watchlist/add-to-watchlist`, stock)
+  const response = await axios.post('/api/watchlist/add-to-watchlist', stock)
   return response.data
 }
 
@@ -14,6 +14,6 @@ export async function removeFromWatchlist(symbol: string) {
 }
 
 export async function getWatchlist() {
-  const response = await axios.get(`/api/watchlist/get-watchlist`)
+  const response = await axios.get('/api/watchlist/get-watchlist')
   return response.data
 }

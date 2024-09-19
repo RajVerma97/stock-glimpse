@@ -1,17 +1,14 @@
 'use client'
 
-import {
-  GithubSignInButton,
-  GoogleSignInButton,
-} from '@/components/authButtons'
-import SpinnerManager from '@/components/SpinnerManager'
-import { notify, ToastManager } from '@/components/ToastManager'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { signIn } from 'next-auth/react'
+import { FormEvent, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { FormEvent, useState } from 'react'
+import { notify, ToastManager } from '../../../components/ToastManager'
+import { Button } from '../../../components/ui/button'
+import SpinnerManager from '../../../components/SpinnerManager'
+import { GithubSignInButton, GoogleSignInButton } from '../../../components/authButtons'
+import { Input } from '../../../components/ui/input'
 
 export default function Form() {
   const router = useRouter()
@@ -39,21 +36,16 @@ export default function Form() {
       router.push('/')
     }
   }
+  if (error) {
+    notify({ status: 'error', message: error })
+    setError(null)
+  }
 
   return (
     <>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-2 mx-auto max-w-md mt-10"
-      >
-        <h1 className="text-3xl text-center mb-5">Login</h1>
-        <Input
-          name="email"
-          className="border border-black text-black"
-          type="email"
-          placeholder="Email"
-          required
-        />
+      <form onSubmit={handleSubmit} className="mx-auto mt-10 flex max-w-md flex-col gap-2">
+        <h1 className="mb-5 text-center text-3xl">Login</h1>
+        <Input name="email" className="border border-black text-black" type="email" placeholder="Email" required />
         <Input
           name="password"
           className="border border-black text-black"

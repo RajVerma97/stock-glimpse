@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
-import { Card } from './ui/card'
 import Link from 'next/link'
+import { Card } from './ui/card'
 
 export default function StockCategories() {
   const categories = [

@@ -1,25 +1,26 @@
 'use client'
-import { fetcher } from '../utils/fetcher'
-import StockCard from '@/components/StockCard'
-import SpinnerManager from '@/components/SpinnerManager'
-import ErrorMessage from '@/components/Error'
+
+import ErrorMessage from '../../components/Error'
+import SpinnerManager from '../../components/SpinnerManager'
+import StockCard from '../../components/StockCard'
 import { useGetWatchlist } from '../hooks/use-get-watch-list'
+import { Stock } from '../types/stock-detail'
 
 function Watchlist() {
   const { data, error, isLoading } = useGetWatchlist()
 
   if (!data && !error) return <SpinnerManager isLoading={isLoading} />
 
-  if (error) console.log(error)
+  if (error) return <ErrorMessage message={(error as Error).message} />
 
-  const watchlist = data?.watchlist || [] // Default to an empty array if data is undefined
+  const watchlist = data?.watchlist || []
 
   return (
     <div>
-      <h1 className="text-2xl text-center mb-4">Your Watchlist</h1>
+      <h1 className="mb-4 text-center text-2xl">Your Watchlist</h1>
       {watchlist.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-          {watchlist.map((stock) => (
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
+          {watchlist.map((stock: Stock) => (
             <StockCard key={stock.symbol} stock={stock} />
           ))}
         </div>

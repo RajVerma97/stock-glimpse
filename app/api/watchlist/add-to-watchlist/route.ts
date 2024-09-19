@@ -1,14 +1,13 @@
-import { authConfig } from '@/lib/auth'
-import { connectDB } from '@/lib/connectDB'
-import User from '@/lib/models/Users'
 import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
+import { authConfig } from '../../../../lib/auth'
+import { connectDB } from '../../../../lib/connectDB'
+import User from '../../../../lib/models/Users'
+import Logger from '../../../../lib/winstonLogger'
 
 export async function POST(request: Request) {
   const stock = await request.json()
   const { symbol } = stock
-  console.log(symbol)
-  console.log('add to watchlist')
   const session = await getServerSession(authConfig)
 
   if (!session || !session.user) {
@@ -22,21 +21,14 @@ export async function POST(request: Request) {
     const userFromDb = await User.findOne({ email: userEmail })
 
     if (!userFromDb) {
-      return NextResponse.json(
-        { message: 'User not found in DB' },
-        { status: 404 },
-      )
+      return NextResponse.json({ message: 'User not found in DB' }, { status: 404 })
     }
 
-    if (userFromDb.watchlist.some((item) => item.symbol === symbol)) {
-      return NextResponse.json(
-        { message: 'Symbol already in watchlist' },
-        { status: 400 },
-      )
+    if (userFromDb.watchlist.some((item: any) => item.symbol === symbol)) {
+      return NextResponse.json({ message: 'Symbol already in watchlist' }, { status: 400 })
     }
 
     userFromDb.watchlist.push(stock)
-    // console.log(userFromDb);
 
     await userFromDb.save()
 
@@ -46,10 +38,7 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     const errorMessage = (error as Error).message || 'Internal Server Error'
-
-    return NextResponse.json(
-      { message: 'Internal server error', error: errorMessage },
-      { status: 500 },
-    )
+    Logger.error('Error Adding to Watchlist' + error)
+    return NextResponse.json({ message: 'Internal server error', error: errorMessage }, { status: 500 })
   }
 }

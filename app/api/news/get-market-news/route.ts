@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { NextResponse } from 'next/server'
+import Logger from '../../../../lib/winstonLogger'
 
 export async function GET() {
   const apiKey = process.env.FINNHUB_API_KEY
@@ -20,10 +21,7 @@ export async function GET() {
 
     return NextResponse.json(response.data, { status: 200 })
   } catch (error) {
-    console.error('Error fetching stock news:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch stock news' },
-      { status: 500 },
-    )
+    Logger.error('Failed to fetch stock news', error)
+    return NextResponse.json({ error: 'Failed to fetch stock news' + error }, { status: 500 })
   }
 }

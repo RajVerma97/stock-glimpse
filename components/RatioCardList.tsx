@@ -1,5 +1,4 @@
 import React from 'react'
-import RatioCard from './RatioCard'
 import {
   DollarSign,
   TrendingUp,
@@ -8,6 +7,7 @@ import {
   PieChart,
   Star,
 } from 'lucide-react'
+import RatioCard from './RatioCard'
 
 export default function RatioCardList({ stock }) {
   return (

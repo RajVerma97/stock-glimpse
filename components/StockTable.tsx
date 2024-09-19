@@ -1,10 +1,6 @@
 import React from 'react'
 import { useFormik } from 'formik'
-import {
-  ColumnDef,
-  useReactTable,
-  getCoreRowModel,
-} from '@tanstack/react-table'
+import { ColumnDef, useReactTable, getCoreRowModel } from '@tanstack/react-table'
 import { AiOutlineFrown } from 'react-icons/ai'
 
 type StockDetail = {
@@ -34,17 +30,12 @@ interface StockTableProps {
   onPageChange: (page: number) => void
 }
 
-const StockTableComponent: React.FC<StockTableProps> = ({
-  data,
-  pagination,
-  onPageChange,
-}) => {
+const StockTableComponent: React.FC<StockTableProps> = ({ data, pagination, onPageChange }) => {
   const formik = useFormik({
     initialValues: {
       currentPage: pagination.currentPage,
     },
     onSubmit: (values) => {
-      console.log('Formik onSubmit called with page:', values.currentPage)
       onPageChange(values.currentPage)
     },
   })
@@ -57,7 +48,7 @@ const StockTableComponent: React.FC<StockTableProps> = ({
   })
 
   return (
-    <div className="w-full bg-gray-900 text-white shadow-md rounded-lg overflow-hidden">
+    <div className="w-full overflow-hidden rounded-lg bg-gray-900 text-white shadow-md">
       <table className="min-w-full divide-y divide-gray-700">
         <thead className="bg-gray-800">
           <tr>
@@ -66,14 +57,10 @@ const StockTableComponent: React.FC<StockTableProps> = ({
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-4 py-2 text-center text-sm font-semibold text-gray-300 uppercase tracking-wider"
+                    className="px-4 py-2 text-center text-sm font-semibold uppercase tracking-wider text-gray-300"
                   >
                     {typeof header.column.columnDef.header === 'function'
-                      ? (
-                          header.column.columnDef.header as (
-                            props: any,
-                          ) => React.ReactNode
-                        )({})
+                      ? (header.column.columnDef.header as (props: any) => React.ReactNode)({})
                       : header.column.columnDef.header}
                   </th>
                 ))}
@@ -81,31 +68,21 @@ const StockTableComponent: React.FC<StockTableProps> = ({
             ))}
           </tr>
         </thead>
-        <tbody className="bg-gray-900 divide-y divide-gray-700">
+        <tbody className="divide-y divide-gray-700 bg-gray-900">
           {data.length === 0 ? (
             <tr>
-              <td
-                colSpan={columns.length}
-                className="px-4 py-6 text-center text-gray-400"
-              >
+              <td colSpan={columns.length} className="px-4 py-6 text-center text-gray-400">
                 <div className="flex flex-col items-center">
-                  <AiOutlineFrown className="text-6xl text-gray-500 mb-4" />
+                  <AiOutlineFrown className="mb-4 text-6xl text-gray-500" />
                   <p className="text-lg">No data available</p>
                 </div>
               </td>
             </tr>
           ) : (
             table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                onClick={() => console.log(row.original.symbol)}
-                className="cursor-pointer hover:bg-gray-800"
-              >
+              <tr key={row.id} onClick={() => {}} className="cursor-pointer hover:bg-gray-800">
                 {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="px-4 py-2 text-sm font-medium text-gray-200 text-center"
-                  >
+                  <td key={cell.id} className="px-4 py-2 text-center text-sm font-medium text-gray-200">
                     {cell.getValue<string>()}
                   </td>
                 ))}
@@ -116,16 +93,15 @@ const StockTableComponent: React.FC<StockTableProps> = ({
       </table>
 
       {/* Pagination Controls */}
-      <div className="mt-4 flex justify-between items-center px-4 py-2 bg-gray-800 border-t border-gray-700">
+      <div className="mt-4 flex items-center justify-between border-t border-gray-700 bg-gray-800 px-4 py-2">
         <button
           type="button"
           onClick={() => {
-            console.log('Previous button clicked')
             formik.setFieldValue('currentPage', pagination.currentPage - 1)
             formik.handleSubmit()
           }}
           disabled={pagination.currentPage === 1}
-          className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:bg-gray-600 transition cursor-pointer"
+          className="cursor-pointer rounded-lg bg-pink-600 px-4 py-2 text-white transition hover:bg-pink-700 disabled:bg-gray-600"
         >
           Previous
         </button>
@@ -135,12 +111,11 @@ const StockTableComponent: React.FC<StockTableProps> = ({
         <button
           type="button"
           onClick={() => {
-            console.log('Next button clicked')
             formik.setFieldValue('currentPage', pagination.currentPage + 1)
             formik.handleSubmit()
           }}
           disabled={pagination.currentPage === pagination.totalPages}
-          className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 disabled:bg-gray-600 transition cursor-pointer"
+          className="cursor-pointer rounded-lg bg-pink-600 px-4 py-2 text-white transition hover:bg-pink-700 disabled:bg-gray-600"
         >
           Next
         </button>
