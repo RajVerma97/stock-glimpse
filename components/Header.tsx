@@ -26,7 +26,7 @@ export default function Header() {
     <header className="borer-2 mb-4 flex w-full items-center justify-between rounded-md border-blue-400 px-4 py-2 shadow-sm">
       <div>
         <Link href="/" className="text-2xl font-bold">
-          Stock Glimpse
+          Stock Glimpse...
         </Link>
       </div>
       <div className="hidden sm:flex">
