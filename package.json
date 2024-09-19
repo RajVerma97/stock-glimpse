@@ -10,6 +10,7 @@
     "lint:fix": "next lint --fix",
     "format": "prettier --write --no-error-on-unmatched-pattern \"src/**/*.{ts,tsx,js}\" *.{ts,tsx,js}",
     "commit": "cz",
+    "test": "echo \"No tests specified\" && exit 0",
     "prepare": "husky"
   },
   "dependencies": {
