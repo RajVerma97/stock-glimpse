@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { addToWatchlist, removeFromWatchlist } from '../queries/watchlist'
+import { removeFromWatchlist } from '../queries/watchlist'
 import useAuthenticatedMutation from './use-authenticated-mutation'
+import { notify } from '../../components/ToastManager'
 
 export function useRemoveFromWatchlist(symbol: string) {
   const queryClient = useQueryClient()
@@ -8,12 +9,11 @@ export function useRemoveFromWatchlist(symbol: string) {
   return useAuthenticatedMutation({
     mutationFn: () => removeFromWatchlist(symbol),
     onSuccess: () => {
-      // Handle success, e.g., show a success message or update the UI
-      console.log('Stock removed from watchlist successfully.')
+      notify({ status: 'success', message: 'Stock removed from watchlist successfully.' })
       queryClient.invalidateQueries({ queryKey: ['get-watchlist'] })
     },
     onError: (error) => {
-      console.error('Error removing Stock from watchlist:', error)
+      notify({ status: 'error', message: 'Error removing Stock from watchlist.' + error })
     },
   })
 }

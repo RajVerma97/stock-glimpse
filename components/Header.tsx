@@ -1,16 +1,13 @@
 'use client'
+
 import React, { useState } from 'react'
-import { Button } from './ui/button'
 import { ArrowLeft, Menu } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import Logout from '@/app/logout'
 import { signOut, useSession } from 'next-auth/react'
+import { Button } from './ui/button'
 
 export default function Header() {
-  const router = useRouter()
-
   const [open, setOpen] = useState<boolean>(false)
   const { data: session } = useSession()
 
@@ -26,19 +23,15 @@ export default function Header() {
   }
 
   return (
-    <header className="py-2  px-4 mb-4 rounded-md w-full flex justify-between items-center shadow-sm borer-2 border-blue-400">
+    <header className="borer-2 mb-4 flex w-full items-center justify-between rounded-md border-blue-400 px-4 py-2 shadow-sm">
       <div>
-        <Link href="/" className="text-2xl font-bold ">
+        <Link href="/" className="text-2xl font-bold">
           Stock Glimpse
         </Link>
       </div>
       <div className="hidden sm:flex">
         <Button variant="secondary" asChild>
-          {session ? (
-            <Button onClick={logout}>Logout</Button>
-          ) : (
-            <Link href="/login">Login</Link>
-          )}
+          {session ? <Button onClick={logout}>Logout</Button> : <Link href="/login">Login</Link>}
         </Button>
         <Button asChild>
           <Link href="/register">Register</Link>
@@ -60,14 +53,14 @@ export default function Header() {
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className="fixed top-0 right-0 w-3/4 h-full bg-blue-500 shadow-lg z-50 sm:hidden"
+          className="fixed right-0 top-0 z-50 h-full w-3/4 bg-blue-500 shadow-lg sm:hidden"
         >
           <div className="p-4">
             <Button variant="ghost" onClick={closeSidebar}>
               <ArrowLeft size={30} />
             </Button>
           </div>
-          <div className="mt-8 flex flex-col items-start px-4 ">
+          <div className="mt-8 flex flex-col items-start px-4">
             <Link href="/login" onClick={closeSidebar}>
               Login
             </Link>

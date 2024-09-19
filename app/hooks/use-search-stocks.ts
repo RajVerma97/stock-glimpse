@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { useQuery } from '@tanstack/react-query'
 import { searchStocks } from '../queries/search-stocks'
 

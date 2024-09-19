@@ -1,7 +1,7 @@
-import { notify } from '@/components/ToastManager'
 import { addToWatchlist } from '../queries/watchlist'
 import useAuthenticatedMutation from './use-authenticated-mutation'
 import { Stock } from '../types/stock-detail'
+import { notify } from '../../components/ToastManager'
 
 export const useAddToWatchListMutation = () => {
   return useAuthenticatedMutation({
@@ -14,7 +14,6 @@ export const useAddToWatchListMutation = () => {
       })
     },
     onError: (error) => {
-      console.log(error)
       const errorMessage = error?.response?.data?.message
       notify({
         message: errorMessage || 'Something went wrong',

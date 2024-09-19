@@ -1,14 +1,13 @@
 import React from 'react'
-import { Card, CardFooter, CardHeader } from './ui/card'
-import { formatDate } from '@/app/utils/dateFormat'
 import Image from 'next/image'
-import { Button } from './ui/button'
-import { useMutation } from '@tanstack/react-query'
-import { useAddToWatchListMutation } from '@/app/hooks/use-add-to-watchlist'
-import { notify, ToastManager } from './ToastManager'
 import { HeartIcon } from 'lucide-react'
+import { Button } from './ui/button'
+import { useAddToWatchListMutation } from '../app/hooks/use-add-to-watchlist'
+import { Card, CardHeader } from './ui/card'
+import { ToastManager } from './ToastManager'
+import { Stock } from '../app/types/stock-detail'
 
-export default function FundamentalCard({ stock }) {
+export default function FundamentalCard({ stock }: { stock: Stock }) {
   const addToWatchListMutation = useAddToWatchListMutation()
 
   const handleAddToWatchList = () => {
@@ -17,14 +16,14 @@ export default function FundamentalCard({ stock }) {
 
   return (
     <div className="">
-      <Card className="w-full p-2 mb-10 md:mb-0">
+      <Card className="mb-10 w-full p-2 md:mb-0">
         <CardHeader>
           <div className="flex items-center">
             {stock.logo && (
               <Image
                 src={stock.logo}
                 alt={`${stock.companyName} logo`}
-                className="w-12 h-12 mr-4"
+                className="mr-4 h-12 w-12"
                 width={50}
                 height={50}
               />
@@ -33,9 +32,7 @@ export default function FundamentalCard({ stock }) {
               <h1 className="text-3xl font-bold">
                 {stock.companyName} ({stock.symbol})
               </h1>
-              <p className="text-gray-500">
-                Current Price: ${stock.currentPrice}
-              </p>
+              <p className="text-gray-500">Current Price: ${stock.currentPrice}</p>
               <p className="text-gray-500">Industry: {stock.industry}</p>
             </div>
           </div>
@@ -98,8 +95,7 @@ export default function FundamentalCard({ stock }) {
             <strong>Number of Shares:</strong> {stock.numberOfShares ?? 'N/A'}
           </p>
           <p>
-            <strong>Promoter Holding Percentage:</strong>{' '}
-            {stock.promoterHoldingPercentage ?? 'N/A'}
+            <strong>Promoter Holding Percentage:</strong> {stock.promoterHoldingPercentage ?? 'N/A'}
           </p>
           <p>
             <strong>Total Debt:</strong> {stock.totalDebt ?? 'N/A'}

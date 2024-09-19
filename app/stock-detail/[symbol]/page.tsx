@@ -1,36 +1,25 @@
 'use client'
-import { TimeFrame } from '@/app/enums/StockPriceChart.enum'
-import { useFetchHistoricalData } from '@/app/hooks/use-fetch-historical-data'
-import { useFetchStockDetails } from '@/app/hooks/use-fetch-stock-details'
-import { useFetchStockNews } from '@/app/hooks/use-fetch-stock-news'
-import { HistoricalData, Stock } from '@/app/types/stock-detail'
-import { formatDate } from '@/app/utils/dateFormat'
-import ErrorMessage from '@/components/Error'
-import FundamentalCard from '@/components/FundamentalCard'
-import Loading from '@/components/Loading'
-import MarketNews from '@/components/MarketNews'
-import RatioCard from '@/components/RatioCard'
-import RatioCardList from '@/components/RatioCardList'
-import RatioChart from '@/components/RatioChart'
-import ShareholdingPatternChart from '@/components/ShareHoldingPatternChart'
-import StockNews from '@/components/StockNews'
-import StockPriceChart from '@/components/StockPriceChart'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import Image from 'next/image'
-import { useState, useEffect } from 'react'
 
-export default function StockDetailPage({ params }) {
+import { useState } from 'react'
+import { TimeFrame } from '../../enums/StockPriceChart.enum'
+import { useFetchStockDetails } from '../../hooks/use-fetch-stock-details'
+import { useFetchHistoricalData } from '../../hooks/use-fetch-historical-data'
+import Loading from '../../../components/Loading'
+import ErrorMessage from '../../../components/Error'
+import FundamentalCard from '../../../components/FundamentalCard'
+import StockNews from '../../../components/StockNews'
+import RatioChart from '../../../components/RatioChart'
+import RatioCardList from '../../../components/RatioCardList'
+import ShareholdingPatternChart from '../../../components/ShareHoldingPatternChart'
+import StockPriceChart from '../../../components/StockPriceChart'
+
+export default function StockDetailPage({ params }: { params: { symbol: string } }) {
   const { symbol } = params
 
   const [timeFrame, setTimeFrame] = useState<string>(TimeFrame.OneMonth)
-  const [error, setError] = useState<string | null>(null)
+  const [error] = useState<string | null>(null)
 
-  const {
-    data: stock,
-    isLoading: isStockDetailsLoading,
-    isError: isStockDetailsError,
-  } = useFetchStockDetails(symbol)
+  const { data: stock, isLoading: isStockDetailsLoading, isError: isStockDetailsError } = useFetchStockDetails(symbol)
 
   const {
     data: historicalData,
@@ -38,36 +27,37 @@ export default function StockDetailPage({ params }) {
     isError: isHistoricalDataError,
   } = useFetchHistoricalData(symbol)
 
-  if (isStockDetailsLoading || isHistoricalDataLoading)
+  if (isStockDetailsLoading || isHistoricalDataLoading) {
     return <Loading isLoading={true} />
+  }
+  if (isHistoricalDataError) {
+    return <ErrorMessage message={'Failed to fetch historical data'} />
+  }
+  if (isStockDetailsError) {
+    return <ErrorMessage message={'Failed to fetch stock details'} />
+  }
   if (error) return <ErrorMessage message={error} />
 
   if (!stock) return <ErrorMessage message="No stock details available" />
   return (
-    <div className="w-full p-10 grid gap-[5rem]">
-      <div className=" block sm:block md:flex  gap-20 sm:gap-10">
+    <div className="grid w-full gap-[5rem] p-10">
+      <div className="block gap-20 sm:block sm:gap-10 md:flex">
         <FundamentalCard stock={stock} />
 
-        <div className="w-full sm:w-1/2 h-[500px]">
+        <div className="h-[500px] w-full sm:w-1/2">
           {historicalData && historicalData.length > 0 && (
-            <StockPriceChart
-              historicalData={historicalData}
-              timeFrame={timeFrame}
-              setTimeFrame={setTimeFrame}
-            />
+            <StockPriceChart historicalData={historicalData} timeFrame={timeFrame} setTimeFrame={setTimeFrame} />
           )}
         </div>
       </div>
       <div className="w-full">
         <h1>Share Holding Pattern</h1>
-        {stock.shareholdingPattern && (
-          <ShareholdingPatternChart data={stock.shareholdingPattern} />
-        )}
+        {stock.shareholdingPattern && <ShareholdingPatternChart data={stock.shareholdingPattern} />}
       </div>
 
       <RatioCardList stock={stock} />
 
-      <div className="w-full  ">
+      <div className="w-full">
         <RatioChart ratios={stock.ratios} />
       </div>
 

@@ -1,21 +1,12 @@
 'use client'
 
-import SpinnerManager from '@/components/SpinnerManager'
-import { notify, ToastManager } from '@/components/ToastManager'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useRouter } from 'next/navigation'
-import React, { CSSProperties, useState } from 'react'
-import {
-  CircleLoader,
-  ClipLoader,
-  MoonLoader,
-  PacmanLoader,
-  PuffLoader,
-} from 'react-spinners'
+import React, { useState } from 'react'
+import { notify, ToastManager } from '../../../components/ToastManager'
+import { Input } from '../../../components/ui/input'
+import { Button } from '../../../components/ui/button'
+import SpinnerManager from '../../../components/SpinnerManager'
 
 export default function ForgetPassword() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
@@ -52,7 +43,7 @@ export default function ForgetPassword() {
         })
       }
     } catch (error) {
-      notify({ status: 'error', message: 'Something went wrong' })
+      notify({ status: 'error', message: 'Something went wrong' + error })
     } finally {
       setIsLoading(false)
     }
@@ -60,8 +51,8 @@ export default function ForgetPassword() {
 
   return (
     <>
-      <div className="flex flex-col gap-2 mx-auto max-w-md mt-10">
-        <h1 className="text-3xl mb-8">Forget Password</h1>
+      <div className="mx-auto mt-10 flex max-w-md flex-col gap-2">
+        <h1 className="mb-8 text-3xl">Forget Password</h1>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <Input
             name="email"

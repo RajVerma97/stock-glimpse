@@ -1,5 +1,4 @@
 import React from 'react'
-import { Card, CardContent, CardHeader } from './ui/card'
 import { Line } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
@@ -11,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
+import { Card, CardContent, CardHeader } from './ui/card'
 import { RatioData, RatioItem } from '@/app/types/stock-detail'
 
 ChartJS.register(

@@ -1,10 +1,8 @@
 import axios from 'axios'
 import { NextResponse } from 'next/server'
+import Logger from '../../../../../lib/winstonLogger'
 
-export async function GET(
-  request: Request,
-  { params }: { params: { symbol: string } },
-) {
+export async function GET(request: Request, { params }: { params: { symbol: string } }) {
   const apiKey = process.env.MARKETAUX_NEWS_API_KEY
 
   if (!apiKey) {
@@ -22,10 +20,7 @@ export async function GET(
 
     return NextResponse.json(response.data.data, { status: 200 })
   } catch (error) {
-    console.error('Error fetching stock news:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch stock news' },
-      { status: 500 },
-    )
+    Logger.error('Failed to fetch stock news' + error)
+    return NextResponse.json({ error: 'Failed to fetch stock news' + error }, { status: 500 })
   }
 }

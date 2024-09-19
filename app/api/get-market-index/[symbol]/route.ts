@@ -1,22 +1,17 @@
 import axios from 'axios'
 import { NextResponse } from 'next/server'
+import Logger from '../../../../lib/winstonLogger'
 
-export async function GET(
-  request: Request,
-  { params }: { params: { symbol: string } },
-) {
+export async function GET(request: Request, { params }: { params: { symbol: string } }) {
   const { symbol } = params
 
   try {
-    const response = await axios.get(
-      `https://data.alpaca.markets/v2/stocks/${symbol}/quotes/latest`,
-      {
-        headers: {
-          'APCA-API-KEY-ID': process.env.ALPACA_API_KEY,
-          'APCA-API-SECRET-KEY': process.env.ALPACA_SECRET_KEY,
-        },
+    const response = await axios.get(`https://data.alpaca.markets/v2/stocks/${symbol}/quotes/latest`, {
+      headers: {
+        'APCA-API-KEY-ID': process.env.ALPACA_API_KEY,
+        'APCA-API-SECRET-KEY': process.env.ALPACA_SECRET_KEY,
       },
-    )
+    })
     const quote = response.data?.quote
 
     if (!quote) {
@@ -34,8 +29,7 @@ export async function GET(
 
     return NextResponse.json(formattedData)
   } catch (error) {
-    console.error('Error fetching data:', error)
-
-    return NextResponse.json({ status: 500, error: 'Failed to fetch data' })
+    Logger.error('Failed to Fetch data', error)
+    return NextResponse.json({ status: 500, error: 'Failed to fetch data' + error }, { status: 500 })
   }
 }

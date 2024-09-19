@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchHistoricalData } from '../queries/historical-data'
 import { fetchStockDetails } from '../queries/stock-details'
 
 export function useFetchStockDetails(symbol: string) {
@@ -7,6 +6,5 @@ export function useFetchStockDetails(symbol: string) {
     queryKey: ['stock-details', symbol],
     queryFn: () => fetchStockDetails(symbol),
     enabled: !!symbol,
-    // staleTime: 60000,
   })
 }

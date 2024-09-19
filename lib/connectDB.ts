@@ -1,10 +1,11 @@
 import mongoose from 'mongoose'
+import Logger from './winstonLogger'
 
 const connection = { isConnected: false }
 
 export const connectDB = async () => {
   if (connection.isConnected) {
-    console.log('Using existing connection')
+    Logger.info('Using existing connection')
     return
   }
 
@@ -16,9 +17,9 @@ export const connectDB = async () => {
     const db = await mongoose.connect(process.env.MONGODB_URI)
 
     connection.isConnected = db.connections[0].readyState === 1
-    console.log('Connected to MongoDB')
+    Logger.info('Connected to MongoDB')
   } catch (error) {
-    console.error('Error connecting to MongoDB:', error)
-    throw new Error('Failed to connect to MongoDB')
+    Logger.error('Failed to connect to MongoDB' + error)
+    throw new Error('Failed to connect to MongoDB' + error)
   }
 }

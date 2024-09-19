@@ -1,8 +1,4 @@
-import {
-  useMutation,
-  UseMutationOptions,
-  UseMutationResult,
-} from '@tanstack/react-query'
+import { useMutation, UseMutationResult } from '@tanstack/react-query'
 
 interface UseAuthenticatedMutationOptions<TData, TSuccess, TError> {
   mutationFn: (data: TData) => Promise<TSuccess>
