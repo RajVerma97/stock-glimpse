@@ -6,6 +6,7 @@ import SearchStocks from '../components/SearchStocks'
 import MarketNews from '../components/MarketNews'
 import Loading from '../components/Loading'
 import StockCategories from '../components/StockCategories'
+import StockCard from '../components/StockCard'
 
 export default function SplashPage() {
   const {
