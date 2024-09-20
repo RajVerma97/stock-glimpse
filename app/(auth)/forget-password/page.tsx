@@ -52,7 +52,7 @@ export default function ForgetPassword() {
   return (
     <>
       <div className="mx-auto mt-10 flex max-w-md flex-col gap-2">
-        <h1 className="mb-8 text-3xl">Forget Password</h1>
+        <h1 className="mb-8 text-center text-3xl">Forget Password</h1>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <Input
             name="email"
@@ -65,7 +65,12 @@ export default function ForgetPassword() {
             required
           />
 
-          <Button type="submit" variant={'outline'} disabled={isLoading}>
+          <Button
+            type="submit"
+            variant={'outline'}
+            disabled={isLoading}
+            className="border-none bg-indigo-500 text-white"
+          >
             Send Reset Link
           </Button>
           <SpinnerManager isLoading={isLoading} />

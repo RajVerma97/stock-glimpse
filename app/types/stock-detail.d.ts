@@ -31,32 +31,33 @@ export interface Stock {
   companyName: string
   symbol: string
   currentPrice: number
-  change: number
-  percentageChange: number
-  highPriceOfDay: number
-  lowPriceOfDay: number
-  openingPrice: number
-  previousClosePrice: number
-  timestamp: number
-  logo: string
-  peRatio: number | null
-  bookValue: number | null
-  marketCap: number | null
-  roi: number | null
-  roe: number | null
-  roce: number | null
-  dividendYield: number | null
-  faceValue: number | null
-  numberOfShares: number | null
-  promoterHoldingPercentage: number | null
-  totalDebt: number | null
+  change?: number
+  percentageChange?: number
+  highPriceOfDay?: number
+  lowPriceOfDay?: number
+  openingPrice?: number
+  previousClosePrice?: number
+  timestamp?: number
+  logo?: string
+  peRatio?: number
+  bookValue?: number
+  marketCap?: number
+  roi?: number
+  roe?: number
+  roce?: number
+  dividendYield?: number
+  faceValue?: number
+  numberOfShares?: number
+  promoterHoldingPercentage?: number
+  totalDebt?: number
   industry: string
-  description: string
-  country: string
-  historicalData: any
-  shareholdingPattern: ShareholdingPattern | null
-  ratios: any
-  debtToEquityRatio: number
+  description?: string
+  country?: string
+  historicalData?: any
+  shareholdingPattern?: ShareholdingPattern
+  ratios?: any
+  debtToEquityRatio?: number
+  epsTTM?: number
 }
 
 export interface RatioItem {

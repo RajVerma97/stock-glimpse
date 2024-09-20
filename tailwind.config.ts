@@ -1,9 +1,9 @@
-import type { Config } from 'tailwindcss'
+import animate from 'tailwindcss-animate'
+import defaultTheme from 'tailwindcss/defaultTheme'
 
 const config = {
   darkMode: ['class'],
   content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}', './src/**/*.{ts,tsx}'],
-  prefix: '',
   theme: {
     container: {
       center: true,
@@ -13,6 +13,18 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        // first font is  applied to the body
+        montserrat: ['Montserrat', 'var(--font-montserrat-sans)', ...defaultTheme.fontFamily.sans],
+        poppins: ['Poppins', 'var(--font-poppins-sans)', ...defaultTheme.fontFamily.sans],
+        sans: ['Inter', 'var(--font-inter-sans)', ...defaultTheme.fontFamily.sans],
+        inter: ['Inter', 'var(--font-inter-sans)', ...defaultTheme.fontFamily.sans],
+        opensans: ['Open Sans', 'var(--font-open-sans-sans)', ...defaultTheme.fontFamily.sans],
+        raleway: ['Raleway', 'var(--font-raleway-sans)', ...defaultTheme.fontFamily.sans],
+        lato: ['Lato', 'var(--font-lato-sans)', ...defaultTheme.fontFamily.sans],
+        roboto: ['Roboto', 'var(--font-roboto-sans)', ...defaultTheme.fontFamily.sans],
+        ubuntu: ['Ubuntu', 'var(--font-ubuntu-sans)', ...defaultTheme.fontFamily.sans],
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -55,21 +67,26 @@ const config = {
       },
       keyframes: {
         'accordion-down': {
-          from: { height: '0' },
+          from: { height: '0px' },
           to: { height: 'var(--radix-accordion-content-height)' },
         },
         'accordion-up': {
           from: { height: 'var(--radix-accordion-content-height)' },
-          to: { height: '0' },
+          to: { height: '0px' },
+        },
+        fade: {
+          from: { opacity: '0.10' },
+          to: { opacity: '1' },
         },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        fade: 'fade 1s linear infinite',
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
-} satisfies Config
+  plugins: [animate],
+}
 
 export default config

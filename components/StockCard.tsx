@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useCallback } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
@@ -8,17 +8,21 @@ import { Button } from './ui/button'
 import SpinnerManager from './SpinnerManager'
 import { useRemoveFromWatchlist } from '../app/hooks/use-remove-from-watchlist'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import { notify } from './ToastManager'
 interface StockCardProps {
   stock: any
 }
 
-const StockCard: React.FC<StockCardProps> = ({ stock }) => {
+export default function StockCard({ stock }: StockCardProps) {
   const pathName = usePathname()
   const { mutate, status } = useRemoveFromWatchlist(stock.symbol)
 
-  const handleRemoveFromWatchlist = useMemo(() => {
+  const handleRemoveFromWatchlist = useCallback(() => {
     mutate(stock.symbol)
-  }, [mutate, stock.symbol])
+    if (status === 'success') {
+      notify({ status: 'success', message: 'Stock removed from watchlist successfully.' })
+    }
+  }, [stock.symbol, mutate, status])
 
   const CardContentComponent = useMemo(
     () => (
@@ -27,7 +31,7 @@ const StockCard: React.FC<StockCardProps> = ({ stock }) => {
 
         {pathName === '/watchlist' ? (
           <Button
-            onClick={() => handleRemoveFromWatchlist}
+            onClick={() => handleRemoveFromWatchlist()}
             className="text-red-500"
             variant={'secondary'}
             disabled={status === 'pending'} // Disable button while loading
@@ -84,5 +88,3 @@ const StockCard: React.FC<StockCardProps> = ({ stock }) => {
     </Link>
   )
 }
-
-export default StockCard

@@ -11,17 +11,9 @@ import {
   Legend,
 } from 'chart.js'
 import { Card, CardContent, CardHeader } from './ui/card'
-import { RatioData, RatioItem } from '@/app/types/stock-detail'
+import { RatioData, RatioItem } from '../app/types/stock-detail'
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-)
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 interface RatioChartProps {
   ratios: RatioData
@@ -33,7 +25,7 @@ export default function RatioChart({ ratios }: RatioChartProps) {
   }
 
   return (
-    <div className="w-full grid grid-cols-1 gap-[10rem] sm:grid-cols-2 md:grid-cols-2">
+    <div className="grid w-full grid-cols-1 gap-[10rem] sm:grid-cols-2 md:grid-cols-2">
       {Object.entries(ratios).map(([key, values], index) => {
         const data = {
           labels: (values as RatioItem[]).map((item) => item.period).reverse(),
@@ -54,11 +46,9 @@ export default function RatioChart({ ratios }: RatioChartProps) {
         return (
           <Card
             key={index}
-            className="bg-gray-100 text-black rounded-lg shadow-md border border-gray-200 p-4 flex flex-col"
+            className="flex flex-col rounded-lg border border-gray-200 bg-gray-100 p-4 text-black shadow-md"
           >
-            <CardHeader className="text-center text-2xl font-semibold uppercase mb-4">
-              {key}
-            </CardHeader>
+            <CardHeader className="mb-4 text-center text-2xl font-semibold uppercase">{key}</CardHeader>
             <CardContent className="relative h-[300px]">
               <Line
                 data={data}

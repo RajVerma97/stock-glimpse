@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Pie } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Button } from './ui/button'
-import { ShareholdingPattern } from '@/app/types/stock-detail'
+import { ShareholdingPattern } from '../app/types/stock-detail'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -10,12 +10,8 @@ interface ShareholdingPatternChartProps {
   data: ShareholdingPattern
 }
 
-const ShareholdingPatternChart: React.FC<ShareholdingPatternChartProps> = ({
-  data,
-}) => {
-  const [activeCategory, setActiveCategory] = useState<
-    'promoters' | 'institutionalInvestors' | 'public'
-  >('promoters')
+const ShareholdingPatternChart: React.FC<ShareholdingPatternChartProps> = ({ data }) => {
+  const [activeCategory, setActiveCategory] = useState<'promoters' | 'institutionalInvestors' | 'public'>('promoters')
 
   const promoters = data.promoters || []
   const institutionalInvestors = data.institutionalInvestors || []
@@ -49,35 +45,23 @@ const ShareholdingPatternChart: React.FC<ShareholdingPatternChartProps> = ({
             case 'promoters':
               return promoters.map((shareholder) => shareholder.percentage)
             case 'institutionalInvestors':
-              return institutionalInvestors.map(
-                (shareholder) => shareholder.percentage,
-              )
+              return institutionalInvestors.map((shareholder) => shareholder.percentage)
             case 'public':
-              return publicShareholders.map(
-                (shareholder) => shareholder.percentage,
-              )
+              return publicShareholders.map((shareholder) => shareholder.percentage)
           }
         })(),
         backgroundColor: (() => {
           switch (activeCategory) {
             case 'promoters':
-              return promoters.map(
-                (_, index) => colorPalette[index % colorPalette.length],
-              )
+              return promoters.map((_, index) => colorPalette[index % colorPalette.length])
             case 'institutionalInvestors':
               return institutionalInvestors.map(
-                (_, index) =>
-                  colorPalette[
-                    (index + promoters.length) % colorPalette.length
-                  ],
+                (_, index) => colorPalette[(index + promoters.length) % colorPalette.length],
               )
             case 'public':
               return publicShareholders.map(
                 (_, index) =>
-                  colorPalette[
-                    (index + promoters.length + institutionalInvestors.length) %
-                      colorPalette.length
-                  ],
+                  colorPalette[(index + promoters.length + institutionalInvestors.length) % colorPalette.length],
               )
           }
         })(),
@@ -105,48 +89,38 @@ const ShareholdingPatternChart: React.FC<ShareholdingPatternChartProps> = ({
   }
 
   if (chartData.labels.length === 0) {
-    return (
-      <p className="text-center text-gray-600">
-        No data available for the chart
-      </p>
-    )
+    return <p className="text-center text-gray-600">No data available for the chart</p>
   }
 
   return (
-    <div className="border border-gray-300 rounded-lg p-8 shadow-lg grid gap-5  ">
+    <div className="grid gap-5 rounded-lg border border-gray-300 p-8 shadow-lg">
       <div className="flex-1">
         <div className="chart-container" style={{ height: '380px' }}>
           <Pie data={chartData} options={chartOptions} />
         </div>
       </div>
 
-      <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 ">
+      <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
         <Button
           onClick={() => setActiveCategory('promoters')}
-          className={`p-5 text-lg rounded-md text-white ${
-            activeCategory === 'promoters'
-              ? 'bg-indigo-500'
-              : 'bg-white text-black border border-gray-300'
+          className={`rounded-md p-5 text-lg text-white ${
+            activeCategory === 'promoters' ? 'bg-indigo-500' : 'border border-gray-300 bg-white text-black'
           }`}
         >
           Promoters
         </Button>
         <Button
           onClick={() => setActiveCategory('institutionalInvestors')}
-          className={`p-5 text-lg rounded-md text-white ${
-            activeCategory === 'institutionalInvestors'
-              ? 'bg-indigo-500'
-              : 'bg-white text-black border border-gray-300'
+          className={`rounded-md p-5 text-lg text-white ${
+            activeCategory === 'institutionalInvestors' ? 'bg-indigo-500' : 'border border-gray-300 bg-white text-black'
           }`}
         >
           Institutional Investors
         </Button>
         <Button
           onClick={() => setActiveCategory('public')}
-          className={`p-5 text-lg rounded-md text-white ${
-            activeCategory === 'public'
-              ? 'bg-indigo-500'
-              : 'bg-white text-black border border-gray-300'
+          className={`rounded-md p-5 text-lg text-white ${
+            activeCategory === 'public' ? 'bg-indigo-500' : 'border border-gray-300 bg-white text-black'
           }`}
         >
           Public

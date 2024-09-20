@@ -1,34 +1,12 @@
 import axios from 'axios'
 import { NextRequest, NextResponse } from 'next/server'
+import { FinnhubLogoResponse, StockData } from '../../../types/stock-search'
 
-interface StockData {
-  ticker: string
-  name: string
-  market: string
-  locale: string
-  primary_exchange: string
-  type: string
-  active: boolean
-  currency_name: string
-  last_updated_utc: string
-  logo?: string | null
-}
-
-interface FinnhubLogoResponse {
-  logo?: string
-}
-
-export async function GET(
-  req: NextRequest,
-  context: { params: { searchParams: string } },
-) {
+export async function GET(req: NextRequest, context: { params: { searchParams: string } }) {
   const searchParams = context.params.searchParams
 
   if (!searchParams) {
-    return NextResponse.json(
-      { error: 'No search parameter provided' },
-      { status: 400 },
-    )
+    return NextResponse.json({ error: 'No search parameter provided' }, { status: 400 })
   }
 
   try {
@@ -75,15 +53,9 @@ export async function GET(
     }
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      return NextResponse.json(
-        { error: error.response.data.error || error.message },
-        { status: error.response.status },
-      )
+      return NextResponse.json({ error: error.response.data.error || error.message }, { status: error.response.status })
     } else {
-      return NextResponse.json(
-        { error: 'An unknown error occurred' },
-        { status: 500 },
-      )
+      return NextResponse.json({ error: 'An unknown error occurred' }, { status: 500 })
     }
   }
 }
