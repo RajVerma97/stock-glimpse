@@ -1,8 +1,8 @@
 import { error } from 'console'
-import { hash } from 'bcrypt'
+import { hash } from 'bcryptjs'
 import { NextResponse } from 'next/server'
-import User from '@/lib/models/Users'
-import { connectDB } from '@/lib/connectDB'
+import { connectDB } from '../../../../lib/connectDB'
+import User from '../../../../lib/models/Users'
 
 export async function POST(request: Request) {
   try {
@@ -15,8 +15,7 @@ export async function POST(request: Request) {
     if (user) {
       return NextResponse.json(
         {
-          message:
-            'Can' + 't register , User already exists,please login instead',
+          message: 'Can' + 't register , User already exists,please login instead',
           error,
         },
         { status: 400 },
@@ -35,15 +34,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: 'success' })
   } catch (e) {
     if (e instanceof Error) {
-      return NextResponse.json(
-        { message: 'error', error: e.message },
-        { status: 500 },
-      )
+      return NextResponse.json({ message: 'error', error: e.message }, { status: 500 })
     }
 
-    return NextResponse.json(
-      { message: 'error', error: 'An unknown error occurred' },
-      { status: 500 },
-    )
+    return NextResponse.json({ message: 'error', error: 'An unknown error occurred' }, { status: 500 })
   }
 }

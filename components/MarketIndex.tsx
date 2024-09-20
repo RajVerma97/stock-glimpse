@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import ErrorMessage from './Error'
 import Loading from './Loading'
-import { useFetchMarketIndex } from '@/app/hooks/use-fetch-market-index'
+import { useFetchMarketIndex } from '../app/hooks/use-fetch-market-index'
 
 export default function MarketIndex() {
   const {
@@ -12,7 +12,7 @@ export default function MarketIndex() {
   } = useFetchMarketIndex('SPY')
 
   return (
-    <div className="p-2 bg-white text-black">
+    <div className="bg-white p-2 text-black">
       {isMarketIndexInfoLoading ? (
         <Loading isLoading={isMarketIndexInfoLoading} />
       ) : isMarketIndexInfoError ? (
@@ -26,9 +26,7 @@ export default function MarketIndex() {
               </CardTitle>
             </CardHeader>
             <CardContent className="text-2xl font-semibold">
-              <p className="text-2xl font-semibold">
-                ${marketIndexInfo.askPrice}
-              </p>
+              <p className="text-2xl font-semibold">${marketIndexInfo.askPrice}</p>
             </CardContent>
           </Card>
         )

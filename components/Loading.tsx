@@ -1,6 +1,6 @@
 // components/Loading.tsx
 import React from 'react'
-import SpinnerManager from '@/components/SpinnerManager' // Adjust the import if necessary
+import SpinnerManager from './SpinnerManager'
 
 interface LoadingProps {
   isLoading: boolean
@@ -10,7 +10,7 @@ const Loading: React.FC<LoadingProps> = ({ isLoading }) => {
   if (!isLoading) return null
 
   return (
-    <div className="w-full p-8 flex justify-center items-center">
+    <div className="flex w-full items-center justify-center p-8">
       <SpinnerManager isLoading={isLoading} />
     </div>
   )

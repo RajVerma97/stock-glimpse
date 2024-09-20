@@ -1,7 +1,11 @@
 import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import 'react-toastify/dist/ReactToastify.css' // Add this line
 
-const notify = ({ status, message }) => {
+type ToastStatus = 'success' | 'error' | 'info' | 'warning'
+
+const notify = ({ status, message }: { status: ToastStatus; message: string }) => {
+  console.log('Toast manager', status)
+  // Ensure status is a valid key of toast
   toast[status](message, {
     position: 'top-right',
     closeOnClick: true,

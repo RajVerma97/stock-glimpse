@@ -9,7 +9,6 @@ export function useRemoveFromWatchlist(symbol: string) {
   return useAuthenticatedMutation({
     mutationFn: () => removeFromWatchlist(symbol),
     onSuccess: () => {
-      notify({ status: 'success', message: 'Stock removed from watchlist successfully.' })
       queryClient.invalidateQueries({ queryKey: ['get-watchlist'] })
     },
     onError: (error) => {

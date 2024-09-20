@@ -1,17 +1,6 @@
 import axios from 'axios'
 import { NextResponse } from 'next/server'
-
-interface Shareholder {
-  name: string
-  percentage: number
-}
-
-interface ShareholdingPattern {
-  symbol: string
-  promoters: Shareholder[]
-  institutionalInvestors: Shareholder[]
-  public: Shareholder[]
-}
+import { Shareholder, ShareholdingPattern } from '../../../../types/stock-detail'
 
 function generateRandomShareholder(namePrefix: string): Shareholder {
   return {

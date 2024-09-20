@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import { hash } from 'bcrypt'
+import { hash } from 'bcryptjs'
 import { NextResponse } from 'next/server'
 import { connectDB } from '../../../../lib/connectDB'
 import User from '../../../../lib/models/Users'
