@@ -39,7 +39,7 @@ export default function Header() {
     <header className="mb-4 flex w-full items-center justify-between rounded-md px-4 py-2">
       <ToastManager />
       <div className="flex-1">
-        <Link href="/" className="text-4xl font-bold">
+        <Link href="/" className="text-2xl font-bold">
           Stock Glimpse
         </Link>
       </div>

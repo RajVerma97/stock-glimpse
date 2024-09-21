@@ -11,9 +11,10 @@ import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { notify } from './ToastManager'
 interface StockCardProps {
   stock: any
+  mode?: 'compact' | 'normal'
 }
 
-export default function StockCard({ stock }: StockCardProps) {
+export default function StockCard({ stock, mode }: StockCardProps) {
   const pathName = usePathname()
   const { mutate, status } = useRemoveFromWatchlist(stock.symbol)
 
@@ -38,14 +39,14 @@ export default function StockCard({ stock }: StockCardProps) {
           >
             <Trash2Icon />
           </Button>
-        ) : (
+        ) : mode == 'normal' ? (
           <p className={`text-lg font-semibold ${stock.change > 0 ? 'text-green-500' : 'text-red-500'}`}>
             {stock.change}%
           </p>
-        )}
+        ) : null}
       </CardContent>
     ),
-    [pathName, stock.currentPrice, stock.change, handleRemoveFromWatchlist, status],
+    [pathName, stock.currentPrice, stock.change, handleRemoveFromWatchlist, status, mode],
   )
 
   const CardComponent = (
