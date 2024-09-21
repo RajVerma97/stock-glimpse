@@ -41,7 +41,7 @@ export default function MarketNews() {
 
   return (
     <div className="max-w-screen-xl">
-      <div className="mb-4 text-2xl font-semibold text-white">Market News</div>
+      <div className="mb-4  text-3xl font-semibold text-white ">Market News</div>
 
       {isMarketNewsLoading ? (
         <Loading isLoading={isMarketNewsLoading} />

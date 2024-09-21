@@ -1,64 +1,76 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { StockSymbols } from '../../../../../data/stock-symbols'
-import { fetchStockDetails } from '../../../../../queries/stock-details'
+import axios from 'axios'
+import { StockCategoriesData } from '../../../../../data/stock-categories-data'
+import Logger from '../../../../../../lib/winstonLogger'
+import { StockCategoriesList } from '../../../../../enums/stock-categories-list.enum'
 
-// GET handler with pagination for stock details based on market cap category
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { category: string; page: number; limit: number } },
-) {
-  const { category, page } = params
+const fetchStockDetailBySymbol = async (symbol: string) => {
+  const apiKey = process.env.FINNHUB_API_KEY
+  if (!apiKey) {
+    Logger.error('FINNHUB_API_KEY is not set')
+    throw new Error('API key missing')
+  }
 
-  const limit = 20
+  const quoteUrl = `https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${apiKey}`
+  const profileUrl = `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${apiKey}`
+
+  try {
+    const [quoteResponse, profileResponse] = await Promise.all([axios.get(quoteUrl), axios.get(profileUrl)])
+
+    const stockDetail = {
+      currentPrice: quoteResponse.data?.c || null,
+      changeInPrice: quoteResponse.data?.d || null,
+      percentageChange: quoteResponse.data?.dp || null,
+      highPriceOfDay: quoteResponse.data?.h || null,
+      lowPriceOfDay: quoteResponse.data?.l || null,
+      openingPrice: quoteResponse.data?.o || null,
+      previousClosePrice: quoteResponse.data?.pc || null,
+      timestamp: quoteResponse.data?.t || null,
+      companyName: profileResponse.data?.name || 'No name available',
+      symbol: profileResponse.data?.ticker || symbol,
+      description: profileResponse.data?.description || 'No description available',
+      industry: profileResponse.data?.finnhubIndustry || 'Unknown',
+      country: profileResponse.data?.country || 'Unknown',
+      logo: profileResponse.data?.logo || null,
+    }
+
+    return stockDetail
+  } catch (error) {
+    Logger.error(`Error fetching stock detail for ${symbol}:`, (error as Error).message)
+    throw error
+  }
+}
+
+// GET handler for stock details based on market cap category
+export async function GET(request: NextRequest, { params }: { params: { category: string } }) {
+  const { category } = params
 
   if (!category) {
     return NextResponse.json({ message: 'No category provided' }, { status: 400 })
   }
 
   try {
-    const symbols = StockSymbols
-    const totalSymbols = symbols.length
-    const startIndex = (page - 1) * limit
-    const endIndex = Math.min(startIndex + limit, totalSymbols)
+    const normalizedCategory = category.toUpperCase() as keyof typeof StockCategoriesList
 
-    const paginatedSymbols = symbols.slice(startIndex, endIndex)
-
-    // Fetch stock details with rate limiting
-    const stockDetailsPromises = paginatedSymbols.map(async (symbolData) => {
-      // Add a delay to avoid hitting the API rate limit
-      const symbol = symbolData.symbol
-      const stockDetail = await fetchStockDetails(symbol)
-
-      if (!stockDetail) return null
-
-      const marketCap = stockDetail.marketCap || 0 // Ensure marketCap has a value
-
-      // Adjust the cap ranges for mid and large caps
-      if (category === 'small-cap' && marketCap < 1_000_000_000) {
-        return stockDetail
-      }
-      if (category === 'mid-cap' && marketCap >= 1_000_000_000 && marketCap < 10_000_000_000) {
-        return stockDetail
-      }
-      if (category === 'large-cap' && marketCap >= 10_000_000_000) {
-        return stockDetail
-      }
-
-      return null
-    })
-
-    const stockDetails = (await Promise.all(stockDetailsPromises)).filter(Boolean)
-
-    const totalPages = Math.ceil(totalSymbols / limit)
-    const pagination = {
-      currentPage: page,
-      limit,
-      totalPages,
-      totalItems: totalSymbols,
+    if (!(normalizedCategory in StockCategoriesList)) {
+      return NextResponse.json({ message: 'Invalid category provided' }, { status: 400 })
     }
 
-    return NextResponse.json({ stockDetails, pagination })
+    const categoryEnumValue = StockCategoriesList[normalizedCategory]
+
+    if (!(categoryEnumValue in StockCategoriesData)) {
+      return NextResponse.json({ message: 'Invalid category provided' }, { status: 400 })
+    }
+
+    const stockSymbolsByCategory = StockCategoriesData[categoryEnumValue]
+    const maxStocks = 8
+    const maxStocksSymbols = stockSymbolsByCategory.slice(0, maxStocks)
+    const stocks = await Promise.all(maxStocksSymbols.map((symbol) => fetchStockDetailBySymbol(symbol)))
+    console.log(stocks)
+
+    return NextResponse.json(stocks)
   } catch (error) {
-    return NextResponse.json({ message: 'Error fetching stock data' + error }, { status: 500 })
+    Logger.error('Error fetching stock details:', (error as Error).message)
+    return NextResponse.json({ message: 'An error occurred' }, { status: 500 })
   }
 }
