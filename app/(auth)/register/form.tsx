@@ -2,9 +2,11 @@
 
 import { signIn } from 'next-auth/react'
 import { FormEvent } from 'react'
+// import Lottie from 'lottie-react'
 import { notify, ToastManager } from '../../../components/ToastManager'
 import { Input } from '../../../components/ui/input'
 import { Button } from '../../../components/ui/button'
+// import registerAnimation from '../../../public/register.json'
 
 export default function Form() {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -49,15 +51,15 @@ export default function Form() {
       <div className="flex w-full items-center justify-center bg-white p-4 md:w-1/2">
         <form onSubmit={handleSubmit} className="w-full max-w-md">
           <h1 className="mb-5 text-center text-3xl font-bold text-black">Register</h1>
-          <Input name="email" className="border border-black text-black " type="email" placeholder="Email" required />
+          <Input name="email" className="border border-black text-black" type="email" placeholder="Email" required />
           <Input
             name="password"
-            className="border border-black text-black mt-4"
+            className="mt-4 border border-black text-black"
             type="password"
             placeholder="Password"
             required
           />
-          <Button variant={'outline'} type="submit" className="border-none bg-indigo-500 text-white mt-4 w-full">
+          <Button variant={'outline'} type="submit" className="mt-4 w-full border-none bg-indigo-500 text-white">
             Register
           </Button>
 
@@ -67,6 +69,7 @@ export default function Form() {
 
       <div className="relative hidden md:block md:w-1/2">
         <img src="/register.jpg" alt="Register Image" className="h-full w-full object-cover" />
+        {/* <Lottie animationData={registerAnimation} /> */}
       </div>
     </div>
   )
