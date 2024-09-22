@@ -66,7 +66,6 @@ export async function GET(request: NextRequest, { params }: { params: { category
     const maxStocks = 8
     const maxStocksSymbols = stockSymbolsByCategory.slice(0, maxStocks)
     const stocks = await Promise.all(maxStocksSymbols.map((symbol) => fetchStockDetailBySymbol(symbol)))
-    console.log(stocks)
 
     return NextResponse.json(stocks)
   } catch (error) {

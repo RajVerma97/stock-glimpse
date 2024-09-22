@@ -9,10 +9,12 @@ export async function GET(request: Request, { params }: { params: { symbol: stri
     return NextResponse.json({ message: 'API key not found' }, { status: 500 })
   }
   const { symbol } = params
+  console.log(symbol)
 
   try {
     const newsUrl = `https://api.marketaux.com/v1/news/all?symbols=${symbol}&filter_entities=true&language=en&api_token=${apiKey}`
     const response = await axios.get(newsUrl)
+    console.log(response)
 
     if (!response || !response.data) {
       return NextResponse.json({ error: 'No data found' }, { status: 404 })

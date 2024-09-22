@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import { ArrowLeft, Menu } from 'lucide-react'
+import { ArrowLeft, Cross, Menu, X } from 'lucide-react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { signOut, useSession } from 'next-auth/react'
@@ -45,21 +45,30 @@ export default function Header() {
       </div>
       <div className="hidden space-x-4 sm:flex">
         {session ? (
-          <Button onClick={logout}>Logout</Button>
-        ) : (
           <Button
-            className={`${pathname === '/login' ? 'bg-white text-black' : 'bg-transparent'} hover:bg-white hover:text-black`}
+            variant="default"
+            className="rounded-lg border-2 border-pink-500 px-6 py-2 font-semibold transition duration-300 ease-in-out hover:bg-pink-500 hover:text-white"
+            onClick={logout}
           >
-            <Link href="/login">Login</Link>
+            Logout
           </Button>
+        ) : (
+          <>
+            <Button
+              className={`${pathname === '/login' ? 'bg-white text-black' : 'bg-transparent'} hover:bg-white hover:text-black`}
+            >
+              <Link href="/login">Login</Link>
+            </Button>
+            <Button
+              className={`${
+                pathname === '/register' ? 'bg-white text-black' : 'bg-transparent'
+              } hover:bg-white hover:text-black`} // Default to transparent, hover to white
+            >
+              <Link href="/register">Register</Link>
+            </Button>
+          </>
         )}
-        <Button
-          className={`${
-            pathname === '/register' ? 'bg-white text-black' : 'bg-transparent'
-          } hover:bg-white hover:text-black`} // Default to transparent, hover to white
-        >
-          <Link href="/register">Register</Link>
-        </Button>
+
         <Button
           className={`${
             pathname === '/watchlist' ? 'bg-white text-black' : 'bg-transparent'
@@ -74,53 +83,62 @@ export default function Header() {
           <Menu size={30} />
         </Button>
       </div>
-
       {open && (
         <motion.div
           initial={{ x: '100%' }}
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className="fixed right-0 top-0 z-50 h-full w-3/4 bg-blue-500 shadow-lg sm:hidden"
+          className="fixed right-0 top-0 z-50 h-full w-3/4 bg-white shadow-lg sm:hidden"
         >
-          <div className="flex items-center justify-between p-4">
-            <Button variant="ghost" onClick={closeSidebar}>
-              <ArrowLeft size={30} />
+          <div className="flex items-center justify-between border-b p-4">
+            <h1 className="text-xl font-semibold text-black">Menu</h1>
+            <Button variant="ghost" onClick={closeSidebar} className="text-black">
+              <X size={30} />
             </Button>
           </div>
 
-          <div className="mt-8 flex flex-col space-y-4 p-4">
+          <div className="mt-6 flex flex-col space-y-4 p-4">
             {session ? (
-              <Button onClick={logout}>Logout</Button>
-            ) : (
               <Button
-                className={`${
-                  pathname === '/login' ? 'bg-white text-black' : 'bg-transparent'
-                } hover:bg-white hover:text-black`}
-                onClick={closeSidebar}
+                variant="default"
+                className="rounded-lg border-2 border-pink-500 bg-pink-500 px-6 py-2 font-semibold text-white transition duration-300 ease-in-out hover:bg-white hover:text-pink-500"
+                onClick={logout}
               >
-                <Link href="/login">Login</Link>
+                Logout
               </Button>
+            ) : (
+              <>
+                <Button
+                  className={`rounded-lg px-6 py-2 font-semibold transition duration-300 ease-in-out ${
+                    pathname === '/login' ? 'bg-indigo-500 text-white' : 'bg-black text-white'
+                  } hover:bg-black hover:text-white`}
+                  onClick={closeSidebar}
+                >
+                  <Link href="/login">Login</Link>
+                </Button>
+                <Button
+                  className={`rounded-lg px-6 py-2 font-semibold transition duration-300 ease-in-out ${
+                    pathname === '/register' ? 'bg-indigo-500 text-white' : 'bg-black text-white'
+                  } hover:bg-black hover:text-white`}
+                  onClick={closeSidebar}
+                >
+                  <Link href="/register">Register</Link>
+                </Button>
+              </>
             )}
+
             <Button
-              className={`${
-                pathname === '/register' ? 'bg-white text-black' : 'bg-transparent'
-              } hover:bg-white hover:text-black`} // Default to transparent, hover to white
-              onClick={closeSidebar}
-            >
-              <Link href="/register">Register</Link>
-            </Button>
-            <Button
-              className={`${
-                pathname === '/watchlist' ? 'bg-white text-black' : 'bg-transparent'
-              } hover:bg-white hover:text-black`} // Default to transparent, hover to white
+              className={`rounded-lg px-6 py-2 font-semibold transition duration-300 ease-in-out ${
+                pathname === '/watchlist' ? 'bg-indigo-500 text-white' : 'bg-black text-white'
+              } hover:bg-black hover:text-white`}
               onClick={handleClick}
             >
               Watchlist
             </Button>
           </div>
         </motion.div>
-      )}
+      )}{' '}
     </header>
   )
 }

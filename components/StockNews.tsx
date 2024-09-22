@@ -9,6 +9,8 @@ import { useFetchStockNews } from '../app/hooks/use-fetch-stock-news'
 export default function StockNews({ symbol }: { symbol: string }) {
   const { data: stockNews, isLoading: isStockNewsLoading, isError: isStockNewsError } = useFetchStockNews(symbol)
 
+  console.log(stockNews)
+
   const content = useMemo(() => {
     return (
       <Carousel className="relative w-full overflow-hidden p-6">
@@ -36,7 +38,7 @@ export default function StockNews({ symbol }: { symbol: string }) {
 
   return (
     <div className="max-w-screen-xl">
-      <div className="mb-4 text-2xl font-semibold text-white">Stock News</div>
+      <div className="mb-4 text-center text-4xl font-semibold text-white">Stock News</div>
 
       {isStockNewsLoading ? (
         <Loading isLoading={isStockNewsLoading} />

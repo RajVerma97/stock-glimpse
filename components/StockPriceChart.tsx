@@ -184,24 +184,30 @@ const StockPriceChart = ({ historicalData, timeFrame, setTimeFrame }: StockPrice
       <div className="mb-4 flex space-x-2">
         <Button
           onClick={() => setTimeFrame(TimeFrame.OneWeek)}
-          className={`rounded-md px-6 py-3 text-lg ${
-            timeFrame === TimeFrame.OneWeek ? 'bg-indigo-500 text-white' : 'bg-white text-black'
+          className={`rounded-md px-6 py-3 text-lg transition-colors duration-300 ${
+            timeFrame === TimeFrame.OneWeek
+              ? 'bg-indigo-500 text-white'
+              : 'bg-gray-200 text-black hover:bg-indigo-500 hover:text-white'
           }`}
         >
           1 Week
         </Button>
         <Button
           onClick={() => setTimeFrame(TimeFrame.OneMonth)}
-          className={`rounded-md px-6 py-3 text-lg ${
-            timeFrame === TimeFrame.OneMonth ? 'bg-indigo-500 text-white' : 'bg-white text-black'
+          className={`rounded-md px-6 py-3 text-lg transition-colors duration-300 ${
+            timeFrame === TimeFrame.OneMonth
+              ? 'bg-indigo-500 text-white'
+              : 'bg-gray-200 text-black hover:bg-indigo-500 hover:text-white'
           }`}
         >
           1 Month
         </Button>
         <Button
           onClick={() => setTimeFrame(TimeFrame.OneYear)}
-          className={`rounded-md px-6 py-3 text-lg ${
-            timeFrame === TimeFrame.OneYear ? 'bg-indigo-500 text-white' : 'bg-white text-black'
+          className={`rounded-md px-6 py-3 text-lg transition-colors duration-300 ${
+            timeFrame === TimeFrame.OneYear
+              ? 'bg-indigo-500 text-white'
+              : 'bg-gray-200 text-black hover:bg-indigo-500 hover:text-white'
           }`}
         >
           1 Year

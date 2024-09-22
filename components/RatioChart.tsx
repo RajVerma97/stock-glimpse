@@ -25,7 +25,7 @@ export default function RatioChart({ ratios }: RatioChartProps) {
   }
 
   return (
-    <div className="grid w-full grid-cols-1 gap-[10rem] sm:grid-cols-2 md:grid-cols-2">
+    <div className="grid w-full grid-cols-1 gap-[3rem] sm:grid-cols-2 md:grid-cols-3">
       {Object.entries(ratios).map(([key, values], index) => {
         const data = {
           labels: (values as RatioItem[]).map((item) => item.period).reverse(),
@@ -46,7 +46,7 @@ export default function RatioChart({ ratios }: RatioChartProps) {
         return (
           <Card
             key={index}
-            className="flex flex-col rounded-lg border border-gray-200 bg-gray-100 p-4 text-black shadow-md"
+            className="flex flex-col rounded-lg border border-gray-200 bg-gray-100 p-1 text-black shadow-md"
           >
             <CardHeader className="mb-4 text-center text-2xl font-semibold uppercase">{key}</CardHeader>
             <CardContent className="relative h-[300px]">

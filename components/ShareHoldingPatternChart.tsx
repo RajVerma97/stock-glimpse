@@ -104,24 +104,24 @@ const ShareholdingPatternChart: React.FC<ShareholdingPatternChartProps> = ({ dat
         <Button
           onClick={() => setActiveCategory('promoters')}
           className={`rounded-md p-5 text-lg text-white ${
-            activeCategory === 'promoters' ? 'bg-indigo-500' : 'border border-gray-300 bg-white text-black'
-          }`}
+            activeCategory === 'promoters' ? 'bg-indigo-500' : 'border-gray-300 bg-white text-black'
+          } transition-transform duration-300 hover:bg-indigo-600 hover:text-white hover:shadow-lg`}
         >
           Promoters
         </Button>
         <Button
           onClick={() => setActiveCategory('institutionalInvestors')}
           className={`rounded-md p-5 text-lg text-white ${
-            activeCategory === 'institutionalInvestors' ? 'bg-indigo-500' : 'border border-gray-300 bg-white text-black'
-          }`}
+            activeCategory === 'institutionalInvestors' ? 'bg-indigo-500' : 'border-gray-300 bg-white text-black'
+          } transition-transform duration-300 hover:bg-indigo-600 hover:text-white hover:shadow-lg`}
         >
           Institutional Investors
         </Button>
         <Button
           onClick={() => setActiveCategory('public')}
           className={`rounded-md p-5 text-lg text-white ${
-            activeCategory === 'public' ? 'bg-indigo-500' : 'border border-gray-300 bg-white text-black'
-          }`}
+            activeCategory === 'public' ? 'bg-indigo-500' : 'border-gray-300 bg-white text-black'
+          } transition-transform duration-300 hover:bg-indigo-600 hover:text-white hover:shadow-lg`}
         >
           Public
         </Button>

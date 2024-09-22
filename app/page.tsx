@@ -19,17 +19,21 @@ export default function SplashPage() {
   const topLosers = topGainersAndLosersData?.topLosers
 
   if (topGainersAndLosersIsError) {
-    ;<ErrorMessage name={'Failed to fetch losers and gainers'} />
+    return <ErrorMessage name={'Failed to fetch losers and gainers'} />
   }
 
   return (
-    <div className="container mx-auto grid gap-8 px-4">
+    <div className="container mx-auto grid gap-8 overflow-x-hidden px-4 sm:px-6 md:px-8">
+      {/* Search Stocks Component */}
       <SearchStocks />
+
+      {/* Market News Component */}
       <MarketNews />
 
+      {/* Top Gainers Section */}
       <div className="mb-4">
-        <h2 className="mb-8 text-3xl font-semibold text-white">Top Gainers</h2>
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
+        <h2 className="mb-6 text-2xl font-semibold text-white sm:text-3xl">Top Gainers</h2>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {IsTopGainersAndLosersLoading ? (
             <Loading isLoading={IsTopGainersAndLosersLoading} />
           ) : (
@@ -38,15 +42,18 @@ export default function SplashPage() {
         </div>
       </div>
 
+      {/* Top Losers Section */}
       <div>
-        <h2 className="mb-8 text-3xl font-semibold">Top Losers</h2>
-        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3">
+        <h2 className="mb-6 text-2xl font-semibold sm:text-3xl">Top Losers</h2>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {topLosers?.slice(0, 5).map((stock: any) => <StockCard stock={stock} key={stock.ticker} mode={'normal'} />)}
         </div>
       </div>
 
-      <div />
-      <StockCategories />
+      {/* Stock Categories */}
+      <div className="mt-10">
+        <StockCategories />
+      </div>
     </div>
   )
 }
