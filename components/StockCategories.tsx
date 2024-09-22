@@ -58,7 +58,6 @@ export default function StockCategories() {
     },
     {
       title: 'TELECOMMUNICATIONS',
-
       image: '/telecommunications.jpg',
       stocks: [],
     },
@@ -70,22 +69,23 @@ export default function StockCategories() {
   ]
 
   return (
-    <div>
+    <div className="overflow-hidden">
       <h1 className="mb-8 text-3xl font-bold text-white">Stock Categories</h1>
 
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {categories.map((category, index) => {
           return (
             <Link href={`/category/${category.title}`} key={index}>
-              <Card className="transform rounded-lg border border-gray-200 p-6 text-center">
-                <Image
-                  src={category.image}
-                  alt={category.title}
-                  className="h-40 mb-4 w-full rounded-md object-cover"
-                  width={500}
-                  height={300}
-                />
-                <h1 className="text-xl text-gray-400">{category.title}</h1>
+              <Card className="transform overflow-hidden rounded-lg border border-gray-200 p-4 transition-transform hover:scale-105">
+                <div className="relative mb-4 h-40 w-full">
+                  <Image
+                    src={category.image}
+                    alt={category.title}
+                    className="h-full w-full rounded-md object-cover"
+                    layout="fill"
+                  />
+                </div>
+                <h1 className="text-lg font-semibold text-gray-400 sm:text-xl text-center">{category.title}</h1>
               </Card>
             </Link>
           )

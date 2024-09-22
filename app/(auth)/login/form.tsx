@@ -43,7 +43,13 @@ export default function Form() {
   }
 
   return (
-    <div className="flex min-h-screen p-4 md:px-16 md:py-10">
+    <div className="flex min-h-screen flex-col overflow-hidden p-4 md:flex-row-reverse md:px-16 md:py-10">
+      {/* Image section */}
+      <div className="h-70 relative w-full md:h-auto md:w-1/2">
+        <img src="/login.jpg" alt="Login Image" className="h-full w-full object-cover" />
+      </div>
+
+      {/* Form section */}
       <div className="flex w-full items-center justify-center bg-white p-4 md:w-1/2">
         <form onSubmit={handleSubmit} className="w-full max-w-md">
           <h1 className="mb-5 text-center text-3xl font-bold text-black">Login</h1>
@@ -88,10 +94,6 @@ export default function Form() {
 
           <ToastManager />
         </form>
-      </div>
-
-      <div className="relative hidden md:block md:w-1/2">
-        <img src="/login.jpg" alt="Login Image" className="h-full w-full object-cover" />
       </div>
     </div>
   )

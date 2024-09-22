@@ -30,7 +30,7 @@ export default function RatioCard({ title, value, icon: Icon }: RatioCardProps) 
           {Icon && <Icon className="mr-2 h-6 w-6 text-gray-600" />}
         </CardHeader>
         <CardContent className="flex h-full items-center justify-center p-8">
-          <h1 className="text-5xl font-bold text-pink-600">
+          <h1 className="text-3xl md:text-5xl font-bold text-pink-600">
             {value?.toFixed(2)} {title === 'ROE' || title === 'ROI' ? '%' : ''}
           </h1>
         </CardContent>

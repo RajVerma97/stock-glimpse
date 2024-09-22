@@ -9,6 +9,7 @@ import SpinnerManager from './SpinnerManager'
 import { useRemoveFromWatchlist } from '../app/hooks/use-remove-from-watchlist'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { notify } from './ToastManager'
+
 interface StockCardProps {
   stock: any
   mode?: 'compact' | 'normal'
@@ -19,34 +20,40 @@ export default function StockCard({ stock, mode }: StockCardProps) {
   const { mutate, status } = useRemoveFromWatchlist(stock.symbol)
 
   const handleRemoveFromWatchlist = useCallback(() => {
-    mutate(stock.symbol)
-    if (status === 'success') {
-      notify({ status: 'success', message: 'Stock removed from watchlist successfully.' })
-    }
-  }, [stock.symbol, mutate, status])
+    mutate(stock.symbol, {
+      onSuccess: () => {
+        notify({ status: 'success', message: 'Stock removed from watchlist successfully.' })
+      },
+      onError: () => {
+        notify({ status: 'error', message: 'Failed to remove stock from watchlist.' })
+      },
+    })
+  }, [stock.symbol, mutate])
 
   const CardContentComponent = useMemo(
     () => (
       <CardContent className="flex items-center justify-between">
-        <p className="text-lg font-medium text-gray-800">${stock.currentPrice}</p>
-
+        <p className="text-lg font-medium text-gray-800">
+          ${typeof stock.currentPrice === 'number' ? stock.currentPrice.toFixed(2) : 'N/A'}
+        </p>
         {pathName === '/watchlist' ? (
           <Button
-            onClick={() => handleRemoveFromWatchlist()}
+            onClick={handleRemoveFromWatchlist}
             className="text-red-500"
-            variant={'secondary'}
-            disabled={status === 'pending'} // Disable button while loading
+            variant="secondary"
+            disabled={status === 'pending'}
+            aria-label={`Remove ${stock.companyName} from watchlist`}
           >
-            <Trash2Icon />
+            {status === 'pending' ? <SpinnerManager isLoading /> : <Trash2Icon />}
           </Button>
-        ) : mode == 'normal' ? (
+        ) : mode === 'normal' ? (
           <p className={`text-lg font-semibold ${stock.change > 0 ? 'text-green-500' : 'text-red-500'}`}>
             {stock.change}%
           </p>
         ) : null}
       </CardContent>
     ),
-    [pathName, stock.currentPrice, stock.change, handleRemoveFromWatchlist, status, mode],
+    [pathName, stock.currentPrice, stock.change, handleRemoveFromWatchlist, status, mode, stock.companyName],
   )
 
   const CardComponent = (
@@ -54,8 +61,6 @@ export default function StockCard({ stock, mode }: StockCardProps) {
       whileHover={{
         scale: 1.05,
         boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
-        color: '',
-        backgroundColor: 'blue',
       }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
       className="rounded-lg"
@@ -66,23 +71,18 @@ export default function StockCard({ stock, mode }: StockCardProps) {
             width={100}
             height={100}
             src={stock?.logo}
-            alt={`${stock.name} logo`}
-            className="mr-4 h-16 w-16 rounded-full"
+            alt={`${stock.companyName} logo`}
+            className="mr-4 h-16 w-16 rounded-full" // Use object-contain or object-cover
           />
-          <CardTitle className="text-xl font-semibold text-gray-900">{stock.companyName}</CardTitle>
+          <CardTitle className="truncate text-xl font-semibold text-gray-900">{stock.companyName}</CardTitle>
         </CardHeader>
         {CardContentComponent}
       </Card>
     </motion.div>
   )
 
-  // If in the watchlist and removing is in progress, show the spinner
-  if (pathName === '/watchlist' && status === 'pending') {
-    return <SpinnerManager isLoading={true} />
-  }
-
-  return pathName === '/watchlist' ? (
-    <div className="block">{CardComponent}</div>
+  return pathName === '/watchlist' && status === 'pending' ? (
+    <SpinnerManager isLoading={true} />
   ) : (
     <Link href={`/stock-detail/${stock.symbol}`} className="block">
       {CardComponent}

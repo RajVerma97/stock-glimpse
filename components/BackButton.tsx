@@ -23,7 +23,7 @@ export default function BackButton() {
             whileTap={{ scale: 0.9 }}
             transition={{ type: 'spring', stiffness: 500, damping: 20 }}
           >
-            <ArrowLeft size={35} className="text-white" />
+            <ArrowLeft size={35} className="text-pink-500 bg-transparent" />
           </motion.div>
         </Button>
       )}
