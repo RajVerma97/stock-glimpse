@@ -46,6 +46,7 @@ export default function Form() {
     <div className="flex min-h-screen flex-col overflow-hidden p-4 md:flex-row-reverse md:px-16 md:py-10">
       {/* Image section */}
       <div className="h-70 relative w-full md:h-auto md:w-1/2">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/login.jpg" alt="Login Image" className="h-full w-full object-cover" />
       </div>
 

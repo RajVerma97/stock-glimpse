@@ -3,7 +3,7 @@
 import { signIn } from 'next-auth/react'
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { notify, ToastManager } from '../../../components/ToastManager'
+import { ToastManager } from '../../../components/ToastManager'
 import { Input } from '../../../components/ui/input'
 import { Button } from '../../../components/ui/button'
 
@@ -30,7 +30,6 @@ export default function Form() {
     const result = await response.json()
 
     if (!response.ok) {
-      console.log(result)
       setError(result.message || 'Registration failed')
       setSuccess(null) // Clear success message
     } else {
@@ -58,6 +57,7 @@ export default function Form() {
   return (
     <div className="flex min-h-screen flex-col overflow-hidden rounded-lg md:flex-row-reverse md:px-16 md:py-10">
       <div className="h-70 relative md:h-auto md:w-1/2">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/register.jpg" alt="Register Image" className="h-full w-full object-cover" />
       </div>
       <div className="flex w-full items-center justify-center bg-white p-8 md:w-1/2">

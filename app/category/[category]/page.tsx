@@ -12,8 +12,6 @@ export default function Page() {
 
   const { data, isLoading, isError, error } = useFetchCategoryStocks(category, 1, 50)
 
-  console.log(data)
-
   if (isLoading) {
     return <SpinnerManager isLoading={isLoading} />
   }
