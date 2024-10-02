@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import ErrorMessage from './Error'
-import Loading from './Loading'
+import Skeleton from './Skeleton'
 import { Carousel, CarouselContent, CarouselItem } from './ui/carousel'
 import { useFetchMarketNews } from '../app/hooks/use-fetch-market-news'
 import { NewsArticle } from '../app/types/market-news'
@@ -41,10 +41,17 @@ export default function MarketNews() {
 
   return (
     <div className="max-w-screen-xl">
-      <div className="mb-4  text-3xl font-semibold text-white ">Market News</div>
+      <div className="mb-4 text-3xl font-semibold text-white">Market News</div>
 
       {isMarketNewsLoading ? (
-        <Loading isLoading={isMarketNewsLoading} />
+        <div className="grid grid-cols-3 gap-4">
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div key={index} className="w-80 flex-shrink-0 basis-1/3">
+              <Skeleton height="20rem" />
+              <Skeleton height="24px" width="100%" className="mt-4" />
+            </div>
+          ))}
+        </div>
       ) : isMarketNewsError ? (
         <ErrorMessage message="Error loading market news" />
       ) : (

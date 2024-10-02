@@ -1,12 +1,12 @@
 'use client'
-import React from 'react'
+import React, { Suspense } from 'react'
 import { ErrorMessage } from 'formik'
 import { useFetchGainersAndLosers } from './hooks/use-fetch-gainers-and-losers'
 import SearchStocks from '../components/SearchStocks'
 import MarketNews from '../components/MarketNews'
-import Loading from '../components/Loading'
 import StockCard from '../components/StockCard'
 import StockCategories from '../components/StockCategories'
+import Skeleton from '../components/Skeleton'
 
 export default function SplashPage() {
   const {
@@ -24,33 +24,36 @@ export default function SplashPage() {
 
   return (
     <div className="container mx-auto grid gap-8 overflow-x-hidden px-4 sm:px-6 md:px-8">
-      {/* Search Stocks Component */}
       <SearchStocks />
 
-      {/* Market News Component */}
       <MarketNews />
 
-      {/* Top Gainers Section */}
       <div className="mb-4">
         <h2 className="mb-6 text-2xl font-semibold text-white sm:text-3xl">Top Gainers</h2>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {IsTopGainersAndLosersLoading ? (
-            <Loading isLoading={IsTopGainersAndLosersLoading} />
-          ) : (
-            topGainers?.slice(0, 5).map((stock: any) => <StockCard stock={stock} key={stock.ticker} mode={'normal'} />)
-          )}
-        </div>
+        <Suspense fallback={<Skeleton height="10rem" className="w-80" />}>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {IsTopGainersAndLosersLoading
+              ? Array.from({ length: 5 }).map((_, index) => <Skeleton key={index} height="10rem" className="w-80" />)
+              : topGainers
+                  ?.slice(0, 5)
+                  .map((stock: any) => <StockCard stock={stock} key={stock.ticker} mode={'normal'} />)}
+          </div>
+        </Suspense>
       </div>
 
-      {/* Top Losers Section */}
       <div>
         <h2 className="mb-6 text-2xl font-semibold sm:text-3xl">Top Losers</h2>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {topLosers?.slice(0, 5).map((stock: any) => <StockCard stock={stock} key={stock.ticker} mode={'normal'} />)}
-        </div>
+        <Suspense fallback={<Skeleton height="10rem" className="w-80" />}>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {IsTopGainersAndLosersLoading
+              ? Array.from({ length: 5 }).map((_, index) => <Skeleton key={index} height="10rem" className="w-80" />)
+              : topLosers
+                  ?.slice(0, 5)
+                  .map((stock: any) => <StockCard stock={stock} key={stock.ticker} mode={'normal'} />)}
+          </div>
+        </Suspense>
       </div>
 
-      {/* Stock Categories */}
       <div className="mt-10">
         <StockCategories />
       </div>
