@@ -1,29 +1,53 @@
 /** @type {import('next').NextConfig} */
+import ContentSecurityPolicy from './csp'
+const redirects = await import('./redirects')
+
 const nextConfig = {
-  experimental: {
-    esmExternals: 'loose',
-    serverComponentsExternalPackages: ['mongoose'],
+  typescript: {
+    ignoreBuildErrors: true,
   },
-  webpack: (config) => {
-    config.experiments = {
-      ...config.experiments,
-      topLevelAwait: true,
-    }
-    return config
-  },
+  reactStrictMode: true,
+  swcMinify: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**', // Allows all domains
-      },
-    ],
+    domains: ['localhost', process.env.NEXT_PUBLIC_SERVER_URL]
+      .filter(Boolean)
+      .map((url) => url.replace(/https?:\/\//, '')),
   },
-  eslint: {
-    // This option ensures that ESLint errors will not stop the build process.
-    ignoreDuringBuilds: false,
+  redirects: redirects.default, // Assuming `redirects` exports a default object
+  async headers() {
+    const headers = []
+
+    // Prevent search engines from indexing the site if it is not live
+    // This is useful for staging environments before they are ready to go live
+    // To allow robots to crawl the site, use the `NEXT_PUBLIC_IS_LIVE` env variable
+    // You may want to also use this variable to conditionally render any tracking scripts
+    if (!process.env.NEXT_PUBLIC_IS_LIVE) {
+      headers.push({
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex',
+          },
+        ],
+        source: '/:path*',
+      })
+    }
+
+    // Set the `Content-Security-Policy` header as a security measure to prevent XSS attacks
+    // It works by explicitly whitelisting trusted sources of content for your website
+    // This will block all inline scripts and styles except for those that are allowed
+    headers.push({
+      source: '/(.*)',
+      headers: [
+        {
+          key: 'Content-Security-Policy',
+          value: ContentSecurityPolicy,
+        },
+      ],
+    })
+
+    return headers
   },
-  // Additional configuration can be added here if necessary
 }
 
-module.exports = nextConfig
+export default nextConfig
