@@ -40,7 +40,7 @@ export default function Header() {
       <ToastManager />
       <div className="flex-1">
         <Link href="/" className="text-2xl font-bold">
-          Stock Glimpse
+          Stock Glimpse.
         </Link>
       </div>
       <div className="hidden space-x-4 sm:flex">
