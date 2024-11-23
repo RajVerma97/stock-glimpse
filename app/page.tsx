@@ -42,7 +42,7 @@ export default function SplashPage() {
       </div>
 
       <div>
-        <h2 className="mb-6 text-2xl font-semibold sm:text-3xl">Top Losers</h2>
+        <h2 className="mb-6 text-2xl font-semibold sm:text-3xl">Top  Losers</h2>
         <Suspense fallback={<Skeleton height="10rem" className="w-80" />}>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {IsTopGainersAndLosersLoading
